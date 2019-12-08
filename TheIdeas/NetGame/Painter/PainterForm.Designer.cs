@@ -1,6 +1,6 @@
-﻿namespace NetGame
+﻿namespace NetGame.Painter
 {
-	partial class MainForm
+	partial class Painter
 	{
 		private System.ComponentModel.IContainer components = null;
 		protected override void Dispose(bool disposing)
@@ -12,16 +12,11 @@
 			}
 			base.Dispose(disposing);
 		}
-
 		private void InitializeComponent()
 		{
-			this.SuspendLayout();
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(284, 262);
-			this.Name = "MainForm";
-			this.Text = "NetGame";
-			this.ResumeLayout(false);
+			this.Text = "Form1";
+			this.Name = "Form1";
 		}
 	}
 }

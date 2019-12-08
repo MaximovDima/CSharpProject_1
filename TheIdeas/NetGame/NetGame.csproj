@@ -52,6 +52,10 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="App\Program.cs" />
+    <Compile Include="Painter\PainterForm.cs" />
+    <Compile Include="Painter\PainterForm.Designer.cs">
+      <DependentUpon>PainterForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -59,6 +63,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App" />
+    <Folder Include="Painter" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="App\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
