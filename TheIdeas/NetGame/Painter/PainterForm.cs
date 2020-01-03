@@ -2,13 +2,14 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace NetGame.Painter
+namespace Painter
 {
-	public partial class Painter : Form
+	public partial class PainterForm : Form
 	{
-		public Painter()
+		public PainterForm()
 		{
 			InitializeComponent();
 		}
+
 	}
 }

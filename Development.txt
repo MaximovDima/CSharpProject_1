@@ -1,1 +1,6 @@
 1. Architecture development and implementation of a client - server platform for games.
+2. Development of components (included libraries) for the system:
+  2.1 work with the database
+  2.2 drawing infographic
+  2.3 action logging
+  2.4 interface "CRUD"

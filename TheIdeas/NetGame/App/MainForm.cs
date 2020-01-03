@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using Painter;
 
 namespace NetGame
 {
@@ -10,6 +11,9 @@ namespace NetGame
 		public MainForm()
 		{
 			InitializeComponent();
+			PainterForm MyPainter = new PainterForm();
+			MyPainter.MdiParent = this;
+			MyPainter.Show();
 		}
 	}
 }
