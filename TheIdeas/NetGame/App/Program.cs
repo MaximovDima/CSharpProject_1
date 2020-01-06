@@ -10,6 +10,7 @@ namespace NetGame
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
+			//Инициализация формы
 			Application.Run(new MainForm());
 		}
 		
