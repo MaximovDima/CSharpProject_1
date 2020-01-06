@@ -1,0 +1,4 @@
+.gitignore
+/TheIdeas/NetGame/bin
+/TheIdeas/NetGame/obj
+/TheIdeas/TheIdeas.sln
