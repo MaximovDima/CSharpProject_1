@@ -19,7 +19,7 @@ namespace NetGame
 			//Инициализация отрисовщика
 			Painter = new TPainter(CtrlScene);
 			//Инициализация сцены
-			//
+			
 			
 			
 
