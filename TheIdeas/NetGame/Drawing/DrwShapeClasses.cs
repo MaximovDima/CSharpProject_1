@@ -76,30 +76,18 @@ namespace DrwShapeClasses
     	
     	public override void Draw(Graphics G)
     	{
-//    		  if not Visible then
-//    Exit;
-//  vBrushStyle := ALayer.Canvas.Brush.Style;
-//  vColor := ALayer.Canvas.Pen.Color;
-//  vPenWidth := ALayer.Canvas.Pen.Width;
-//  try
-//    ALayer.Canvas.Pen.Width := PenWidth;
-//    ALayer.Canvas.Pen.Color := Color;
-//    ALayer.Canvas.Brush.Style := bsClear;
-//    SetLength(vPointArray, DrwPointList.Count);
-//    for I := 0 to DrwPointList.Count - 1 do
-//    begin
-//      vPointArray[I].X := Trunc(DrwPointList[I].X);
-//      vPointArray[I].Y := Trunc(DrwPointList[I].Y);
-//    end;
-//    ALayer.Canvas.Polyline(vPointArray);
-//  finally
-//    ALayer.Canvas.Pen.Color := vColor;
-//    ALayer.Canvas.Brush.Style := vBrushStyle;
-//    ALayer.Canvas.Pen.Width := vPenWidth;
-//  end;
-    				
-    		Pen mypen = new Pen(Color.Black);
-//    		G.DrawPolygon(mypen, 
+    		if (!Visible)
+    		{
+    			return;
+    		}
+			Point[] points = new Point[DrwPointList.Count];
+			for(int i = 0; i < DrwPointList.Count; i++)
+			{
+				points[i].X = (int)DrwPointList[i].X;
+				points[i].Y = (int)DrwPointList[i].Y;
+			}  				
+    		Pen mypen = new Pen(Color, PenWidth);
+    		G.DrawLines(mypen, points);
 			
     	}
 	}
