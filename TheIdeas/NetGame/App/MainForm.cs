@@ -27,7 +27,7 @@ namespace NetGame
 	
 		void MainFormResize(object sender, EventArgs e)
 		{
-			Game.SceneResize();
+			Game.SceneResize(CtrlScene.ClientSize.Width, CtrlScene.ClientSize.Height);
 		}
 	}
 }

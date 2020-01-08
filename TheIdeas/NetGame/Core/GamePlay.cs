@@ -220,10 +220,9 @@ namespace GamePlay
 			Scene = new TScene(ACtrlScene);
 		}
 		
-		public void SceneResize()
+		public void SceneResize(int AX, int AY)
 		{
-			Painter.Refresh();
-			Scene.SetXY(Painter.CtrlScene.Width, Painter.CtrlScene.Height);
+			Painter.Refresh(AX, AY);
 		}
 		
 		public void CreateSession()

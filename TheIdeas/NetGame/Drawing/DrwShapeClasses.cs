@@ -43,6 +43,7 @@ namespace DrwShapeClasses
   			Color = Color.Black;
   			ByGroup = false;
   			Visible = true;
+  			LayerType = TLayerType.ltBack;
 		}
 		
 		public abstract void Draw(Graphics G);

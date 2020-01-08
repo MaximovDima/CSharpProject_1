@@ -10,8 +10,13 @@ namespace Painter
 	{
 		public List<TDrwShape> DrwShapeList;
 		public PictureBox CtrlScene;
+		public double InitX;
+		public double InitY;
+		public double CoeffX;
+		public double CoeffY;
 		public Bitmap DrawArea;
-		public Graphics G;
+		public Graphics FrontLayer;
+		public Graphics BackLayer; 
 		
 		public TPainter(PictureBox ACtrlScene)
 		{
@@ -22,27 +27,60 @@ namespace Painter
 		
 		public void Init()
 		{
-			DrawArea = new Bitmap(CtrlScene.ClientSize.Width, CtrlScene.Size.Height);
-			G = Graphics.FromImage(DrawArea);
+			InitX = CtrlScene.ClientSize.Width;
+			InitY = CtrlScene.ClientSize.Height;
+			InitDrawArea((int)InitX, (int)InitY);
+		}
+		
+		public void InitDrawArea(int AX, int AY)
+		{
+			DrawArea = new Bitmap(AX, AY);
+			BackLayer = Graphics.FromImage(DrawArea);
+			FrontLayer = Graphics.FromImage(DrawArea);
 			CtrlScene.Image = DrawArea; 
-			G.Clear(Color.White); 	
+			BackLayer.Clear(Color.White); 		
 		}
 		
 		public void Draw()
 		{
 			foreach(TDrwShape vShape in DrwShapeList)
 			{
-				vShape.Draw(G);
+				if (vShape.LayerType == TLayerType.ltBack)
+				{
+					vShape.Draw(BackLayer);
+				}
+				else
+				{
+					vShape.Draw(FrontLayer);	
+				}
 			}
 		}
 		
-		public void Refresh()
+		public void Refresh(int AX, int AY)
 		{
-			//Пересоздание битмапа с учетом новых размеров
-			Init();
+			//Пересоздание слоев с учетом новых размеров
+			InitDrawArea(AX, AY);
+			//Масштабирование
+			CoeffX = AX / InitX;
+  			CoeffY = AY / InitY;
+  			ReCalcCoords();
 			//Перерисовка слоев с фигурами
-			Pen mypen = new Pen(Color.Black);
-			G.DrawEllipse(mypen, 50,50,DrawArea.Width/2,DrawArea.Height/2);
+			Draw();
+		}
+		
+		public void ReCalcCoords()
+		{
+			foreach(TDrwShape vShape in DrwShapeList)
+			{
+				if (vShape is TDrwPolyLine)
+				{
+					foreach(TDrwPoint vPoint in (vShape as TDrwPolyLine).DrwPointList)
+					{
+						vPoint.X = (int)(vPoint.InitPoint.X * CoeffX);
+						vPoint.Y = (int)(vPoint.InitPoint.Y * CoeffY);
+					}
+				}
+			}
 		}
 		
 		public void AddShape(TDrwShape AShape)
