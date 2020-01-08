@@ -16,7 +16,7 @@
 		private void InitializeComponent()
 		{
 			this.CtrlScene = new System.Windows.Forms.PictureBox();
-			this.Menu = new System.Windows.Forms.MenuStrip();
+			this.MainMenu = new System.Windows.Forms.MenuStrip();
 			((System.ComponentModel.ISupportInitialize)(this.CtrlScene)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -29,12 +29,12 @@
 			this.CtrlScene.TabIndex = 2;
 			this.CtrlScene.TabStop = false;
 			// 
-			// Menu
+			// MainMenu
 			// 
-			this.Menu.Location = new System.Drawing.Point(0, 0);
-			this.Menu.Name = "Menu";
-			this.Menu.Size = new System.Drawing.Size(762, 24);
-			this.Menu.TabIndex = 4;
+			this.MainMenu.Location = new System.Drawing.Point(0, 0);
+			this.MainMenu.Name = "MainMenu";
+			this.MainMenu.Size = new System.Drawing.Size(762, 24);
+			this.MainMenu.TabIndex = 4;
 			// 
 			// MainForm
 			// 
@@ -42,9 +42,9 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(762, 571);
 			this.Controls.Add(this.CtrlScene);
-			this.Controls.Add(this.Menu);
+			this.Controls.Add(this.MainMenu);
 			this.IsMdiContainer = true;
-			this.MainMenuStrip = this.Menu;
+			this.MainMenuStrip = this.MainMenu;
 			this.Name = "MainForm";
 			this.Text = "NetGame";
 			this.Resize += new System.EventHandler(this.MainFormResize);
@@ -52,7 +52,7 @@
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
-		private System.Windows.Forms.MenuStrip Menu;
+		private System.Windows.Forms.MenuStrip MainMenu;
 		private System.Windows.Forms.PictureBox CtrlScene;
 	}
 }

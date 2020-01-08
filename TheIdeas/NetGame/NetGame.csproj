@@ -53,6 +53,7 @@
     </Compile>
     <Compile Include="App\Program.cs" />
     <Compile Include="Core\GamePlay.cs" />
+    <Compile Include="Drawing\DrwShapeClasses.cs" />
     <Compile Include="Drawing\Painter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -2,58 +2,32 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using Painter;
 using GamePlay;
-
 namespace NetGame
 {
 	public partial class MainForm : Form
 	{
-		public TPainter Painter;
-		public TScene Scene; 
-		private Bitmap DrawArea;
 		
+		public TGame Game; 
+	
 		public MainForm()
 		{
 			InitializeComponent();
-			//Инициализация отрисовщика
-			Painter = new TPainter(CtrlScene);
-			//Инициализация сцены
+			//Загрузка ресурсов для игры
+			Game = new TGame(CtrlScene);
+			//первичной инициализации
 			
-			
-			
-
-//			PainterForm MyPainter = new PainterForm();
-//			MyPainter.MdiParent = this;
-//			MyPainter.Show();
+			//выполняется выбор одиночная игра или подключение к серверу
+			//загрузка типа геймплея
+			Game.CreateSession();
+			//процесс игры 
+			// 1.отслеживания активности мыши
+			// 2.в случае сетевой игры - обмен с сервером		
 		}
-		
-		void Button1Click(object sender, EventArgs e)
-		{
-					DrawArea = new Bitmap(CtrlScene.ClientSize.Width, CtrlScene.Size.Height);
-            CtrlScene.Image = DrawArea;
-                Font ff;
-                ff = new Font("Arial", 24f);
-                
-//                DrawArea.
-                Graphics g;
-                
-                g = Graphics.FromImage(DrawArea);
-                g.Clear(Color.White);
-                Pen mypen = new Pen(Color.Black);
-				
-//                g.DrawLine(mypen, 0,0,200,150);
-				g.DrawEllipse(mypen, 50,50,DrawArea.Width,DrawArea.Height);
-				g.DrawString("test", ff, Brushes.Black, 0,DrawArea.Height/2);
-
-                CtrlScene.Image = DrawArea;
-
-                g.Dispose();			
-		}
-		
+	
 		void MainFormResize(object sender, EventArgs e)
 		{
-			Painter.Refresh();
+			Game.SceneResize();
 		}
 	}
 }
