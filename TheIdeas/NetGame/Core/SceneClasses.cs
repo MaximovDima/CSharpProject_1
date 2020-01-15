@@ -66,7 +66,7 @@ namespace SceneClasses
 		public double XEnd;
 		public double YHorzLevel;
 		public double YMax;
-		public const int h = 33;
+		public const int cH = 33;
 		
 		public TGround(int AX, int AY)
 		{
@@ -106,10 +106,10 @@ namespace SceneClasses
   			vPeakPoint.Y = (int)(YMax - YHorzLevel * 2);
 
   			//Склоны
-  			vStep = (vEndPoint.X - vStartPoint.X)/h;
-  			vPointUpList = new TPoint[(int)h/2];
-  			vPointDownList = new TPoint[(int)h/2];
-  			for (int i = 0; i < (int)h/2; i++)
+  			vStep = (vEndPoint.X - vStartPoint.X)/cH;
+  			vPointUpList = new TPoint[(int)cH/2];
+  			vPointDownList = new TPoint[(int)cH/2];
+  			for (int i = 0; i < (int)cH/2; i++)
   			{
     			vPointUpList[i].X = (int)(vStartPoint.X + vStep * i);
     			vPointDownList[i].X = (int)(vPeakPoint.X + vStep * i);
@@ -123,8 +123,8 @@ namespace SceneClasses
       				vPrevHHUp = vStartPoint.Y;
       				vPrevHHDown = vPeakPoint.Y;
       			}
-    			vPointUpList[i].Y = Math.Min(vPeakPoint.Y, (int)(vPrevHHUp + rnd.Next(0,((int)(h*1.2)))));
-    			vPointDownList[i].Y = Math.Max(vEndPoint.Y, (int)(vPrevHHDown - rnd.Next(0,((int)(h*2)))));
+    			vPointUpList[i].Y = Math.Min(vPeakPoint.Y, (int)(vPrevHHUp + rnd.Next(0,((int)(cH*1.2)))));
+    			vPointDownList[i].Y = Math.Max(vEndPoint.Y, (int)(vPrevHHDown - rnd.Next(0,((int)(cH*2)))));
   			}
 
   			PointList.Add(vStartPoint);
@@ -191,5 +191,43 @@ namespace SceneClasses
       				/((PointList[vIndex1]).X - PointList[vIndex0].X));
 		}
 		
+	}
+	
+	public class TPlayer : TSceneObject
+	{
+    	public double X;
+    	public double Y;
+    	//точка для отображения положения 1 спицы
+    	public double XEndLine;
+    	public double YEndLine;
+    	//Поворот 0-23
+    	public int Turn;
+    	public int BarrelTurn;
+    	//выделенность (готовность к движению)
+    	public bool ReadyMove;
+    	//готвность к прицеливанию
+    	public bool ReadyAim;
+    	//ось вращения ствола
+    	public double AxisX;
+    	public double AxisY;
+    	//Угол наклона ствола
+    	public double Angle;
+  		public const int cRadius = 10;
+      	public const int cStep = 3;
+      	
+      	public TPlayer()
+      	{
+      		
+      	}
+      	
+      	public override void Build()
+      	{
+      		
+      	}
+      	
+      	public int AddTurn(int AInc)
+      	{
+      		return 0;
+      	}
 	}
 }
