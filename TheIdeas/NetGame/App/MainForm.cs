@@ -1,33 +1,27 @@
-﻿using System;
+﻿//Основная и единственная форма приложения
+//Инициализация сессии игры
+
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using GamePlay;
+using GameService;
+
 namespace NetGame
 {
 	public partial class MainForm : Form
 	{
-		
-		public TGame Game; 
-	
+		public TGameSession GameSession;
 		public MainForm()
 		{
 			InitializeComponent();
 			//Загрузка ресурсов для игры
-			Game = new TGame(CtrlScene);
-			//первичной инициализации
-			
-			//выполняется выбор одиночная игра или подключение к серверу
-			//загрузка типа геймплея
-			Game.CreateSession();
-			//процесс игры 
-			// 1.отслеживания активности мыши
-			// 2.в случае сетевой игры - обмен с сервером		
+			GameSession = new TGameSession(CtrlScene);
 		}
 	
 		void MainFormResize(object sender, EventArgs e)
 		{
-			Game.SceneResize(CtrlScene.ClientSize.Width, CtrlScene.ClientSize.Height);
+			GameSession.SceneResize(CtrlScene.ClientSize.Width, CtrlScene.ClientSize.Height);
 		}
 	}
 }

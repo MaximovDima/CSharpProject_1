@@ -52,7 +52,9 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="App\Program.cs" />
+    <Compile Include="Core\SceneClasses.cs" />
     <Compile Include="Core\GamePlay.cs" />
+    <Compile Include="Core\GameSession.cs" />
     <Compile Include="Drawing\DrwShapeClasses.cs" />
     <Compile Include="Drawing\Painter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,4 +1,6 @@
-﻿using System;
+﻿//Запуск приложения
+
+using System;
 using System.Windows.Forms;
 
 namespace NetGame
