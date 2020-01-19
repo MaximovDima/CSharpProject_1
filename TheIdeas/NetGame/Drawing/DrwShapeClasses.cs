@@ -94,4 +94,34 @@ namespace DrwShapeClasses
 			
     	}
 	}
+	
+	public class TDrwCircle : TDrwShape
+	{
+    	public TDrwPoint Center;
+    	public double Radius;
+    	public double InitRadius;
+    	
+    	public TDrwCircle(int AX, int AY, int ARadius)
+    	{
+    		Center = new TDrwPoint();
+    		Center.X = AX;
+    		Center.Y = AY;
+    		InitRadius = ARadius;
+    		Radius = ARadius;
+    	}
+ 		
+    	public override void Draw(Graphics G)
+    	{
+    		 if (!Visible)
+    		{
+    			return;
+    		}
+    		
+    		Pen mypen = new Pen(Color, PenWidth);
+    		G.DrawEllipse(mypen, (int)(Center.X - Radius),
+    		              		 (int)(Center.Y + Radius),
+    		              		 (int)(2*Radius),
+    		              		 (int)(2*Radius));
+    	}
+	}
 }

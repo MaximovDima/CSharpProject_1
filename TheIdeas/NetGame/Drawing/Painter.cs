@@ -1,4 +1,14 @@
-﻿//Отрисовщик примитивных фигур
+﻿//Отрисовщик
+//Класс сцена служит для хранения логических моделей объектов
+//для независимого отображения в масштабе, который меняется при изменении окна приложения
+//Класс Painter нужен для хранения примитивов и отображения их графически
+//Суть отрисовки:
+//  Расчитывается логическая модель объектов, с учетом их свойств и взаиморасположения
+//  Этот расчет может быть в виде коллекции "кадров", где "кадр" это состояние модели в определенный момент времени
+//  Далее модель переносится со сцены на отрисовщик, где каждый модельный объект имеет набор примитивов.
+//  Далее примитивы отрисовываются на экране, пропрционально текущему масштабу.
+//Изменение масштаба происходит без перерасчета модели сцены
+//
 
 using System;
 using System.Windows.Forms;
@@ -7,7 +17,71 @@ using System.Collections.Generic;
 using DrwShapeClasses;
 
 namespace Painter
-{
+{	
+	//Виртуальная сцена
+	public class TScene
+	{
+		//Размеры сцены в пикселях
+		public int X;
+		public int Y;
+		//Коллеккция моделей объектов сцены
+		public List<TSceneObject> SceneObjectList;
+		//ссылка на отрисовщик
+		public TPainter Painter;
+			
+		
+		public TScene(PictureBox ACtrlScene)
+		{
+			//Инициализация отрисовщика
+			Painter = new TPainter(ACtrlScene);
+			SceneObjectList = new List<TSceneObject>();
+			X = ACtrlScene.Width;
+			Y = ACtrlScene.Height;
+		}
+		//Синхронизация новых размеров окна приложения и сцены
+		public void SetXY(int AX, int AY)
+		{
+			X = AX;
+			Y = AY;
+		}
+		
+		//Построение сцены - это построение каждого объекта сцены
+		//используя примитивы класса TDrwShape
+		public void Build()
+		{
+			foreach (TSceneObject SceneObj in SceneObjectList)
+        	{
+				SceneObj.DrwObjList.Clear();
+				SceneObj.Build();
+  				
+  				foreach (TDrwShape Shape in SceneObj.DrwObjList)
+  				{
+  					SceneObj.CodeList.Add(Shape.GroupCode);
+    				Shape.LayerType = TLayerType.ltBack;
+    				Shape.ScObjName = SceneObj.Name;
+    				Painter.AddShape(Shape);
+  				}
+        	}
+		}
+	}
+	
+	public abstract class TSceneObject
+	{
+    	public int ID;
+    	public string Name;
+    	public List<string> CodeList;
+    	public List<TDrwShape> DrwObjList;
+    	
+    	public TSceneObject()
+    	{
+    		CodeList = new List<string>();
+    		DrwObjList = new List<TDrwShape>();
+    	}
+    	
+    	public abstract void Build();
+    
+	}
+	
 	public class TPainter
 	{
 		public List<TDrwShape> DrwShapeList;
@@ -82,6 +156,12 @@ namespace Painter
 						vPoint.Y = (int)(vPoint.InitPoint.Y * CoeffY);
 					}
 				}
+				if (vShape is TDrwCircle)
+				{
+					(vShape as TDrwCircle).Center.X = (int)((vShape as TDrwCircle).Center.InitPoint.X * CoeffX);
+					(vShape as TDrwCircle).Center.Y = (int)((vShape as TDrwCircle).Center.InitPoint.Y * CoeffY);
+    				(vShape as TDrwCircle).Radius = (vShape as TDrwCircle).InitRadius * Math.Max(CoeffX, CoeffY);
+				}
 			}
 		}
 		
@@ -105,14 +185,14 @@ namespace Painter
       				vPoint.InitPoint.Y = vPoint.Y;	
 				}
 			}
-//  if AShape is TDrwCircle then
-//  begin
-//    TDrwCircle(AShape).Center.Y := BackLayer.Height - TDrwCircle(AShape).Center.Y;
-//    TDrwCircle(AShape).Center.InitPoint.X := TDrwCircle(AShape).Center.X;
-//    TDrwCircle(AShape).Center.InitPoint.Y := TDrwCircle(AShape).Center.Y;
-//    TDrwCircle(AShape).InitRadius := TDrwCircle(AShape).Radius;
-//    TDrwCircle(AShape).InitRadius := TDrwCircle(AShape).Radius;
-//  end;
+			if (AShape is TDrwCircle)
+			{
+				(AShape as TDrwCircle).Center.Y = CtrlScene.Height - (AShape as TDrwCircle).Center.Y;
+    			(AShape as TDrwCircle).Center.InitPoint.X = (AShape as TDrwCircle).Center.X;
+    			(AShape as TDrwCircle).Center.InitPoint.Y = (AShape as TDrwCircle).Center.Y;
+    			(AShape as TDrwCircle).InitRadius = (AShape as TDrwCircle).Radius;
+    			(AShape as TDrwCircle).InitRadius = (AShape as TDrwCircle).Radius;
+			}
 			AddShapeToList(AShape);	
 		}
 		

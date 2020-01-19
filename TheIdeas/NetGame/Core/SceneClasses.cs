@@ -2,60 +2,18 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
+using Painter;
 using DrwShapeClasses;
 
 namespace SceneClasses
 {
-	public class TScene
-	{
-		//Координаты сцены
-		public int X;
-		public int Y;
-		//Коллеккция моделей объектов сцены
-		public List<TSceneObject> SceneObjectList;
-		
-		
-		public TScene(PictureBox ACtrlScene)
-		{
-			SceneObjectList = new List<TSceneObject>();
-			X = ACtrlScene.Width;
-			Y = ACtrlScene.Height;
-		}
-		
-		public void SetXY(int AX, int AY)
-		{
-			X = AX;
-			Y = AY;
-		}
-		
-		public void Build()
-		{
-			TGround Ground = new TGround(X, Y);
-			SceneObjectList.Add(Ground);
-		}
-	}
+
 	public struct TPoint
 	{
 		public int X;
 		public int Y;		
-	}
-	
-	public abstract class TSceneObject
-	{
-    	public int ID;
-    	public string Name;
-    	public List<string> CodeList;
-    	public List<TDrwShape> DrwObjList;
-    	
-    	public TSceneObject()
-    	{
-    		CodeList = new List<string>();
-    		DrwObjList = new List<TDrwShape>();
-    	}
-    	
-    	public abstract void Build();
-    
 	}
 	
 	public class TGround : TSceneObject
@@ -215,14 +173,32 @@ namespace SceneClasses
   		public const int cRadius = 10;
       	public const int cStep = 3;
       	
-      	public TPlayer()
+      	public TPlayer(int AX, int AY)
       	{
-      		
+      		X = AX;
+      		Y = AY;
       	}
       	
       	public override void Build()
       	{
+      		Color vWheelColor;
+      		if (ReadyMove)
+      		{
+      			vWheelColor = Color.Red;
+      		}
+      		else
+      		{
+      			vWheelColor = Color.Black;
+      		}
       		
+      		DrwObjList.Clear();
+  			//наружняя часть колеса
+  			TDrwCircle vWheel1 = new TDrwCircle((int)X, (int)Y, cRadius);
+  			vWheel1.CodeElement = "ExtWheel";
+  			vWheel1.Color = vWheelColor;
+  			vWheel1.GroupCode = "Wheel";
+  			vWheel1.ByGroup = true;
+  			DrwObjList.Add(vWheel1);	
       	}
       	
       	public int AddTurn(int AInc)

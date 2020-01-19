@@ -15,7 +15,7 @@ namespace NetGame
 		public MainForm()
 		{
 			InitializeComponent();
-			//Загрузка ресурсов для игры
+			//Загрузка ресурсов для игры (по умолчанию однопользовательская)
 			GameSession = new TGameSession(CtrlScene);
 		}
 	

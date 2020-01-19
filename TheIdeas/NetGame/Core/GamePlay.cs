@@ -14,20 +14,19 @@ namespace GamePlay
 	
 	public class TGame
 	{
-		public TPainter Painter;
+		
 		public TScene Scene;
 		
 		public TGame(PictureBox ACtrlScene)
 		{
-			//Инициализация отрисовщика
-			Painter = new TPainter(ACtrlScene);
+
 			//Инициализация сцены
 			Scene = new TScene(ACtrlScene);
 		}
 		
 		public void SceneResize(int AX, int AY)
 		{
-			Painter.Refresh(AX, AY);
+			Scene.Painter.Refresh(AX, AY);
 		}
 		
 		public void CreateSession()
@@ -39,28 +38,11 @@ namespace GamePlay
 			//построение сцены
 			Scene.Build();
 			//перевод моделей сцены в отрисовку
-			DrawSceneByPainter();
+//			DrawSceneByPainter();
 			//Отриовка
-			Painter.Draw();
+			Scene.Painter.Draw();
 					
-		}
-		
-		public void DrawSceneByPainter()
-		{
-			foreach (TSceneObject SceneObj in Scene.SceneObjectList)
-        	{
-				SceneObj.DrwObjList.Clear();
-				SceneObj.Build();
-  				
-  				foreach (TDrwShape Shape in SceneObj.DrwObjList)
-  				{
-  					SceneObj.CodeList.Add(Shape.GroupCode);
-    				Shape.LayerType = TLayerType.ltBack;
-    				Shape.ScObjName = SceneObj.Name;
-    				Painter.AddShape(Shape);
-  				}
-        	}
-		}
+		}		
 	}
 		
 }

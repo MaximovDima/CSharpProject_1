@@ -9,13 +9,15 @@ namespace GameService
 	public class TGameSession
 	{
 		public TGame Game;
+		public TClient Client;
 		public TServer Server;
 		
 		public TGameSession(PictureBox ACtrlScene)
 		{
-			
+			//Экземпляр клиента
 			Game = new TGame(ACtrlScene);
-			//первичной инициализации
+			//Инициализация сервера
+			Server = new TServer();
 			
 			//выполняется выбор одиночная игра или подключение к серверу
 			//загрузка типа геймплея
@@ -28,11 +30,20 @@ namespace GameService
 		}
 	}
 	
+	public class TClient
+	{
+		public TClient()
+		{
+			
+		}
+	}
+	
 	public class TServer
 	{
 		public TServer()
 		{
-			
+			//Инициализация игры
+//			Game = new TGame(ACtrlScene);		
 		}
 	}
 }
