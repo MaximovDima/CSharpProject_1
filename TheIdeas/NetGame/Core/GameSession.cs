@@ -2,37 +2,47 @@
 
 using System;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using GamePlay;
+using Painter;
 
 namespace GameService
 {
 	public class TGameSession
 	{
-		public TGame Game;
 		public TClient Client;
 		public TServer Server;
 		
 		public TGameSession(PictureBox ACtrlScene)
 		{
 			//Экземпляр клиента
-			Game = new TGame(ACtrlScene);
+			Client = new TClient(ACtrlScene);
 			//Инициализация сервера
 			Server = new TServer();
+			//Добавление текущего клиента в лист отслеживания
+			Server.ClientList.Add(Client);
 			
-			//выполняется выбор одиночная игра или подключение к серверу
-			//загрузка типа геймплея
-			Game.CreateSession();
+			//по умолчанию выбор одиночной игры
+			Client.NewSingleGame(Server);
+//			Game.CreateSession();
 		}
 		
 		public void SceneResize(int AX, int AY)
 		{
-			Game.SceneResize(AX, AY);
+//			Game.SceneResize(AX, AY);
 		}
 	}
 	
 	public class TClient
 	{
-		public TClient()
+		
+		public TClient(PictureBox ACtrlScene)
+		{
+			
+		}
+		
+		//Запрос к сервреру для начала одиночной игры
+		public void NewSingleGame(TServer Server)
 		{
 			
 		}
@@ -40,9 +50,13 @@ namespace GameService
 	
 	public class TServer
 	{
+		public TScene Scene;
+		
+		public List<TClient> ClientList;
 		public TServer()
 		{
-			//Инициализация игры
+			ClientList = new List<TClient>();
+			//Инициализация игровой модели
 //			Game = new TGame(ACtrlScene);		
 		}
 	}
