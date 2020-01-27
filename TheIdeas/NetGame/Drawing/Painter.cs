@@ -30,14 +30,11 @@ namespace Painter
 		public TPainter Painter;
 			
 		
-		public TScene(PictureBox ACtrlScene)
+		public TScene()
 		{
-			//Инициализация отрисовщика
-			Painter = new TPainter(ACtrlScene);
 			SceneObjectList = new List<TSceneObject>();
-			X = ACtrlScene.Width;
-			Y = ACtrlScene.Height;
 		}
+		
 		//Синхронизация новых размеров окна приложения и сцены
 		public void SetXY(int AX, int AY)
 		{

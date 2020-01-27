@@ -14,14 +14,14 @@ namespace GamePlay
 	
 	public class TGame
 	{
-		
 		public TScene Scene;
 		
-		public TGame(PictureBox ACtrlScene)
+		public TGame()
 		{
-
 			//Инициализация сцены
-			Scene = new TScene(ACtrlScene);
+			Scene = new TScene();
+			Scene.X = 700;
+			Scene.Y = 550;			
 		}
 		
 		public void SceneResize(int AX, int AY)
@@ -29,19 +29,11 @@ namespace GamePlay
 			Scene.Painter.Refresh(AX, AY);
 		}
 		
-		public void CreateSession()
+		public void InitScene()
 		{
-			//создание сервера
-			//Загрзука модели игры если одиноч
-			//еще что-то
-			
-			//построение сцены
-			Scene.Build();
-			//перевод моделей сцены в отрисовку
-//			DrawSceneByPainter();
-			//Отриовка
-			Scene.Painter.Draw();
-					
+			//Ландшафт
+			TGround Ground = new TGround(Scene.X, Scene.Y);
+			Scene.SceneObjectList.Add(Ground);	
 		}		
 	}
 		
