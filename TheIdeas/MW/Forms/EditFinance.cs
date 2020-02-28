@@ -14,8 +14,24 @@ namespace MW.Forms
 		void AddTypeCostClick(object sender, EventArgs e)
 		{
 			frmEditDirectory editDirectory = new frmEditDirectory((sender as Button).Name);
-			editDirectory.Text = "Добавить тип расхода";
 			editDirectory.ShowDialog();			
+		}
+		
+		void BtnCancelClick(object sender, EventArgs e)
+		{
+			Close();
+		}
+		
+		void AddPlaceClick(object sender, EventArgs e)
+		{
+			frmEditDirectory editDirectory = new frmEditDirectory((sender as Button).Name);
+			editDirectory.ShowDialog();				
+		}
+		
+		void SelectTagsClick(object sender, EventArgs e)
+		{
+			frmEditDirectory editDirectory = new frmEditDirectory((sender as Button).Name);
+			editDirectory.ShowDialog();				
 		}
 	}
 }

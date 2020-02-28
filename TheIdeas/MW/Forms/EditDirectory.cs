@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using MW.Utils;
 
 namespace MW.Forms
 {
@@ -15,6 +16,47 @@ namespace MW.Forms
 		{
 			InitializeComponent();
 			Type = AType;
+			SyncForm();
+		}
+		
+		//Инициализация справочника
+		public void SyncForm()
+		{
+			SyncName();
+					
+		}
+		
+		//Синхронизация наименования
+		public void SyncName()
+		{
+			switch (Type)
+			{
+				case "addTypeCost":
+					Text = "Добавить тип расхода";
+					break;
+				case "addPlace":
+					Text = "Добавить место расхода";
+					break; 
+				case "SelectTags":
+					Text = "Добавить тэги";
+					eComment.Enabled = false ;
+					break;
+					
+				default:
+					Text = "Новый тип";
+					break;
+			}
+		}	
+		
+		void BtnCancelClick(object sender, EventArgs e)
+		{
+			Close();			
+		}
+		
+		void BtnOkClick(object sender, EventArgs e)
+		{
+			Checks.CheckNull("Наименование", eName);
+//			CheckExist();
 		}
 	}
 }

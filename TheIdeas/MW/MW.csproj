@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Core\Controller.cs" />
     <Compile Include="Core\Models.cs" />
+    <Compile Include="Core\Utils.cs" />
     <Compile Include="Core\View.cs" />
     <Compile Include="Data\DataBase.cs" />
     <Compile Include="Forms\EditDirectory.cs" />
