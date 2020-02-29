@@ -62,18 +62,19 @@ namespace MW
 		//подключение к БД
 		public TDataBase DB;
 		//Модель данных
-		public List<TModel> ModelList;
+		public List<TModel> Models;
 		
 		public TDataService(string ASourceDB)
 		{
 			DB = new TDataBase(ASourceDB);
-			ModelList = new List<TModel>();
+			Models = new List<TModel>();
+			InitModel("Directory");
 		}
 		
 		public TModel GetModel(string AName)
 		{
 			TModel result = null;
-			foreach(TModel model in  ModelList)
+			foreach(TModel model in  Models)
 			{
 				if (model.Name == AName)
 				{
@@ -86,6 +87,11 @@ namespace MW
 				throw new NullReferenceException();	
 			}
 			return result;
+		}
+		
+		public void InitModel(string ATableName)
+		{
+			Models.Add(DB.GetModel(ATableName));
 		}
 	}
 

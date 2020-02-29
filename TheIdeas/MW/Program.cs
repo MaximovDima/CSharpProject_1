@@ -5,13 +5,16 @@ namespace MW
 {
 	internal sealed class Program
 	{
+		public static FrmMainForm MainForm;
+		public static TApp App;
 		[STAThread]
 		private static void Main(string[] args)
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new FrmMainForm());
+			MainForm = new FrmMainForm();
+			App = MainForm.App;			
+			Application.Run(MainForm);
 		}
-		
 	}
 }

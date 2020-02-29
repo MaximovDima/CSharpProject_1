@@ -3,44 +3,43 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using MW.Utils;
+using MW.Models;
 
 namespace MW.Forms
 {
 	public partial class frmEditDirectory : Form
 	{
+		//Подгрузка справочника
+		public TDirectory Directory;
 		//Тип справочной информации
 		public string Type;
-		//Текущие данные для определенного типа
-		public List<string> Values;
 		//Обновление данных
 		
-		
-		public frmEditDirectory(string AType)
+		public frmEditDirectory(string ATypeName, TDirectory ADirectory)
 		{
 			InitializeComponent();
-			Type = AType;
-			Values = new List<string>();
-			SyncForm();
+			Directory = ADirectory;
+			SyncForm(ATypeName);
 		}
 		
 		//Инициализация справочника
-		public void SyncForm()
+		public void SyncForm(string ATypeName)
 		{
-			SyncName();
-			SyncExistValueByType(Type);
-					
+			SyncName(ATypeName);					
 		}
 		
 		//Синхронизация наименования
-		public void SyncName()
+		public void SyncName(string ATypeName)
 		{
-			switch (Type)
+			switch (ATypeName)
 			{
 				case "addTypeCost":
 					Text = "Добавить тип расхода";
+					Type = "TypeCost";
 					break;
 				case "addPlace":
 					Text = "Добавить место расхода";
+					Type = "Place";
 					break; 
 				case "SelectTags":
 					Text = "Добавить тэги";
@@ -67,8 +66,26 @@ namespace MW.Forms
 		
 		void BtnOkClick(object sender, EventArgs e)
 		{
-			Checks.CheckNull("Наименование", eName);
-//			CheckExist();
+			//Проверки
+			if (Checks.IsNull("Наименование", eName) || IsExist())
+			{
+				return;
+			}
+			
+			//Добавление в модель
+			Directory.Add(Type, eName.Text, eComment.Text);
+			Close();
+		}
+		
+		//Проверка на дубликат
+		public bool IsExist()
+		{
+			if (Directory.Exist(Type, eName.Text))
+			{
+				MessageBox.Show("Раздел '" + eName.Text + "' уже существует!", "Дубликация", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return true;
+			}
+			else return false;
 		}
 	}
 }

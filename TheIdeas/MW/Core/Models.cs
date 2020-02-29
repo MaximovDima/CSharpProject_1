@@ -21,6 +21,9 @@ namespace MW.Models
 				case "Cost":
 					toReturn = new TCosts(ATableName);
 					break;
+				case "Directory":
+					toReturn = new TDirectory(ATableName);
+					break;
 					
 				default:
 					throw new ArgumentException("Таблицы " + ATableName + " не существует!");
@@ -250,11 +253,14 @@ namespace MW.Models
 		{
 			//Наименование
 			public string Name;
+			//Тип справочника
+			public string Type;
 			
 			public TRowDirectory(int AIndex, int AID, string AComment, 
-				string AName) : base(AIndex, AID, AComment)
+				string AName, string AType) : base(AIndex, AID, AComment)
 			{
 				Name = AName;
+				Type = AType;
 			}
 		}
 			
@@ -262,7 +268,7 @@ namespace MW.Models
 		{
 			RowCount = 0;
 			Rows = new List<TRowDirectory>();
-			Fields = " ID, Name, Comment";
+			Fields = " ID, Name, Type, Comment";
 		}
 		
 		public override void InitDataRow(SQLiteDataReader AReader)
@@ -270,9 +276,30 @@ namespace MW.Models
 	    		TRowDirectory Row = new TRowDirectory(RowCount++,
 					Convert.ToInt32(AReader["ID"]),
 					Convert.ToString(AReader["Comment"]),
-					Convert.ToString(AReader["NAme"]));
+					Convert.ToString(AReader["Name"]),
+					Convert.ToString(AReader["Type"]));
             	Rows.Add(Row);
 		}
 		
+		public bool Exist(string AType, string AName)
+		{
+			bool vResult = false;
+			
+			foreach(TRowDirectory row in Rows)
+			{
+				if ((row.Type == AType) && (String.Compare(row.Name, AName, true) == 0))
+				{
+					vResult = true;
+					break;
+				}
+			}
+			return vResult;
+		}
+		
+		public void Add(string AType,string AName, string AComment)
+		{
+			TRowDirectory Row = new TRowDirectory(RowCount++, 0, AComment, AName, AType);
+			Rows.Add(Row);
+		}
 	}
 }
