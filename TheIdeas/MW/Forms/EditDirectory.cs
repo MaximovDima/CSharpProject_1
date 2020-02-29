@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using MW.Utils;
 
 namespace MW.Forms
@@ -9,6 +10,8 @@ namespace MW.Forms
 	{
 		//Тип справочной информации
 		public string Type;
+		//Текущие данные для определенного типа
+		public List<string> Values;
 		//Обновление данных
 		
 		
@@ -16,6 +19,7 @@ namespace MW.Forms
 		{
 			InitializeComponent();
 			Type = AType;
+			Values = new List<string>();
 			SyncForm();
 		}
 		
@@ -23,6 +27,7 @@ namespace MW.Forms
 		public void SyncForm()
 		{
 			SyncName();
+			SyncExistValueByType(Type);
 					
 		}
 		
@@ -47,6 +52,13 @@ namespace MW.Forms
 					break;
 			}
 		}	
+		
+		//синхронизация текущих значений (необходима для исключения
+		// дублирующих значений)
+		public void SyncExistValueByType(string AType)
+		{
+			
+		}
 		
 		void BtnCancelClick(object sender, EventArgs e)
 		{

@@ -32,6 +32,8 @@
 			this.addPlace = new System.Windows.Forms.Button();
 			this.btnOk = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
+			this.dTypeCost = new System.Data.DataSet();
+			((System.ComponentModel.ISupportInitialize)(this.dTypeCost)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// eDate
@@ -91,6 +93,7 @@
 			// 
 			// cbTypeCost
 			// 
+			this.cbTypeCost.DataSource = this.dTypeCost;
 			this.cbTypeCost.FormattingEnabled = true;
 			this.cbTypeCost.Location = new System.Drawing.Point(120, 73);
 			this.cbTypeCost.Name = "cbTypeCost";
@@ -176,6 +179,10 @@
 			this.btnCancel.UseVisualStyleBackColor = true;
 			this.btnCancel.Click += new System.EventHandler(this.BtnCancelClick);
 			// 
+			// dTypeCost
+			// 
+			this.dTypeCost.DataSetName = "NewDataSet";
+			// 
 			// FrmEditFinance
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -201,9 +208,11 @@
 			this.Controls.Add(this.eDate);
 			this.Name = "FrmEditFinance";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+			((System.ComponentModel.ISupportInitialize)(this.dTypeCost)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Data.DataSet dTypeCost;
 		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.Button btnOk;
 		private System.Windows.Forms.Button addPlace;
