@@ -18,7 +18,7 @@
 		{
 			this.MWMenu = new System.Windows.Forms.MenuStrip();
 			this.Finance = new System.Windows.Forms.ToolStripMenuItem();
-			this.Football = new System.Windows.Forms.ToolStripMenuItem();
+			this.GKH = new System.Windows.Forms.ToolStripMenuItem();
 			this.MWMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -26,7 +26,7 @@
 			// 
 			this.MWMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 									this.Finance,
-									this.Football});
+									this.GKH});
 			this.MWMenu.Location = new System.Drawing.Point(0, 0);
 			this.MWMenu.Name = "MWMenu";
 			this.MWMenu.Size = new System.Drawing.Size(1169, 24);
@@ -39,11 +39,12 @@
 			this.Finance.Text = "Финансы";
 			this.Finance.Click += new System.EventHandler(this.FinanceClick);
 			// 
-			// Football
+			// GKH
 			// 
-			this.Football.Name = "Football";
-			this.Football.Size = new System.Drawing.Size(86, 20);
-			this.Football.Text = "Футбольчик";
+			this.GKH.Name = "GKH";
+			this.GKH.Size = new System.Drawing.Size(44, 20);
+			this.GKH.Text = "ЖКХ";
+			this.GKH.Click += new System.EventHandler(this.GKHClick);
 			// 
 			// FrmMainForm
 			// 
@@ -63,7 +64,7 @@
 			this.PerformLayout();
 		}
 		private System.Windows.Forms.ToolStripMenuItem Finance;
-		private System.Windows.Forms.ToolStripMenuItem Football;
+		private System.Windows.Forms.ToolStripMenuItem GKH;
 		private System.Windows.Forms.MenuStrip MWMenu;
 	}
 }

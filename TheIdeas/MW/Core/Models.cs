@@ -94,13 +94,7 @@ namespace MW.Models
 		}
 		
 		//инициализация данных
-		public abstract void InitDataRow(SQLiteDataReader AReader);
-		
-		//Добавление новых данных
-		public virtual void AddDataRow()
-		{
-		}
-		
+		public abstract void InitDataRow(SQLiteDataReader AReader);	
 	}
 	
 	//Модель логирования
@@ -135,11 +129,6 @@ namespace MW.Models
 			RowCount = 0;
 			Rows = new List<TRowLog>();
 			Fields = " ID, Comment, Date, ActionType, AdviceType, Change, User";
-		}
-		
-		public void AddDataRow(TDateRow ARow)
-		{
-		
 		}
 		
 		public override void InitDataRow(SQLiteDataReader AReader)
@@ -241,6 +230,12 @@ namespace MW.Models
             	Rows.Add(Row);
 		}
 		
+		public void Add(string AComment, string ADate, int AValue, int ACostType, int APlace, int ATag)
+		{
+			TRowCost Row = new TRowCost(RowCount++, 0, AComment, ADate, AValue, "Add", ACostType, APlace, ATag);
+			Rows.Add(Row);
+		}
+		
 	}
 	
 	//Модель справочник
@@ -263,14 +258,14 @@ namespace MW.Models
 				Type = AType;
 			}
 		}
-			
+		//Конструктор	
 		public TDirectory (string AName) : base(AName)
 		{
-			RowCount = 0;
+			RowCount = 1;
 			Rows = new List<TRowDirectory>();
 			Fields = " ID, Name, Type, Comment";
 		}
-		
+		//Инициализация из БД
 		public override void InitDataRow(SQLiteDataReader AReader)
 		{
 	    		TRowDirectory Row = new TRowDirectory(RowCount++,
@@ -280,7 +275,7 @@ namespace MW.Models
 					Convert.ToString(AReader["Type"]));
             	Rows.Add(Row);
 		}
-		
+		//Проверка на наличие
 		public bool Exist(string AType, string AName)
 		{
 			bool vResult = false;
@@ -293,12 +288,27 @@ namespace MW.Models
 					break;
 				}
 			}
-			return vResult;
+			return vResult;	
 		}
-		
-		public void Add(string AType,string AName, string AComment)
+		//Определение ID по списку категорий
+		public int GetIDByTypeAndName(string AType, string AName)
 		{
-			TRowDirectory Row = new TRowDirectory(RowCount++, 0, AComment, AName, AType);
+			int vResult = 0;
+			
+			foreach(TRowDirectory row in Rows)
+			{
+				if ((row.Type == AType) && (String.Compare(row.Name, AName, true) == 0))
+				{
+					vResult = row.ID;
+					break;
+				}
+			}
+			return vResult;	
+		}
+		//Добавление в модель пользователем
+		public void Add(string AType, string AName, string AComment)
+		{
+			TRowDirectory Row = new TRowDirectory(RowCount++, RowCount++, AComment, AName, AType);
 			Rows.Add(Row);
 		}
 	}

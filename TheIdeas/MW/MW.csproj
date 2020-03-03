@@ -67,6 +67,10 @@
     <Compile Include="Forms\Finance.Designer.cs">
       <DependentUpon>Finance.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\GKH.cs" />
+    <Compile Include="Forms\GKH.Designer.cs">
+      <DependentUpon>GKH.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm\MainForm.cs" />
     <Compile Include="MainForm\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -89,6 +93,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Finance.resx">
       <DependentUpon>Finance.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GKH.resx">
+      <DependentUpon>GKH.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

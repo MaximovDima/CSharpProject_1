@@ -4,21 +4,22 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 
 using MW;
+using MW.Utils;
 using MW.Models;
 
 namespace MW.Forms
 {
 	public partial class FrmEditFinance : Form
 	{
-		//Инициализация модели справочника
+		//Инициализация моделей
 		public TDirectory Directory;
-		//Списки значений для справочников
-		public List<string> TypesCost;
+		public TCosts Costs;
 		
 		public FrmEditFinance()
 		{
 			InitializeComponent();
 			Directory = (TDirectory)Program.App.DS.GetModel("Directory");
+			Costs = (TCosts)Program.App.DS.GetModel("Cost");
 			SyncForm();
 		}
 		
@@ -36,11 +37,11 @@ namespace MW.Forms
 			{
 				if (row.Type == "TypeCost")
 				{
-					cbTypeCost.Items.Insert(row.ID, row.Name);
+					cbTypeCost.Items.Add(row.Name);
 				}
 				if (row.Type == "Place")
 				{
-					cbPlace.Items.Insert(row.ID, row.Name);
+					cbPlace.Items.Add(row.Name);
 				}				
 			}
 			
@@ -70,6 +71,23 @@ namespace MW.Forms
 			frmEditDirectory editDirectory = new frmEditDirectory((sender as Button).Name, Directory);
 			editDirectory.ShowDialog();
 			SyncValuesForComboBoxes();			
+		}
+		
+		void BtnOkClick(object sender, EventArgs e)
+		{
+			//Проверки
+			if (Checks.IsNull("Сумма", eValue) ||
+			    Checks.IsNull("Тип расхода", cbTypeCost) ||
+			    Checks.IsNull("Место", cbPlace))
+			{
+				return;
+			}
+			
+			//Добавление в модель
+			Costs.Add(eComment.Text, eDate.Value.ToString(), Format.StrToInt(eValue.Text),
+			          Directory.GetIDByTypeAndName("TypeCost", cbTypeCost.Text),  
+			          Directory.GetIDByTypeAndName("Place", cbPlace.Text), Format.StrToInt(eTags.Text));
+			Close();
 		}
 	}
 }

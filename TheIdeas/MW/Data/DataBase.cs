@@ -15,7 +15,7 @@ namespace MW.DataModule
 		public TDataBase(string ASource)
 		{
 			Source = ASource;
-			Source = @"D:\csh\CSharpProject_1\TheIdeas\MW\Data\MaxiWiki";
+			Source = @"D:\projects\CSharpProject_1\TheIdeas\MW\Data\MaxiWiki";
 			Connect = new SQLiteConnection("Data Source=" + Source + ";Version=3;");
 			Connect.Open();
 		}

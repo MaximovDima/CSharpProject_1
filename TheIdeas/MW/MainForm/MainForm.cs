@@ -23,19 +23,17 @@ namespace MW
 			App = new TApp("SourceDB From MainForm Component");
 		}
 		
-		void Button1Click(object sender, EventArgs e)
-		{
-//			DB.SyncDataFromTable("Income");				
-		}
-		
-		void Button2Click(object sender, EventArgs e)
-		{
-//			DB.AddDataToTable("Directory");
-		}	
-		
 		void FinanceClick(object sender, EventArgs e)
 		{
 			Form form1 = new FrmFinance();
+			form1.MdiParent = this;
+			form1.Dock = DockStyle.Fill;
+			form1.Show();			
+		}
+		
+		void GKHClick(object sender, EventArgs e)
+		{
+			Form form1 = new FrmGKH();
 			form1.MdiParent = this;
 			form1.Dock = DockStyle.Fill;
 			form1.Show();			
@@ -69,6 +67,7 @@ namespace MW
 			DB = new TDataBase(ASourceDB);
 			Models = new List<TModel>();
 			InitModel("Directory");
+			InitModel("Cost");
 		}
 		
 		public TModel GetModel(string AName)
