@@ -305,6 +305,21 @@ namespace MW.Models
 			}
 			return vResult;	
 		}
+		//Определение категории по ID
+		/*public int GetIDByTypeAndName(string AType, int AName)
+		{
+			int vResult = 0;
+			
+			foreach(TRowDirectory row in Rows)
+			{
+				if ((row.Type == AType) && (String.Compare(row.Name, AName, true) == 0))
+				{
+					vResult = row.ID;
+					break;
+				}
+			}
+			return vResult;	
+		}*/
 		//Добавление в модель пользователем
 		public void Add(string AType, string AName, string AComment)
 		{

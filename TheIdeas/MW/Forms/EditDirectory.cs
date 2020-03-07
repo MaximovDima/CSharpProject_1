@@ -13,7 +13,6 @@ namespace MW.Forms
 		public TDirectory Directory;
 		//Тип справочной информации
 		public string Type;
-		//Обновление данных
 		
 		public frmEditDirectory(string ATypeName, TDirectory ADirectory)
 		{
@@ -71,7 +70,6 @@ namespace MW.Forms
 			{
 				return;
 			}
-			
 			//Добавление в модель
 			Directory.Add(Type, eName.Text, eComment.Text);
 			Close();

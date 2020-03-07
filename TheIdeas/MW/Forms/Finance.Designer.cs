@@ -87,7 +87,7 @@
 			this.ControlBox = false;
 			this.Controls.Add(this.splitter);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-			this.Name = "TFinance";
+			this.Name = "FrmFinance";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.splitter.Panel1.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.splitter)).EndInit();

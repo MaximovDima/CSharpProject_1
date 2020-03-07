@@ -24,6 +24,24 @@ namespace MW.Utils
 			}
 			else return false;
 		}
+		//Проверка числа на буквы
+		public static bool IsString(string AName, TextBox AEdit)
+		{
+			string Str = AEdit.Text.Trim();
+			int Num;
+			bool isNum = int.TryParse(Str, out Num);
+
+			if (isNum)
+			{
+				return false;
+			} 
+			else
+			{
+				MessageBox.Show("Неверное числовое значение '" + AName + "'", "Некорректные данные", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return true;
+			}
+
+		}
 	}
 	//Форматирование
 	public static class Format

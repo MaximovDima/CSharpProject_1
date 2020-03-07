@@ -14,12 +14,16 @@ namespace MW.Forms
 		//Инициализация моделей
 		public TDirectory Directory;
 		public TCosts Costs;
+		//Флаг регистрации изменения
+		public bool IsModify;
 		
-		public FrmEditFinance()
+		public FrmEditFinance(TDirectory ADirectory, TCosts ACosts)
 		{
+			Directory = ADirectory;
+		    Costs = ACosts;
+			IsModify = false;
+		    
 			InitializeComponent();
-			Directory = (TDirectory)Program.App.DS.GetModel("Directory");
-			Costs = (TCosts)Program.App.DS.GetModel("Cost");
 			SyncForm();
 		}
 		
@@ -78,7 +82,8 @@ namespace MW.Forms
 			//Проверки
 			if (Checks.IsNull("Сумма", eValue) ||
 			    Checks.IsNull("Тип расхода", cbTypeCost) ||
-			    Checks.IsNull("Место", cbPlace))
+			    Checks.IsNull("Место", cbPlace) ||
+			    Checks.IsString("Сумма", eValue))
 			{
 				return;
 			}
@@ -87,6 +92,7 @@ namespace MW.Forms
 			Costs.Add(eComment.Text, eDate.Value.ToString(), Format.StrToInt(eValue.Text),
 			          Directory.GetIDByTypeAndName("TypeCost", cbTypeCost.Text),  
 			          Directory.GetIDByTypeAndName("Place", cbPlace.Text), Format.StrToInt(eTags.Text));
+			IsModify = true;
 			Close();
 		}
 	}

@@ -16,27 +16,60 @@ namespace MW
 	{
 		//управление приложением
 		public TApp App;
+		//список форм-разделов
+		public List<Form> Forms;
 		
 		public FrmMainForm()
 		{
 			InitializeComponent();
+			Forms = new List<Form>();
 			App = new TApp("SourceDB From MainForm Component");
+		}
+		//Поиск раздела (создание если еще не создан)
+		public Form GetForm(string AName)
+		{
+			Form vResult = null;
+			foreach(Form form in Forms)
+			{
+				if (form.Name == AName)
+				{
+					vResult = form;
+				}
+				else
+				{
+					form.Hide();
+				}
+			}
+			if (vResult == null)
+			{
+				switch (AName)
+				{
+					case "FrmFinance":
+						vResult = new FrmFinance();
+						break;
+					case "FrmGKH":
+						vResult = new FrmGKH();
+						break; 
+						
+					default:
+						throw new ArgumentException("Формы " + AName + " не существует!");
+				}
+				Forms.Add(vResult);
+			}
+			vResult.MdiParent = this;
+			vResult.Dock = DockStyle.Fill;
+			
+			return vResult;
 		}
 		
 		void FinanceClick(object sender, EventArgs e)
 		{
-			Form form1 = new FrmFinance();
-			form1.MdiParent = this;
-			form1.Dock = DockStyle.Fill;
-			form1.Show();			
+			GetForm("FrmFinance").Show();			
 		}
 		
 		void GKHClick(object sender, EventArgs e)
 		{
-			Form form1 = new FrmGKH();
-			form1.MdiParent = this;
-			form1.Dock = DockStyle.Fill;
-			form1.Show();			
+			GetForm("FrmGKH").Show();			
 		}
 	}
 	
