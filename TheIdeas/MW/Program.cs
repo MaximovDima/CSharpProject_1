@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Windows.Forms;
 
+using MW.Data;
+
 namespace MW
 {
 	internal sealed class Program
 	{
 		public static FrmMainForm MainForm;
-		public static TApp App;
+		//Интерфейс базы данных
+		public static TData Data;
 		[STAThread]
 		private static void Main(string[] args)
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			MainForm = new FrmMainForm();
-			App = MainForm.App;			
+			Data = MainForm.Data;			
 			Application.Run(MainForm);
 		}
 	}

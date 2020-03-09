@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using MW;
 using MW.Utils;
-using MW.Models;
+using MW.Core;
 
 namespace MW.Forms
 {

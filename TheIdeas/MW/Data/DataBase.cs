@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Data.SQLite;
 using System.Collections.Generic;
-using MW.Models;
+using MW.Utils;
 
-namespace MW.DataModule
+namespace MW.Data
 {
 	public class TDataBase
 	{
@@ -20,27 +20,30 @@ namespace MW.DataModule
 			Connect.Open();
 		}
 		
-		public TModel GetModel(string ATableName)
+		//Результат запроса в виде списка строк	
+		public void ReFillModelRows(List<Dictionary<string, string>> ARows, string[] AStrings, string ATableName)
 		{
-			ModelFactory MFactory = new ModelFactory();
-			
-			TModel Model = MFactory.GetModel(ATableName);
-			string sqlQuery = "Select " + Model.Fields + " from " + ATableName;
-					
-			SQLiteCommand command = new SQLiteCommand(sqlQuery, Connect);
-            SQLiteDataReader reader = command.ExecuteReader();
-            	
-            while (reader.Read())
+			ARows.Clear();
+			string vSQLQuery = "Select " + Format.GetSQL(AStrings) + " from " + ATableName;
+			SQLiteCommand command = new SQLiteCommand(vSQLQuery, Connect);
+            SQLiteDataReader vReader = command.ExecuteReader();
+            while (vReader.Read())
             {
-            	Model.InitDataRow(reader);
+            	Dictionary<string, string> vRow = new Dictionary<string, string>();
+            	for(int i = 0; i < AStrings.Length; i++)
+            	{
+            		vRow[AStrings[i]] = Convert.ToString(vReader[AStrings[i]]);
+            	}
+            	
+            	ARows.Add(vRow);
             }
-			
-            return Model;
 		}
 		
-		public void AddDataToTable(string ATableName)
+		//Удаление в таблице БД
+		public void DeleteRow(string ATableName, int ADeleteID)
 		{
-
+			
 		}
+		
 	}
 }

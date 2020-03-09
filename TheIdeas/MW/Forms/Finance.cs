@@ -2,21 +2,24 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-using MW.Models;
+using MW.Data;
+using MW.Core;
 
 namespace MW.Forms
 {
 	public partial class FrmFinance : Form
 	{
 		//Инициализация моделей
+		public TData Data;
 		public TDirectory Directory;
 		public TCosts Costs;
 		
-		public FrmFinance()
+		public FrmFinance(TData AData)
 		{
 			InitializeComponent();
-			Directory = (TDirectory)Program.App.DS.GetModel("Directory");
-			Costs = (TCosts)Program.App.DS.GetModel("Cost");
+			Data = AData;
+			Directory = (TDirectory)Data.GetModel("Directory");
+			Costs = (TCosts)Data.GetModel("Cost");
 		}
 		
 		void BtnAddClick(object sender, EventArgs e)
@@ -26,7 +29,8 @@ namespace MW.Forms
 			editForm.ShowDialog();
 			if (editForm.IsModify)
 			{
-				int q = 1;	
+				Data.UpdateModel("Directory");
+				Data.UpdateModel("Cost");
 			}
 			
 		}

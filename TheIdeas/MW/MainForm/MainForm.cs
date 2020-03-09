@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-using MW.DataModule;
-using MW.Models;
-using MW.Controller;
+using MW.Data;
 using MW.View;
 using MW.Forms;
 
@@ -15,7 +13,7 @@ namespace MW
 	public partial class FrmMainForm : Form
 	{
 		//управление приложением
-		public TApp App;
+		public TData Data;
 		//список форм-разделов
 		public List<Form> Forms;
 		
@@ -23,21 +21,21 @@ namespace MW
 		{
 			InitializeComponent();
 			Forms = new List<Form>();
-			App = new TApp("SourceDB From MainForm Component");
+			Data = new TData("SourceDB From MainForm Component");
 		}
 		//Поиск раздела (создание если еще не создан)
 		public Form GetForm(string AName)
 		{
 			Form vResult = null;
-			foreach(Form form in Forms)
+			foreach(Form vForm in Forms)
 			{
-				if (form.Name == AName)
+				if (vForm.Name == AName)
 				{
-					vResult = form;
+					vResult = vForm;
 				}
 				else
 				{
-					form.Hide();
+					vForm.Hide();
 				}
 			}
 			if (vResult == null)
@@ -45,10 +43,10 @@ namespace MW
 				switch (AName)
 				{
 					case "FrmFinance":
-						vResult = new FrmFinance();
+						vResult = new FrmFinance(Data);
 						break;
 					case "FrmGKH":
-						vResult = new FrmGKH();
+						vResult = new FrmGKH(Data);
 						break; 
 						
 					default:
@@ -71,67 +69,5 @@ namespace MW
 		{
 			GetForm("FrmGKH").Show();			
 		}
-	}
-	
-	//Приложение
-	public class TApp
-	{
-		//Служба работы с данными
-		public TDataService DS;
-		//Контроллер
-		public TInterface View;
-		
-		public TApp(string ASourceDB)
-		{
-			DS = new TDataService(ASourceDB);
-			View = new TInterface();
-		}
-	}
-	
-	public class TDataService
-	{
-		//подключение к БД
-		public TDataBase DB;
-		//Модель данных
-		public List<TModel> Models;
-		
-		public TDataService(string ASourceDB)
-		{
-			DB = new TDataBase(ASourceDB);
-			Models = new List<TModel>();
-			InitModel("Directory");
-			InitModel("Cost");
-		}
-		
-		public TModel GetModel(string AName)
-		{
-			TModel result = null;
-			foreach(TModel model in  Models)
-			{
-				if (model.Name == AName)
-				{
-					result = model;
-					break;
-				}
-			}
-			if (result == null) 
-			{
-				throw new NullReferenceException();	
-			}
-			return result;
-		}
-		
-		public void InitModel(string ATableName)
-		{
-			Models.Add(DB.GetModel(ATableName));
-		}
-	}
-
-	public class TInterface
-	{
-		//Связь контроллов и моделей
-		public TCRUDService Data;
-		//Отрисовка
-		public TDrwInfo DrwInfo;
 	}
 }

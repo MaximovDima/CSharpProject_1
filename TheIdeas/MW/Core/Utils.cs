@@ -66,5 +66,10 @@ namespace MW.Utils
 				return Convert.ToString(AValue);
 			}
 		}
+		//Перевод массива строк в SQL-запрос
+		public static string GetSQL(string[] AStrings)
+		{
+			return String.Join(", ", AStrings); 
+		}
 	}
 }

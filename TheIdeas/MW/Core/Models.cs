@@ -1,34 +1,34 @@
 ﻿using System;
-using System.Data.SQLite;
 using System.Collections.Generic;
+using MW.Utils;
 
-namespace MW.Models
+namespace MW.Core
 {
 	//Фабрика моделей
 	public class ModelFactory
 	{
 		public TModel GetModel(string ATableName)
 		{
-			TModel toReturn = null;
+			TModel vReturn = null;
 			switch (ATableName)
 			{
 				case "Log":
-					toReturn = new TLogs(ATableName);
+					vReturn = new TLogs(ATableName);
 					break;
 				case "Income":
-					toReturn = new TIncomes(ATableName);
+					vReturn = new TIncomes(ATableName);
 					break; 
 				case "Cost":
-					toReturn = new TCosts(ATableName);
+					vReturn = new TCosts(ATableName);
 					break;
 				case "Directory":
-					toReturn = new TDirectory(ATableName);
+					vReturn = new TDirectory(ATableName);
 					break;
 					
 				default:
 					throw new ArgumentException("Таблицы " + ATableName + " не существует!");
 			}
-			return toReturn;
+			return vReturn;
 		}
 	}
 	
@@ -47,6 +47,18 @@ namespace MW.Models
 			Index = AIndex;
 			ID = AID;
 			Comment = AComment;
+		}
+	}
+	
+	//Строка с состоянием
+	public abstract class TStateRow : TRow
+	{
+		//Состояние (Current/Add/Edit/Delete)
+		public string State;
+		
+		public TStateRow(int AIndex, int AID, string AComment, string AState) : base(AIndex, AID, AComment) 
+		{
+			State = AState;
 		}
 	}
 	
@@ -84,7 +96,7 @@ namespace MW.Models
 		//Наименование
 		public string Name;
 		//Список полей в БД
-		public string Fields;
+		public string[] Fields;
 		//Текущее количество строк
 		public int RowCount;
 		
@@ -93,8 +105,14 @@ namespace MW.Models
 			Name = AName; 
 		}
 		
-		//инициализация данных
-		public abstract void InitDataRow(SQLiteDataReader AReader);	
+		//Синхронизация с таблицей БД
+		public abstract void CreateNewRow(Dictionary<string, string> ARow);
+
+		//Очистка данных
+		public abstract void Clear();
+		
+		//Строку которую надо удалить
+		public abstract int GetDeleteRowID();
 	}
 	
 	//Модель логирования
@@ -128,20 +146,31 @@ namespace MW.Models
 		{
 			RowCount = 0;
 			Rows = new List<TRowLog>();
-			Fields = " ID, Comment, Date, ActionType, AdviceType, Change, User";
+			Fields = new string[] {"ID", "Comment", "Date", "ActionType", "AdviceType", "Change", "User"};
 		}
 		
-		public override void InitDataRow(SQLiteDataReader AReader)
+		public override void CreateNewRow(Dictionary<string, string> ARow)
 		{
 	    		TRowLog Row = new TRowLog(RowCount++,
-					Convert.ToInt32(AReader["ID"]),
-					Convert.ToString(AReader["Comment"]),
-					Convert.ToString(AReader["Date"]),
-					Convert.ToString(AReader["ActionType"]),
-					Convert.ToString(AReader["AdviceType"]),
-					Convert.ToString(AReader["Change"]),
-					Convert.ToString(AReader["User"]));
+			        Format.StrToInt(ARow["ID"]),
+					ARow["Comment"],
+					ARow["Date"],
+					ARow["ActionType"],
+					ARow["AdviceType"],
+					ARow["Change"],
+					ARow["User"]);
             	Rows.Add(Row);
+		}
+		
+		public override void Clear()
+		{
+			RowCount = 0;
+			Rows.Clear();
+		}
+		
+		public override int GetDeleteRowID()
+		{
+			return -1;
 		}
 		
 	}
@@ -168,21 +197,40 @@ namespace MW.Models
 		{
 			RowCount = 0;
 			Rows = new List<TRowIncome>();
-			Fields = " ID, Comment, Date, Value, IncomeType";
+			Fields = new string[] {"ID", "Comment", "Date", "Value", "IncomeType"};
 		}
 		
-		public override void InitDataRow(SQLiteDataReader AReader)
+		public override void CreateNewRow(Dictionary<string, string> ARow)
 		{
 	    		TRowIncome Row = new TRowIncome(RowCount++,
-					Convert.ToInt32(AReader["ID"]),
-					Convert.ToString(AReader["Comment"]),
-					Convert.ToString(AReader["Date"]),
-					Convert.ToInt32(AReader["Value"]),
-					Convert.ToString(AReader["State"]),
-					Convert.ToInt32(AReader["IncomeType"]));
+					Format.StrToInt(ARow["ID"]),
+					ARow["Comment"],
+					ARow["Date"],
+					Format.StrToInt(ARow["Value"]),
+					"Current",
+					Format.StrToInt(ARow["IncomeType"]));
             	Rows.Add(Row);
 		}
 		
+		public override void Clear()
+		{
+			RowCount = 0;
+			Rows.Clear();
+		}
+		
+		public override int GetDeleteRowID()
+		{
+			int vID = -1;
+			foreach(TRowIncome vRow in Rows)
+			{
+				if (vRow.State == "delete")
+				{
+					vID = vRow.ID;
+					break;
+				}
+			}
+			return vID;
+		}
 	}
 
 	//Модель расходы
@@ -213,20 +261,20 @@ namespace MW.Models
 		{
 			RowCount = 0;
 			Rows = new List<TRowCost>();
-			Fields = " ID, Comment, Date, Value, CostType, Place, Tag";
+			Fields = new string[] {"ID", "Comment", "Date", "Value", "CostType", "Place", "Tag"};
 		}
 		
-		public override void InitDataRow(SQLiteDataReader AReader)
+		public override void CreateNewRow(Dictionary<string, string> ARow)
 		{
 	    		TRowCost Row = new TRowCost(RowCount++,
-					Convert.ToInt32(AReader["ID"]),
-					Convert.ToString(AReader["Comment"]),
-					Convert.ToString(AReader["Date"]),
-					Convert.ToInt32(AReader["Value"]),
-					Convert.ToString(AReader["State"]),
-					Convert.ToInt32(AReader["CostType"]),
-					Convert.ToInt32(AReader["Place"]),
-					Convert.ToInt32(AReader["Tag"]));
+					Format.StrToInt(ARow["ID"]),
+					ARow["Comment"],
+					ARow["Date"],
+					Format.StrToInt(ARow["Value"]),
+					"Current",
+					Format.StrToInt(ARow["CostType"]),
+					Format.StrToInt(ARow["Place"]),
+					Format.StrToInt(ARow["Tag"]));
             	Rows.Add(Row);
 		}
 		
@@ -236,6 +284,25 @@ namespace MW.Models
 			Rows.Add(Row);
 		}
 		
+		public override void Clear()
+		{
+			RowCount = 0;
+			Rows.Clear();
+		}
+		
+		public override int GetDeleteRowID()
+		{
+			int vID = -1;
+			foreach(TRowCost vRow in Rows)
+			{
+				if (vRow.State == "delete")
+				{
+					vID = vRow.ID;
+					break;
+				}
+			}
+			return vID;
+		}
 	}
 	
 	//Модель справочник
@@ -244,15 +311,15 @@ namespace MW.Models
 		//Список строк
 		public List<TRowDirectory> Rows;
 		//строка справочника
-		public class TRowDirectory : TRow
+		public class TRowDirectory : TStateRow
 		{
 			//Наименование
 			public string Name;
 			//Тип справочника
 			public string Type;
 			
-			public TRowDirectory(int AIndex, int AID, string AComment, 
-				string AName, string AType) : base(AIndex, AID, AComment)
+			public TRowDirectory(int AIndex, int AID, string AComment, string AState,
+				string AName, string AType) : base(AIndex, AID, AComment, AState)
 			{
 				Name = AName;
 				Type = AType;
@@ -263,16 +330,17 @@ namespace MW.Models
 		{
 			RowCount = 1;
 			Rows = new List<TRowDirectory>();
-			Fields = " ID, Name, Type, Comment";
+			Fields = new string[] {"ID", "Name", "Type", "Comment"};
 		}
 		//Инициализация из БД
-		public override void InitDataRow(SQLiteDataReader AReader)
+		public override void CreateNewRow(Dictionary<string, string> ARow)
 		{
 	    		TRowDirectory Row = new TRowDirectory(RowCount++,
-					Convert.ToInt32(AReader["ID"]),
-					Convert.ToString(AReader["Comment"]),
-					Convert.ToString(AReader["Name"]),
-					Convert.ToString(AReader["Type"]));
+					Format.StrToInt(ARow["ID"]),
+					ARow["Comment"], 
+					"Current",
+					ARow["Name"],
+					ARow["Type"]);
             	Rows.Add(Row);
 		}
 		//Проверка на наличие
@@ -323,8 +391,28 @@ namespace MW.Models
 		//Добавление в модель пользователем
 		public void Add(string AType, string AName, string AComment)
 		{
-			TRowDirectory Row = new TRowDirectory(RowCount++, RowCount++, AComment, AName, AType);
+			TRowDirectory Row = new TRowDirectory(RowCount++, 0, AComment, "Add", AName, AType);
 			Rows.Add(Row);
 		}
+		
+		public override void Clear()
+		{
+			RowCount = 0;
+			Rows.Clear();
+		}
+		
+		public override int GetDeleteRowID()
+		{
+			int vID = -1;
+			foreach(TRowDirectory vRow in Rows)
+			{
+				if (vRow.State == "delete")
+				{
+					vID = vRow.ID;
+					break;
+				}
+			}
+			return vID;
+		}		
 	}
 }

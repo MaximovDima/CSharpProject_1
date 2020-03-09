@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using MW.Utils;
-using MW.Models;
+using MW.Core;
 
 namespace MW.Forms
 {
