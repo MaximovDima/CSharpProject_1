@@ -71,7 +71,7 @@ namespace MW.Data
 				return;
 			}
 			//Заполнение изменений
-//			AModel.ReFillChangeRows(vInsertRows, vUpdateRow);
+			AModel.ReFillChangeRows(vInsertRows, vUpdateRow);
 			//вставка			
 			if (vInsertRows.Count > 0)
 			{

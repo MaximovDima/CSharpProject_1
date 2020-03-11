@@ -105,7 +105,7 @@ namespace MW.Core
 			Name = AName; 
 		}
 		
-		//Синхронизация с таблицей БД
+		//Создание строки синхронизированной с данными
 		public abstract void CreateNewRow(Dictionary<string, string> ARow);
 
 		//Очистка данных
@@ -113,6 +113,10 @@ namespace MW.Core
 		
 		//Строку которую надо удалить
 		public abstract int GetDeleteRowID();
+		
+		//Синхронизация изменений
+		public abstract void ReFillChangeRows(List<Dictionary<string, string>> AInsertRows, 
+		                                      Dictionary<string, string> AUpdateRow);
 	}
 	
 	//Модель логирования
@@ -173,6 +177,11 @@ namespace MW.Core
 			return -1;
 		}
 		
+		public override void ReFillChangeRows(List<Dictionary<string, string>> AInsertRows, 
+		                                      Dictionary<string, string> AUpdateRow)
+		{
+			
+		}
 	}
 
 	//Модель доходы
@@ -230,6 +239,12 @@ namespace MW.Core
 				}
 			}
 			return vID;
+		}
+		
+		public override void ReFillChangeRows(List<Dictionary<string, string>> AInsertRows, 
+		                                      Dictionary<string, string> AUpdateRow)
+		{
+			
 		}
 	}
 
@@ -303,6 +318,12 @@ namespace MW.Core
 			}
 			return vID;
 		}
+		
+		public override void ReFillChangeRows(List<Dictionary<string, string>> AInsertRows, 
+		                                      Dictionary<string, string> AUpdateRow)
+		{
+			
+		}		
 	}
 	
 	//Модель справочник
@@ -367,7 +388,7 @@ namespace MW.Core
 			{
 				if ((row.Type == AType) && (String.Compare(row.Name, AName, true) == 0))
 				{
-					vResult = row.ID;
+					vResult = row.Index;
 					break;
 				}
 			}
@@ -413,6 +434,36 @@ namespace MW.Core
 				}
 			}
 			return vID;
+		}
+		
+		public override void ReFillChangeRows(List<Dictionary<string, string>> AInsertRows, 
+		                                      Dictionary<string, string> AUpdateRow)
+		{
+			AInsertRows.Clear();
+			AUpdateRow.Clear();
+			foreach(TRowDirectory vRow in Rows)
+			{
+				if (vRow.State == "Edit")
+				{
+					AUpdateRow["ID"] = Convert.ToString(vRow.ID);
+					AUpdateRow["Index"] = Convert.ToString(vRow.Index);
+					AUpdateRow["Name"] = Convert.ToString(vRow.Name);
+					AUpdateRow["Type"] = Convert.ToString(vRow.Type);
+					AUpdateRow["Comment"] = Convert.ToString(vRow.Comment);
+				}
+				
+				if (vRow.State == "Add")
+				{
+					Dictionary<string, string> vInsertRow = new Dictionary<string, string>();
+					
+					vInsertRow["ID"] = Convert.ToString(vRow.ID);
+					vInsertRow["Index"] = Convert.ToString(vRow.Index);
+					vInsertRow["Name"] = Convert.ToString(vRow.Name);
+					vInsertRow["Type"] = Convert.ToString(vRow.Type);
+					vInsertRow["Comment"] = Convert.ToString(vRow.Comment);
+					AInsertRows.Add(vInsertRow);
+				}
+			}
 		}		
 	}
 }
