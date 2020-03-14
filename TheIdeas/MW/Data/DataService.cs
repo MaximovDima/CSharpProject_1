@@ -12,11 +12,32 @@ namespace MW.Data
 		public TDataBase DB;
 		//Модель данных
 		public List<TModel> Models;
+		//Конфигурации (пока захардкодим, реализация настройки в отедельном файле!)
+		public string SourceDB = @"D:\projects\CSharpProject_1\TheIdeas\MW\Data\MaxiWiki";
+		public string[] LogFields = new string[] {"ID", "Comment", "Date", "ActionType", "AdviceType", "Change", "User"};
+		public string[] DirectoryFields = new string[] {"ID", "Name", "Type", "Comment"};
+		public string[] CostFields = new string[] {"ID", "Comment", "Date", "Value", "CostType", "Place", "Tag"};
 		
-		public TData(string ASourceDB)
+		public TData(string ASourceFile)
 		{
-			DB = new TDataBase(ASourceDB);
+			DB = new TDataBase(SourceDB);
 			Models = new List<TModel>();
+		}
+		
+		public string[] GetFields(string AName)
+		{
+			switch (AName)
+			{
+				case "Log":
+					return LogFields;
+				case "Directory":
+					return DirectoryFields;
+				case "Cost":
+					return CostFields;
+				
+				default:
+					throw new ArgumentException("Таблицы " + AName + " не существует!");
+			}				
 		}
 		
 		public TModel GetModel(string AName)
@@ -31,7 +52,7 @@ namespace MW.Data
 				}
 			}
 			if (vResult == null) 
-			{
+			{		
 				vResult = CreateModel(AName);
 			}
 			return vResult;
@@ -39,8 +60,7 @@ namespace MW.Data
 		//Создание новой модели по таблице БД
 		public TModel CreateModel(string ATableName)
 		{
-			ModelFactory vMFactory = new ModelFactory();
-			TModel vModel = vMFactory.GetModel(ATableName);
+			TModel vModel = new TModel(ATableName, GetFields(ATableName));
 			GetData(vModel);
 			Models.Add(vModel);
             
@@ -49,20 +69,12 @@ namespace MW.Data
 		//Заполнение таблицы данными
 		public void GetData(TModel AModel)
 		{
-			List<Dictionary<string, string>> vRows = new List<Dictionary<string, string>>();
-			DB.ReFillModelRows(vRows, AModel.Fields, AModel.Name);
-            	
-            foreach(Dictionary<string, string> vRow in vRows)
-            {
-            	AModel.CreateNewRow(vRow);
-            }
+			DB.ReFillModelRows(AModel.Rows, AModel.Fields, AModel.Name);
 		}
 		
 		//Синхронизация модели данных с БД
 		public void SetData(TModel AModel)
 		{
-			List<Dictionary<string, string>> vInsertRows = new List<Dictionary<string, string>>();
-			Dictionary<string, string> vUpdateRow = new Dictionary<string, string>();
 			int vDeleteID = AModel.GetDeleteRowID();
 			if (vDeleteID > -1)
 			{
@@ -70,30 +82,44 @@ namespace MW.Data
 				//лог
 				return;
 			}
-			//Заполнение изменений
-			AModel.ReFillChangeRows(vInsertRows, vUpdateRow);
-			//вставка			
-			if (vInsertRows.Count > 0)
-			{
-				foreach(Dictionary<string, string> vRow in vInsertRows)
-				{
-					//Формируем логи
-				}
-			}//обновление
-			else if (vUpdateRow.Count > 0)
-			{
-				
-			}
 			
-			//Insert Logs
+			//Синхронизация изменений
+			foreach(Dictionary<string, string> vRow in AModel.Rows)
+			{
+				if ((vRow["State"] == "add") || (vRow["State"] == "edit"))
+				{
+					Dictionary<string, string> vLogRow = new Dictionary<string, string>();
+					vLogRow.Add("ID", "1");
+					vLogRow.Add("Comment", "auto");
+					vLogRow.Add("Date", DateTime.Now.ToString());
+					vLogRow.Add("AdviceType", "PC");
+					vLogRow.Add("User", "Maximov");
+					//вставка			
+					if (vRow["State"] == "add")
+					{
+						string vNewValues = DB.InsertRow(vRow, AModel.Fields, AModel.Name);
+						vLogRow.Add("ActionType", "Добавление");
+						string vChange = AModel.Name + ": " + vNewValues; 
+						vLogRow.Add("Change", vChange);
+					}//обновление
+					else if (vRow["State"] == "edit")
+					{
+//						DB.UpdateRow(AModel.Fields, vRow);
+					}
+			
+					//Insert Logs
+					DB.InsertRow(vLogRow, LogFields, "Log");
+				}
+			}
 		}
-		
+
+			
 		//Обновление данных модели
 		public void UpdateModel(string AName)
 		{
 			TModel vModel = GetModel(AName);
 			SetData(vModel);
-			vModel.Clear();
+			vModel.Rows.Clear();
 			GetData(vModel);
 			
 		}

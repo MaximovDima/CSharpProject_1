@@ -11,9 +11,8 @@ namespace MW.Forms
 	{
 		public FrmGKH(TData AData)
 		{
-			
 			InitializeComponent();
-			TLogs logs = (TLogs)AData.GetModel("Log");
+			TModel logs = AData.GetModel("Log");
 		}
 	}
 }

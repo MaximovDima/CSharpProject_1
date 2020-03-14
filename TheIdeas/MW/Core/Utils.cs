@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 
 namespace MW.Utils
@@ -46,6 +47,17 @@ namespace MW.Utils
 	//Форматирование
 	public static class Format
 	{
+		public static string ObjToStr(object AObj)
+		{
+			if (AObj == null)
+			{
+				return "";
+			} else
+			{
+				return Convert.ToString(AObj);
+			}
+		}
+		
 		public static int StrToInt(string AString)
 		{
 			if (AString == "")

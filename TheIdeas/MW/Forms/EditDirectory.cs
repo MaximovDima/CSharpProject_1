@@ -10,11 +10,11 @@ namespace MW.Forms
 	public partial class frmEditDirectory : Form
 	{
 		//Подгрузка справочника
-		public TDirectory Directory;
+		public TModel Directory;
 		//Тип справочной информации
 		public string Type;
 		
-		public frmEditDirectory(string ATypeName, TDirectory ADirectory)
+		public frmEditDirectory(string ATypeName, TModel ADirectory)
 		{
 			InitializeComponent();
 			Directory = ADirectory;
@@ -34,7 +34,7 @@ namespace MW.Forms
 			{
 				case "addTypeCost":
 					Text = "Добавить тип расхода";
-					Type = "TypeCost";
+					Type = "Cost";
 					break;
 				case "addPlace":
 					Text = "Добавить место расхода";
@@ -71,14 +71,23 @@ namespace MW.Forms
 				return;
 			}
 			//Добавление в модель
-			Directory.Add(Type, eName.Text, eComment.Text);
+			Dictionary<string, string> vRow = new Dictionary<string, string>();
+			vRow.Add("ID", Directory.GetNextID());
+			vRow.Add("Type", Type);
+			vRow.Add("Name", eName.Text);
+			vRow.Add("Comment", eComment.Text);
+			vRow.Add("State", "add");
+			Directory.Rows.Add(vRow);
 			Close();
 		}
 		
 		//Проверка на дубликат
 		public bool IsExist()
 		{
-			if (Directory.Exist(Type, eName.Text))
+			Dictionary<string, string> vRow = new Dictionary<string, string>();
+			vRow.Add("Type", Type);
+			vRow.Add("Name", eName.Text);
+			if (Directory.ExistDataRow(Type, eName.Text))
 			{
 				MessageBox.Show("Раздел '" + eName.Text + "' уже существует!", "Дубликация", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return true;

@@ -21,7 +21,7 @@ namespace MW
 		{
 			InitializeComponent();
 			Forms = new List<Form>();
-			Data = new TData("SourceDB From MainForm Component");
+			Data = new TData("Передаем Config");
 		}
 		//Поиск раздела (создание если еще не создан)
 		public Form GetForm(string AName)

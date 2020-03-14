@@ -15,28 +15,45 @@ namespace MW.Data
 		public TDataBase(string ASource)
 		{
 			Source = ASource;
-			Source = @"D:\projects\CSharpProject_1\TheIdeas\MW\Data\MaxiWiki";
 			Connect = new SQLiteConnection("Data Source=" + Source + ";Version=3;");
 			Connect.Open();
 		}
 		
 		//Результат запроса в виде списка строк	
-		public void ReFillModelRows(List<Dictionary<string, string>> ARows, string[] AStrings, string ATableName)
+		public void ReFillModelRows(List<Dictionary<string, string>> ARows, string[] AFields, string ATableName)
 		{
 			ARows.Clear();
-			string vSQLQuery = "Select " + Format.GetSQL(AStrings) + " from " + ATableName;
+			string vSQLQuery = "Select " + Format.GetSQL(AFields) + " from " + ATableName;
 			SQLiteCommand command = new SQLiteCommand(vSQLQuery, Connect);
             SQLiteDataReader vReader = command.ExecuteReader();
             while (vReader.Read())
             {
             	Dictionary<string, string> vRow = new Dictionary<string, string>();
-            	for(int i = 0; i < AStrings.Length; i++)
+            	for(int i = 0; i < AFields.Length; i++)
             	{
-            		vRow[AStrings[i]] = Convert.ToString(vReader[AStrings[i]]);
+            		vRow.Add(AFields[i], Format.ObjToStr(vReader[AFields[i]]));
             	}
+            	vRow.Add("State", "current");
             	
             	ARows.Add(vRow);
             }
+		}
+		
+		//Результат запроса в виде списка строк	
+		public string InsertRow(Dictionary<string, string> ARow, string[] AFields, string ATableName)
+		{
+			string[] vValues = new string[AFields.Length];
+			string[] vReturnValues = new string[AFields.Length];
+			for(int i = 0; i < AFields.Length; i++)
+			{
+				vValues[i] = "'" + ARow[AFields[i]] + "'";
+				vReturnValues[i] = ARow[AFields[i]];
+			}
+			string vSQLQuery = "Insert into " + ATableName + " (" + Format.GetSQL(AFields) +") values (" + Format.GetSQL(vValues) + ")";
+			SQLiteCommand command = new SQLiteCommand(vSQLQuery, Connect);
+			command.ExecuteNonQuery();
+			
+			return Format.GetSQL(vReturnValues);
 		}
 		
 		//Удаление в таблице БД

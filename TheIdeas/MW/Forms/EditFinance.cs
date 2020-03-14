@@ -12,12 +12,12 @@ namespace MW.Forms
 	public partial class FrmEditFinance : Form
 	{
 		//Инициализация моделей
-		public TDirectory Directory;
-		public TCosts Costs;
+		public TModel Directory;
+		public TModel Costs;
 		//Флаг регистрации изменения
 		public bool IsModify;
 		
-		public FrmEditFinance(TDirectory ADirectory, TCosts ACosts)
+		public FrmEditFinance(TModel ADirectory, TModel ACosts)
 		{
 			Directory = ADirectory;
 		    Costs = ACosts;
@@ -37,15 +37,15 @@ namespace MW.Forms
 		{
 			cbTypeCost.Items.Clear();
 			cbPlace.Items.Clear();
-			foreach(TDirectory.TRowDirectory row in Directory.Rows)
+			foreach(Dictionary<string, string> vRow in Directory.Rows)
 			{
-				if (row.Type == "TypeCost")
+				if (vRow["Type"] == "Cost")
 				{
-					cbTypeCost.Items.Add(row.Name);
+					cbTypeCost.Items.Add(vRow["Name"]);
 				}
-				if (row.Type == "Place")
+				if (vRow["Type"] == "Place")
 				{
-					cbPlace.Items.Add(row.Name);
+					cbPlace.Items.Add(vRow["Name"]);
 				}				
 			}
 			
@@ -89,9 +89,18 @@ namespace MW.Forms
 			}
 			
 			//Добавление в модель
-			Costs.Add(eComment.Text, eDate.Value.ToString(), Format.StrToInt(eValue.Text),
-			          Directory.GetIDByTypeAndName("TypeCost", cbTypeCost.Text),  
-			          Directory.GetIDByTypeAndName("Place", cbPlace.Text), Format.StrToInt(eTags.Text));
+			Dictionary<string, string> vRow = new Dictionary<string, string>();
+			vRow.Add("ID", Costs.GetNextID());
+			vRow.Add("Comment", eComment.Text);
+			vRow.Add("Date", eDate.Value.ToString());
+			vRow.Add("Value", eValue.Text);
+			vRow.Add("CostType", Directory.GetIDByTypeAndName("Cost", cbTypeCost.Text));
+			vRow.Add("Place", Directory.GetIDByTypeAndName("Place", cbPlace.Text));
+			vRow.Add("Tag", eTags.Text);
+			vRow.Add("State", "add");
+			
+			Costs.Rows.Add(vRow);
+			
 			IsModify = true;
 			Close();
 		}

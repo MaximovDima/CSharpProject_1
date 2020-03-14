@@ -11,15 +11,17 @@ namespace MW.Forms
 	{
 		//Инициализация моделей
 		public TData Data;
-		public TDirectory Directory;
-		public TCosts Costs;
+		//Справочник
+		public TModel Directory;
+		//Расходы
+		public TModel Costs;
 		
 		public FrmFinance(TData AData)
 		{
 			InitializeComponent();
 			Data = AData;
-			Directory = (TDirectory)Data.GetModel("Directory");
-			Costs = (TCosts)Data.GetModel("Cost");
+			Directory = Data.GetModel("Directory");
+			Costs = Data.GetModel("Cost");
 		}
 		
 		void BtnAddClick(object sender, EventArgs e)
