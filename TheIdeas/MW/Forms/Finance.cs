@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-
 using MW.Data;
 using MW.Core;
 
@@ -22,6 +22,28 @@ namespace MW.Forms
 			Data = AData;
 			Directory = Data.GetModel("Directory");
 			Costs = Data.GetModel("Cost");
+			SyncForm();
+		}
+		
+		public void SyncForm()
+		{
+			SyncCostsView();
+		}
+		
+		public void SyncCostsView()
+		{
+			vCosts.Rows.Clear();
+			foreach(Dictionary<string, string> vRow in Costs.Rows)
+			{
+				string[] vGridRow = new string[5];
+				vGridRow[0] = vRow["Date"];
+				vGridRow[1] = Directory.GetNameByID("Cost", vRow["CostType"]);
+				vGridRow[2] = Directory.GetNameByID("Place", vRow["Place"]);
+				vGridRow[3] = vRow["Value"];
+				vGridRow[4] = vRow["Comment"];
+				
+				vCosts.Rows.Add(vGridRow);
+			}
 		}
 		
 		void BtnAddClick(object sender, EventArgs e)
@@ -33,6 +55,7 @@ namespace MW.Forms
 			{
 				Data.UpdateModel("Directory");
 				Data.UpdateModel("Cost");
+				SyncCostsView();
 			}
 			
 		}

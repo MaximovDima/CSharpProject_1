@@ -59,6 +59,22 @@ namespace MW.Core
 			return vResult;	
 		}
 		
+		//Определение наименования по списку категорий
+		public string GetNameByID(string AType, string AID)
+		{
+			string vResult = "";
+			
+			foreach(Dictionary<string, string> vRow in Rows)
+			{
+				if ((vRow["Type"] == AType) && (vRow["ID"] == AID))
+				{
+					vResult = vRow["Name"];
+					break;
+				}
+			}
+			return vResult;	
+		}
+		
 		//Строку которую надо удалить
 		public int GetDeleteRowID()
 		{

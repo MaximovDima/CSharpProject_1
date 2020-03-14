@@ -16,11 +16,20 @@
 
 		private void InitializeComponent()
 		{
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.splitter = new System.Windows.Forms.SplitContainer();
 			this.btnDelete = new System.Windows.Forms.Button();
 			this.btnEdit = new System.Windows.Forms.Button();
 			this.btnAdd = new System.Windows.Forms.Button();
 			this.vCosts = new System.Windows.Forms.DataGridView();
+			this.Date = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.TypeCost = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.Place = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.Comment = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			((System.ComponentModel.ISupportInitialize)(this.splitter)).BeginInit();
 			this.splitter.Panel1.SuspendLayout();
 			this.splitter.SuspendLayout();
@@ -76,12 +85,64 @@
 			// vCosts
 			// 
 			this.vCosts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.vCosts.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+									this.Date,
+									this.TypeCost,
+									this.Place,
+									this.Value,
+									this.Comment});
 			this.vCosts.Location = new System.Drawing.Point(12, 12);
 			this.vCosts.Name = "vCosts";
 			this.vCosts.Size = new System.Drawing.Size(481, 231);
 			this.vCosts.TabIndex = 0;
 			// 
-			// TFinance
+			// Date
+			// 
+			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			this.Date.DefaultCellStyle = dataGridViewCellStyle1;
+			this.Date.HeaderText = "Дата";
+			this.Date.Name = "Date";
+			this.Date.ReadOnly = true;
+			this.Date.Width = 75;
+			// 
+			// TypeCost
+			// 
+			this.TypeCost.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			this.TypeCost.DefaultCellStyle = dataGridViewCellStyle2;
+			this.TypeCost.HeaderText = "Тип";
+			this.TypeCost.Name = "TypeCost";
+			this.TypeCost.ReadOnly = true;
+			this.TypeCost.Width = 51;
+			// 
+			// Place
+			// 
+			this.Place.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			this.Place.DefaultCellStyle = dataGridViewCellStyle3;
+			this.Place.HeaderText = "Место";
+			this.Place.Name = "Place";
+			this.Place.ReadOnly = true;
+			this.Place.Width = 64;
+			// 
+			// Value
+			// 
+			this.Value.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			this.Value.DefaultCellStyle = dataGridViewCellStyle4;
+			this.Value.HeaderText = "Сумма";
+			this.Value.Name = "Value";
+			this.Value.ReadOnly = true;
+			this.Value.Width = 66;
+			// 
+			// Comment
+			// 
+			this.Comment.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+			this.Comment.HeaderText = "Комментарий";
+			this.Comment.Name = "Comment";
+			this.Comment.ReadOnly = true;
+			// 
+			// FrmFinance
 			// 
 			this.ClientSize = new System.Drawing.Size(1159, 553);
 			this.ControlBox = false;
@@ -95,6 +156,11 @@
 			((System.ComponentModel.ISupportInitialize)(this.vCosts)).EndInit();
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.DataGridViewTextBoxColumn Comment;
+		private System.Windows.Forms.DataGridViewTextBoxColumn Value;
+		private System.Windows.Forms.DataGridViewTextBoxColumn Place;
+		private System.Windows.Forms.DataGridViewTextBoxColumn TypeCost;
+		private System.Windows.Forms.DataGridViewTextBoxColumn Date;
 		private System.Windows.Forms.Button btnEdit;
 		private System.Windows.Forms.Button btnDelete;
 		private System.Windows.Forms.Button btnAdd;
