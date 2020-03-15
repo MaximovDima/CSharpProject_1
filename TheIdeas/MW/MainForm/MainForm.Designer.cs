@@ -16,6 +16,7 @@
 
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMainForm));
 			this.MWMenu = new System.Windows.Forms.MenuStrip();
 			this.Finance = new System.Windows.Forms.ToolStripMenuItem();
 			this.GKH = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,6 +54,7 @@
 			this.ClientSize = new System.Drawing.Size(1169, 606);
 			this.Controls.Add(this.MWMenu);
 			this.HelpButton = true;
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.IsMdiContainer = true;
 			this.MainMenuStrip = this.MWMenu;
 			this.Name = "FrmMainForm";

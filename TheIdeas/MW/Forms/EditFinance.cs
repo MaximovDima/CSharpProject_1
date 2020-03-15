@@ -94,7 +94,7 @@ namespace MW.Forms
 			vRow.Add("Comment", eComment.Text);
 			vRow.Add("Date", eDate.Value.ToString());
 			vRow.Add("Value", eValue.Text);
-			vRow.Add("CostType", Directory.GetIDByTypeAndName("Cost", cbTypeCost.Text));
+			vRow.Add("Type", Directory.GetIDByTypeAndName("Cost", cbTypeCost.Text));
 			vRow.Add("Place", Directory.GetIDByTypeAndName("Place", cbPlace.Text));
 			vRow.Add("Tag", eTags.Text);
 			vRow.Add("State", "add");

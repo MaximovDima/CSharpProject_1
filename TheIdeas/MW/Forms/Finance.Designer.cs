@@ -16,13 +16,15 @@
 
 		private void InitializeComponent()
 		{
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmFinance));
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.splitter = new System.Windows.Forms.SplitContainer();
-			this.btnDelete = new System.Windows.Forms.Button();
-			this.btnEdit = new System.Windows.Forms.Button();
+			this.gbCosts = new System.Windows.Forms.GroupBox();
+			this.button2 = new System.Windows.Forms.Button();
+			this.button1 = new System.Windows.Forms.Button();
 			this.btnAdd = new System.Windows.Forms.Button();
 			this.vCosts = new System.Windows.Forms.DataGridView();
 			this.Date = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -33,6 +35,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.splitter)).BeginInit();
 			this.splitter.Panel1.SuspendLayout();
 			this.splitter.SuspendLayout();
+			this.gbCosts.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.vCosts)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -40,45 +43,57 @@
 			// 
 			this.splitter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.splitter.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.splitter.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+			this.splitter.IsSplitterFixed = true;
 			this.splitter.Location = new System.Drawing.Point(0, 0);
 			this.splitter.Name = "splitter";
 			this.splitter.Orientation = System.Windows.Forms.Orientation.Horizontal;
 			// 
 			// splitter.Panel1
 			// 
-			this.splitter.Panel1.Controls.Add(this.btnDelete);
-			this.splitter.Panel1.Controls.Add(this.btnEdit);
-			this.splitter.Panel1.Controls.Add(this.btnAdd);
-			this.splitter.Panel1.Controls.Add(this.vCosts);
+			this.splitter.Panel1.Controls.Add(this.gbCosts);
 			this.splitter.Size = new System.Drawing.Size(1159, 553);
-			this.splitter.SplitterDistance = 258;
+			this.splitter.SplitterDistance = 273;
 			this.splitter.TabIndex = 0;
 			// 
-			// btnDelete
+			// gbCosts
 			// 
-			this.btnDelete.Location = new System.Drawing.Point(499, 70);
-			this.btnDelete.Name = "btnDelete";
-			this.btnDelete.Size = new System.Drawing.Size(92, 23);
-			this.btnDelete.TabIndex = 3;
-			this.btnDelete.Text = "Удалить";
-			this.btnDelete.UseVisualStyleBackColor = true;
+			this.gbCosts.Controls.Add(this.button2);
+			this.gbCosts.Controls.Add(this.button1);
+			this.gbCosts.Controls.Add(this.btnAdd);
+			this.gbCosts.Controls.Add(this.vCosts);
+			this.gbCosts.Location = new System.Drawing.Point(11, 11);
+			this.gbCosts.Name = "gbCosts";
+			this.gbCosts.Size = new System.Drawing.Size(529, 256);
+			this.gbCosts.TabIndex = 2;
+			this.gbCosts.TabStop = false;
+			this.gbCosts.Text = "Расходы";
 			// 
-			// btnEdit
+			// button2
 			// 
-			this.btnEdit.Location = new System.Drawing.Point(499, 41);
-			this.btnEdit.Name = "btnEdit";
-			this.btnEdit.Size = new System.Drawing.Size(92, 23);
-			this.btnEdit.TabIndex = 2;
-			this.btnEdit.Text = "Редактировать";
-			this.btnEdit.UseVisualStyleBackColor = true;
+			this.button2.Image = ((System.Drawing.Image)(resources.GetObject("button2.Image")));
+			this.button2.Location = new System.Drawing.Point(44, 19);
+			this.button2.Name = "button2";
+			this.button2.Size = new System.Drawing.Size(32, 32);
+			this.button2.TabIndex = 3;
+			this.button2.UseVisualStyleBackColor = true;
+			// 
+			// button1
+			// 
+			this.button1.Image = ((System.Drawing.Image)(resources.GetObject("button1.Image")));
+			this.button1.Location = new System.Drawing.Point(82, 19);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(32, 32);
+			this.button1.TabIndex = 2;
+			this.button1.UseVisualStyleBackColor = true;
 			// 
 			// btnAdd
 			// 
-			this.btnAdd.Location = new System.Drawing.Point(499, 12);
+			this.btnAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnAdd.Image")));
+			this.btnAdd.Location = new System.Drawing.Point(6, 19);
 			this.btnAdd.Name = "btnAdd";
-			this.btnAdd.Size = new System.Drawing.Size(92, 23);
+			this.btnAdd.Size = new System.Drawing.Size(32, 32);
 			this.btnAdd.TabIndex = 1;
-			this.btnAdd.Text = "Добавить";
 			this.btnAdd.UseVisualStyleBackColor = true;
 			this.btnAdd.Click += new System.EventHandler(this.BtnAddClick);
 			// 
@@ -91,15 +106,16 @@
 									this.Place,
 									this.Value,
 									this.Comment});
-			this.vCosts.Location = new System.Drawing.Point(12, 12);
+			this.vCosts.Location = new System.Drawing.Point(6, 58);
 			this.vCosts.Name = "vCosts";
-			this.vCosts.Size = new System.Drawing.Size(481, 231);
+			this.vCosts.Size = new System.Drawing.Size(481, 184);
 			this.vCosts.TabIndex = 0;
+			this.vCosts.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.VCostsCellDoubleClick);
 			// 
 			// Date
 			// 
-			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			this.Date.DefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			this.Date.DefaultCellStyle = dataGridViewCellStyle9;
 			this.Date.HeaderText = "Дата";
 			this.Date.Name = "Date";
 			this.Date.ReadOnly = true;
@@ -108,8 +124,8 @@
 			// TypeCost
 			// 
 			this.TypeCost.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			this.TypeCost.DefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			this.TypeCost.DefaultCellStyle = dataGridViewCellStyle10;
 			this.TypeCost.HeaderText = "Тип";
 			this.TypeCost.Name = "TypeCost";
 			this.TypeCost.ReadOnly = true;
@@ -118,8 +134,8 @@
 			// Place
 			// 
 			this.Place.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			this.Place.DefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			this.Place.DefaultCellStyle = dataGridViewCellStyle11;
 			this.Place.HeaderText = "Место";
 			this.Place.Name = "Place";
 			this.Place.ReadOnly = true;
@@ -128,8 +144,8 @@
 			// Value
 			// 
 			this.Value.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			this.Value.DefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			this.Value.DefaultCellStyle = dataGridViewCellStyle12;
 			this.Value.HeaderText = "Сумма";
 			this.Value.Name = "Value";
 			this.Value.ReadOnly = true;
@@ -153,16 +169,18 @@
 			this.splitter.Panel1.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.splitter)).EndInit();
 			this.splitter.ResumeLayout(false);
+			this.gbCosts.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.vCosts)).EndInit();
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.Button button2;
+		private System.Windows.Forms.GroupBox gbCosts;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Comment;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Value;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Place;
 		private System.Windows.Forms.DataGridViewTextBoxColumn TypeCost;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Date;
-		private System.Windows.Forms.Button btnEdit;
-		private System.Windows.Forms.Button btnDelete;
 		private System.Windows.Forms.Button btnAdd;
 		private System.Windows.Forms.DataGridView vCosts;
 		private System.Windows.Forms.SplitContainer splitter;

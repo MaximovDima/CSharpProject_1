@@ -37,7 +37,7 @@ namespace MW.Forms
 			{
 				string[] vGridRow = new string[5];
 				vGridRow[0] = vRow["Date"];
-				vGridRow[1] = Directory.GetNameByID("Cost", vRow["CostType"]);
+				vGridRow[1] = Directory.GetNameByID("Cost", vRow["Type"]);
 				vGridRow[2] = Directory.GetNameByID("Place", vRow["Place"]);
 				vGridRow[3] = vRow["Value"];
 				vGridRow[4] = vRow["Comment"];
@@ -58,6 +58,20 @@ namespace MW.Forms
 				SyncCostsView();
 			}
 			
+		}
+		
+		void VCostsCellDoubleClick(object sender, DataGridViewCellEventArgs e)
+		{
+			Dictionary<string, string> vRow = Costs.Rows[e.RowIndex];
+			FrmEditFinance editForm = new FrmEditFinance(Directory, Costs);
+			editForm.Text = "Редактировать расход...";
+			editForm.ShowDialog();		
+			
+//			if (editForm.IsModify)
+//			{
+//				Data.UpdateModel("Cost");
+//				SyncCostsView();
+//			}
 		}
 	}
 }

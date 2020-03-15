@@ -75,11 +75,11 @@
 			// 
 			// lblPalce
 			// 
-			this.lblPalce.Location = new System.Drawing.Point(14, 106);
+			this.lblPalce.Location = new System.Drawing.Point(14, 105);
 			this.lblPalce.Name = "lblPalce";
-			this.lblPalce.Size = new System.Drawing.Size(100, 15);
+			this.lblPalce.Size = new System.Drawing.Size(100, 14);
 			this.lblPalce.TabIndex = 6;
-			this.lblPalce.Text = "Место:";
+			this.lblPalce.Text = "Место/причина:";
 			// 
 			// lblTypeCost
 			// 
@@ -87,7 +87,7 @@
 			this.lblTypeCost.Name = "lblTypeCost";
 			this.lblTypeCost.Size = new System.Drawing.Size(100, 16);
 			this.lblTypeCost.TabIndex = 7;
-			this.lblTypeCost.Text = "Тип расхода:";
+			this.lblTypeCost.Text = "Тип/вид:";
 			// 
 			// cbTypeCost
 			// 
