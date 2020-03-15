@@ -91,6 +91,9 @@
 			// 
 			// cbTypeCost
 			// 
+			this.cbTypeCost.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+			this.cbTypeCost.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+			this.cbTypeCost.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cbTypeCost.FormattingEnabled = true;
 			this.cbTypeCost.Location = new System.Drawing.Point(120, 73);
 			this.cbTypeCost.Name = "cbTypeCost";
@@ -106,6 +109,9 @@
 			// 
 			// cbPlace
 			// 
+			this.cbPlace.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+			this.cbPlace.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+			this.cbPlace.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cbPlace.FormattingEnabled = true;
 			this.cbPlace.Location = new System.Drawing.Point(120, 100);
 			this.cbPlace.Name = "cbPlace";

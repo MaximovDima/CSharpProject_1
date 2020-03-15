@@ -56,6 +56,23 @@ namespace MW.Data
 			return Format.GetSQL(vReturnValues);
 		}
 		
+		//Результат запроса в виде обновленного списка строк	
+		public string UpdateRow(Dictionary<string, string> ARow, string[] AFields, string ATableName)
+		{
+			string[] vValues = new string[AFields.Length - 1];
+			string[] vReturnValues = new string[AFields.Length - 1];
+			for(int i = 1; i < AFields.Length; i++)
+			{
+				vValues[i - 1] = AFields[i] + " = "+ "'" + ARow[AFields[i]] + "'";
+				vReturnValues[i - 1] = AFields[i] + " = " + ARow[AFields[i]];
+			}
+			string vSQLQuery = "Update " + ATableName + " set " + Format.GetSQL(vValues) + " where ID = " + ARow["ID"];
+			SQLiteCommand command = new SQLiteCommand(vSQLQuery, Connect);
+			command.ExecuteNonQuery();
+
+			return Format.GetSQL(vReturnValues);
+		}
+		
 		//Удаление в таблице БД
 		public void DeleteRow(string ATableName, int ADeleteID)
 		{

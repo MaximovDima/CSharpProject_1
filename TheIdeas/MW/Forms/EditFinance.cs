@@ -16,6 +16,12 @@ namespace MW.Forms
 		public TModel Costs;
 		//Флаг регистрации изменения
 		public bool IsModify;
+		//Флаг редактирования
+		public bool IsEdit;
+		//Флаг расходы
+		public bool IsCosts;
+		//Редактируемая строка
+		public Dictionary<string, string> EditRow;
 		
 		public FrmEditFinance(TModel ADirectory, TModel ACosts)
 		{
@@ -24,13 +30,26 @@ namespace MW.Forms
 			IsModify = false;
 		    
 			InitializeComponent();
-			SyncForm();
 		}
 		
 		//синхронизация формы(параметров, выпадающих списков)
 		public void SyncForm()
 		{
 			SyncValuesForComboBoxes();
+			if(IsEdit)
+			{
+				SyncEdits();
+			}
+		}
+		
+		//Синхронизация контролов в случае редактирования
+		public void SyncEdits()
+		{
+			eDate.Value = Convert.ToDateTime(EditRow["Date"]);
+			eValue.Text = EditRow["Value"];
+			cbTypeCost.SelectedIndex = cbTypeCost.Items.IndexOf(Directory.GetNameByID("Cost", EditRow["Type"]));
+			cbPlace.SelectedIndex = cbPlace.Items.IndexOf(Directory.GetNameByID("Place", EditRow["Place"]));
+			eComment.Text = EditRow["Comment"];
 		}
 		
 		public void SyncValuesForComboBoxes()
@@ -88,18 +107,32 @@ namespace MW.Forms
 				return;
 			}
 			
-			//Добавление в модель
-			Dictionary<string, string> vRow = new Dictionary<string, string>();
-			vRow.Add("ID", Costs.GetNextID());
-			vRow.Add("Comment", eComment.Text);
-			vRow.Add("Date", eDate.Value.ToString());
-			vRow.Add("Value", eValue.Text);
-			vRow.Add("Type", Directory.GetIDByTypeAndName("Cost", cbTypeCost.Text));
-			vRow.Add("Place", Directory.GetIDByTypeAndName("Place", cbPlace.Text));
-			vRow.Add("Tag", eTags.Text);
-			vRow.Add("State", "add");
+			//Обновление
+			if(IsEdit)
+			{
+				EditRow["Comment"] = eComment.Text;
+				EditRow["Date"] = eDate.Value.ToString();
+				EditRow["Value"] = eValue.Text;
+				EditRow["Type"] = Directory.GetIDByTypeAndName("Cost", cbTypeCost.Text);
+				EditRow["Place"] = Directory.GetIDByTypeAndName("Place", cbPlace.Text);
+				EditRow["Tag"] = eTags.Text;
+				EditRow["State"] = "edit";
+			}
+			else
+			//Добавление
+			{
+				Dictionary<string, string> vRow = new Dictionary<string, string>();
+				vRow.Add("ID", Costs.GetNextID());
+				vRow.Add("Comment", eComment.Text);
+				vRow.Add("Date", eDate.Value.ToString());
+				vRow.Add("Value", eValue.Text);
+				vRow.Add("Type", Directory.GetIDByTypeAndName("Cost", cbTypeCost.Text));
+				vRow.Add("Place", Directory.GetIDByTypeAndName("Place", cbPlace.Text));
+				vRow.Add("Tag", eTags.Text);
+				vRow.Add("State", "add");
 			
-			Costs.Rows.Add(vRow);
+				Costs.Rows.Add(vRow);
+			}
 			
 			IsModify = true;
 			Close();

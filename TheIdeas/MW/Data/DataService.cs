@@ -104,7 +104,10 @@ namespace MW.Data
 					}//обновление
 					else if (vRow["State"] == "edit")
 					{
-//						DB.UpdateRow(AModel.Fields, vRow);
+						string vNewValues = DB.UpdateRow(vRow, AModel.Fields, AModel.Name);
+						vLogRow.Add("ActionType", "Редактирование");
+						string vChange = AModel.Name + ": " + vNewValues; 
+						vLogRow.Add("Change", vChange);
 					}
 			
 					//Insert Logs
