@@ -89,5 +89,17 @@ namespace MW.Core
 			}
 			return vID;
 		}
+		
+		//Возвращает сумму по числовому полю
+		public string GetTextSum(string AFieldName)
+		{
+			int vResult = 0;
+			foreach(Dictionary<string, string> vRow in Rows)
+			{
+				vResult = vResult + Format.StrToInt(vRow[AFieldName]);
+			}
+			
+			return Format.IntToStr(vResult);
+		}
 	}
 }

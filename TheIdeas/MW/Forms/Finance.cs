@@ -29,6 +29,7 @@ namespace MW.Forms
 		public void SyncForm()
 		{
 			SyncCostsView();
+			lblCostSum.Text = Costs.GetTextSum("Value");
 		}
 		
 		public void SyncCostsView()
@@ -60,7 +61,7 @@ namespace MW.Forms
 			{
 				Data.UpdateModel("Directory");
 				Data.UpdateModel("Cost");
-				SyncCostsView();
+				SyncForm();
 			}
 			
 		}
@@ -82,7 +83,7 @@ namespace MW.Forms
 			{
 				Data.UpdateModel("Directory");
 				Data.UpdateModel("Cost");
-				SyncCostsView();
+				SyncForm();
 			}
 		}
 	}

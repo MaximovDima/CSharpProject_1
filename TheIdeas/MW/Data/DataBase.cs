@@ -59,6 +59,7 @@ namespace MW.Data
 		//Результат запроса в виде обновленного списка строк	
 		public string UpdateRow(Dictionary<string, string> ARow, string[] AFields, string ATableName)
 		{
+			//ID всегда идет первым в конфигурации
 			string[] vValues = new string[AFields.Length - 1];
 			string[] vReturnValues = new string[AFields.Length - 1];
 			for(int i = 1; i < AFields.Length; i++)

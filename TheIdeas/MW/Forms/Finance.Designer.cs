@@ -25,7 +25,7 @@
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.gbCosts = new System.Windows.Forms.GroupBox();
-			this.label1 = new System.Windows.Forms.Label();
+			this.lblCostSum = new System.Windows.Forms.Label();
 			this.button2 = new System.Windows.Forms.Button();
 			this.button1 = new System.Windows.Forms.Button();
 			this.btnAdd = new System.Windows.Forms.Button();
@@ -55,7 +55,7 @@
 			// 
 			// gbCosts
 			// 
-			this.gbCosts.Controls.Add(this.label1);
+			this.gbCosts.Controls.Add(this.lblCostSum);
 			this.gbCosts.Controls.Add(this.button2);
 			this.gbCosts.Controls.Add(this.button1);
 			this.gbCosts.Controls.Add(this.btnAdd);
@@ -67,15 +67,15 @@
 			this.gbCosts.TabStop = false;
 			this.gbCosts.Text = "Расходы";
 			// 
-			// label1
+			// lblCostSum
 			// 
-			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.label1.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-			this.label1.Location = new System.Drawing.Point(432, 16);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(137, 32);
-			this.label1.TabIndex = 4;
-			this.label1.Text = "100 000";
+			this.lblCostSum.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.lblCostSum.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+			this.lblCostSum.Location = new System.Drawing.Point(432, 16);
+			this.lblCostSum.Name = "lblCostSum";
+			this.lblCostSum.Size = new System.Drawing.Size(137, 32);
+			this.lblCostSum.TabIndex = 4;
+			this.lblCostSum.Text = "100 000";
 			// 
 			// button2
 			// 
@@ -323,7 +323,7 @@
 		private System.Windows.Forms.Button button3;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.GroupBox gbIncomes;
-		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label lblCostSum;
 		private System.Windows.Forms.Button button1;
 		private System.Windows.Forms.Button button2;
 		private System.Windows.Forms.GroupBox gbCosts;
