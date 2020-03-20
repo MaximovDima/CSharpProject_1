@@ -52,7 +52,7 @@ namespace MW.Forms
 			vCosts.FirstDisplayedScrollingRowIndex = vCosts.RowCount - 1;		
 		}
 		
-		void BtnAddClick(object sender, EventArgs e)
+		void BtnAddCostClick(object sender, EventArgs e)
 		{
 			FrmEditFinance editForm = new FrmEditFinance(Directory, Costs);
 			editForm.Text = "Новый расход...";
@@ -71,7 +71,15 @@ namespace MW.Forms
 		
 		void VCostsCellDoubleClick(object sender, DataGridViewCellEventArgs e)
 		{
-			string vID = vCosts.Rows[e.RowIndex].Cells["ID"].Value.ToString();
+			EditCost(e.RowIndex);
+		}
+		
+		public void EditCost(int ARowIndex)
+		{
+			if (ARowIndex >= vCosts.RowCount - 1)
+				return;
+				
+			string vID = vCosts.Rows[ARowIndex].Cells["ID"].Value.ToString();
 			Dictionary<string, string> vRow = Costs.Rows[Format.StrToInt(vID) - 1];
 
 			FrmEditFinance editForm = new FrmEditFinance(Directory, Costs);
@@ -85,6 +93,28 @@ namespace MW.Forms
 			if (editForm.IsModify)
 			{
 				Data.UpdateModel("Directory");
+				Data.UpdateModel("Cost");
+				SyncForm();
+			}
+		}	
+		
+		void BtnCostEditClick(object sender, EventArgs e)
+		{
+			EditCost(vCosts.CurrentRow.Index);	
+		}
+		
+		void BtnCostDeleteClick(object sender, EventArgs e)
+		{
+			if (vCosts.CurrentRow.Index >= vCosts.RowCount - 1)
+				return;
+			string vID = vCosts.Rows[vCosts.CurrentRow.Index].Cells["ID"].Value.ToString();
+			Dictionary<string, string> vRow = Costs.Rows[Format.StrToInt(vID) - 1];
+			
+			DialogResult vResult = MessageBox.Show("Удалить расход " + vRow["Value"] + " за " + vRow["Date"],
+			                                      "Удаление", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+			if (vResult == DialogResult.Yes)
+			{
+				vRow["State"] = "delete";
 				Data.UpdateModel("Cost");
 				SyncForm();
 			}

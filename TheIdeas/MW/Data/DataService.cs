@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 
 using MW.Core;
+using MW.Utils;
 
 namespace MW.Data
 {
@@ -13,7 +14,7 @@ namespace MW.Data
 		//Модель данных
 		public List<TModel> Models;
 		//Конфигурации (пока захардкодим, реализация настройки в отедельном файле!)
-		public string SourceDB = @"D:\projects\CSharpProject_1\TheIdeas\MW\Data\MaxiWiki";
+		public string SourceDB = @"D:\MaxiWiki";
 		public string[] LogFields = new string[] {"ID", "Comment", "Date", "ActionType", "AdviceType", "Change", "User"};
 		public string[] DirectoryFields = new string[] {"ID", "Name", "Type", "Comment"};
 		public string[] CostFields = new string[] {"ID", "Comment", "Date", "Value", "Type", "Place", "Tag"};
@@ -79,7 +80,17 @@ namespace MW.Data
 			if (vDeleteID > -1)
 			{
 				DB.DeleteRow(AModel.Name, vDeleteID);
-				//лог
+				
+				Dictionary<string, string> vLogRow = new Dictionary<string, string>();
+				vLogRow.Add("ID", "1");
+				vLogRow.Add("Comment", "auto");
+				vLogRow.Add("Date", DateTime.Now.ToString());
+				vLogRow.Add("AdviceType", "PC");
+				vLogRow.Add("User", "Maximov");
+				vLogRow.Add("ActionType", "Удаление");
+				vLogRow.Add("Change", "Данные: " + AModel.Name + "/ Ключ строки = " + Format.IntToStr(vDeleteID));
+				DB.InsertRow(vLogRow, LogFields, "Log");
+				
 				return;
 			}
 			

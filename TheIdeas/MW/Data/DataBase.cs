@@ -77,7 +77,9 @@ namespace MW.Data
 		//Удаление в таблице БД
 		public void DeleteRow(string ATableName, int ADeleteID)
 		{
-			
+			string vSQLQuery = "Delete from " + ATableName + " where ID = " + Format.IntToStr(ADeleteID);
+			SQLiteCommand command = new SQLiteCommand(vSQLQuery, Connect);
+			command.ExecuteNonQuery();
 		}
 		
 	}
