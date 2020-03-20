@@ -30,6 +30,7 @@ namespace MW.Forms
 		{
 			SyncCostsView();
 			lblCostSum.Text = Costs.GetTextSum("Value");
+			lblAverage.Text = Costs.GetTextAverageDay("Value");
 		}
 		
 		public void SyncCostsView()
@@ -47,6 +48,8 @@ namespace MW.Forms
 				
 				vCosts.Rows.Add(vGridRow);
 			}
+
+			vCosts.FirstDisplayedScrollingRowIndex = vCosts.RowCount - 1;		
 		}
 		
 		void BtnAddClick(object sender, EventArgs e)

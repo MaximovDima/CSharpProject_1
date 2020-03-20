@@ -101,5 +101,21 @@ namespace MW.Core
 			
 			return Format.IntToStr(vResult);
 		}
+		
+		//Возвращает среднее в сутки по числовому полю (по максимальный сущ. дату)
+		public string GetTextAverageDay(string AFieldName)
+		{
+			double vResult = 0;
+			DateTime vFirstDate = new DateTime(2020, 1, 1);
+			string vDate = Rows[Rows.Count - 1]["Date"];
+			TimeSpan vTime = Convert.ToDateTime(vDate) - vFirstDate;
+
+			foreach(Dictionary<string, string> vRow in Rows)
+			{
+				vResult = vResult + Format.StrToInt(vRow[AFieldName]);
+			}
+			
+			return Format.ObjToStr(vResult / (vTime.Days + 1));
+		}
 	}
 }

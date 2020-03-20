@@ -98,14 +98,14 @@
 			this.cbTypeCost.Location = new System.Drawing.Point(120, 73);
 			this.cbTypeCost.Name = "cbTypeCost";
 			this.cbTypeCost.Size = new System.Drawing.Size(256, 21);
-			this.cbTypeCost.TabIndex = 8;
+			this.cbTypeCost.TabIndex = 2;
 			// 
 			// eValue
 			// 
 			this.eValue.Location = new System.Drawing.Point(120, 45);
 			this.eValue.Name = "eValue";
 			this.eValue.Size = new System.Drawing.Size(257, 20);
-			this.eValue.TabIndex = 9;
+			this.eValue.TabIndex = 1;
 			// 
 			// cbPlace
 			// 
@@ -116,7 +116,7 @@
 			this.cbPlace.Location = new System.Drawing.Point(120, 100);
 			this.cbPlace.Name = "cbPlace";
 			this.cbPlace.Size = new System.Drawing.Size(257, 21);
-			this.cbPlace.TabIndex = 10;
+			this.cbPlace.TabIndex = 3;
 			// 
 			// eTags
 			// 
@@ -131,7 +131,7 @@
 			this.eComment.Location = new System.Drawing.Point(120, 153);
 			this.eComment.Name = "eComment";
 			this.eComment.Size = new System.Drawing.Size(257, 20);
-			this.eComment.TabIndex = 12;
+			this.eComment.TabIndex = 4;
 			// 
 			// addTypeCost
 			// 
@@ -168,7 +168,7 @@
 			this.btnOk.Location = new System.Drawing.Point(248, 188);
 			this.btnOk.Name = "btnOk";
 			this.btnOk.Size = new System.Drawing.Size(75, 23);
-			this.btnOk.TabIndex = 16;
+			this.btnOk.TabIndex = 5;
 			this.btnOk.Text = "Ок";
 			this.btnOk.UseVisualStyleBackColor = true;
 			this.btnOk.Click += new System.EventHandler(this.BtnOkClick);

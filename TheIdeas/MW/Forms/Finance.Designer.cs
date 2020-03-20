@@ -17,14 +17,15 @@
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmFinance));
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle25 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle26 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle27 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle28 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.gbCosts = new System.Windows.Forms.GroupBox();
+			this.lblAverage = new System.Windows.Forms.Label();
 			this.lblCostSum = new System.Windows.Forms.Label();
 			this.button2 = new System.Windows.Forms.Button();
 			this.button1 = new System.Windows.Forms.Button();
@@ -47,6 +48,7 @@
 			this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.gbDraw = new System.Windows.Forms.GroupBox();
+			this.label1 = new System.Windows.Forms.Label();
 			this.gbCosts.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.vCosts)).BeginInit();
 			this.gbIncomes.SuspendLayout();
@@ -55,6 +57,8 @@
 			// 
 			// gbCosts
 			// 
+			this.gbCosts.Controls.Add(this.label1);
+			this.gbCosts.Controls.Add(this.lblAverage);
 			this.gbCosts.Controls.Add(this.lblCostSum);
 			this.gbCosts.Controls.Add(this.button2);
 			this.gbCosts.Controls.Add(this.button1);
@@ -67,15 +71,25 @@
 			this.gbCosts.TabStop = false;
 			this.gbCosts.Text = "Расходы";
 			// 
+			// lblAverage
+			// 
+			this.lblAverage.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.lblAverage.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+			this.lblAverage.Location = new System.Drawing.Point(463, 24);
+			this.lblAverage.Name = "lblAverage";
+			this.lblAverage.Size = new System.Drawing.Size(60, 23);
+			this.lblAverage.TabIndex = 5;
+			this.lblAverage.Text = "1000";
+			// 
 			// lblCostSum
 			// 
 			this.lblCostSum.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.lblCostSum.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-			this.lblCostSum.Location = new System.Drawing.Point(432, 16);
+			this.lblCostSum.Location = new System.Drawing.Point(334, 15);
 			this.lblCostSum.Name = "lblCostSum";
-			this.lblCostSum.Size = new System.Drawing.Size(137, 32);
+			this.lblCostSum.Size = new System.Drawing.Size(123, 32);
 			this.lblCostSum.TabIndex = 4;
-			this.lblCostSum.Text = "100 000";
+			this.lblCostSum.Text = "100000";
 			// 
 			// button2
 			// 
@@ -131,8 +145,8 @@
 			// 
 			// Date
 			// 
-			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			this.Date.DefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			this.Date.DefaultCellStyle = dataGridViewCellStyle22;
 			this.Date.HeaderText = "Дата";
 			this.Date.Name = "Date";
 			this.Date.ReadOnly = true;
@@ -141,8 +155,8 @@
 			// TypeCost
 			// 
 			this.TypeCost.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			this.TypeCost.DefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			this.TypeCost.DefaultCellStyle = dataGridViewCellStyle23;
 			this.TypeCost.HeaderText = "Тип";
 			this.TypeCost.Name = "TypeCost";
 			this.TypeCost.ReadOnly = true;
@@ -151,8 +165,8 @@
 			// Place
 			// 
 			this.Place.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			this.Place.DefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			this.Place.DefaultCellStyle = dataGridViewCellStyle24;
 			this.Place.HeaderText = "Место";
 			this.Place.Name = "Place";
 			this.Place.ReadOnly = true;
@@ -161,8 +175,8 @@
 			// Value
 			// 
 			this.Value.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			this.Value.DefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle25.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			this.Value.DefaultCellStyle = dataGridViewCellStyle25;
 			this.Value.HeaderText = "Сумма";
 			this.Value.Name = "Value";
 			this.Value.ReadOnly = true;
@@ -195,11 +209,11 @@
 			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.label2.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-			this.label2.Location = new System.Drawing.Point(418, 16);
+			this.label2.Location = new System.Drawing.Point(427, 16);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(133, 32);
+			this.label2.Size = new System.Drawing.Size(124, 32);
 			this.label2.TabIndex = 4;
-			this.label2.Text = "100 000";
+			this.label2.Text = "100000";
 			// 
 			// button3
 			// 
@@ -248,8 +262,8 @@
 			// 
 			// dataGridViewTextBoxColumn1
 			// 
-			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			this.dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle5;
+			dataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			this.dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle26;
 			this.dataGridViewTextBoxColumn1.HeaderText = "Дата";
 			this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
 			this.dataGridViewTextBoxColumn1.ReadOnly = true;
@@ -258,8 +272,8 @@
 			// dataGridViewTextBoxColumn2
 			// 
 			this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			this.dataGridViewTextBoxColumn2.DefaultCellStyle = dataGridViewCellStyle6;
+			dataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			this.dataGridViewTextBoxColumn2.DefaultCellStyle = dataGridViewCellStyle27;
 			this.dataGridViewTextBoxColumn2.HeaderText = "Тип";
 			this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
 			this.dataGridViewTextBoxColumn2.ReadOnly = true;
@@ -268,8 +282,8 @@
 			// dataGridViewTextBoxColumn4
 			// 
 			this.dataGridViewTextBoxColumn4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-			dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			this.dataGridViewTextBoxColumn4.DefaultCellStyle = dataGridViewCellStyle7;
+			dataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			this.dataGridViewTextBoxColumn4.DefaultCellStyle = dataGridViewCellStyle28;
 			this.dataGridViewTextBoxColumn4.HeaderText = "Сумма";
 			this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
 			this.dataGridViewTextBoxColumn4.ReadOnly = true;
@@ -294,6 +308,14 @@
 			this.gbDraw.TabIndex = 4;
 			this.gbDraw.TabStop = false;
 			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(520, 34);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(40, 13);
+			this.label1.TabIndex = 6;
+			this.label1.Text = "в день";
+			// 
 			// FrmFinance
 			// 
 			this.ClientSize = new System.Drawing.Size(1160, 574);
@@ -311,6 +333,8 @@
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label lblAverage;
 		private System.Windows.Forms.DataGridViewTextBoxColumn ID;
 		private System.Windows.Forms.GroupBox gbDraw;
 		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
