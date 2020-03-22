@@ -13,8 +13,7 @@ namespace MW.Forms
 	{
 		//Инициализация моделей
 		public TModel Directory;
-		public TModel Costs;
-		public TModel Incomes;
+		public TModel FinModel;
 		//Флаг регистрации изменения
 		public bool IsModify;
 		//Флаг редактирования
@@ -27,8 +26,7 @@ namespace MW.Forms
 		public FrmEditFinance(TModel ADirectory, TModel AModel)
 		{
 			Directory = ADirectory;
-			Incomes = AModel;
-		    Costs = AModel;
+			FinModel = AModel;
 			IsModify = false;
 		    
 			InitializeComponent();
@@ -42,6 +40,7 @@ namespace MW.Forms
 				lblPalce.Enabled = false;
 				cbPlace.Enabled = false;
 				addPlace.Enabled = false;
+				
 			}
 			SyncValuesForComboBoxes();
 			if(IsEdit)
@@ -55,8 +54,15 @@ namespace MW.Forms
 		{
 			eDate.Value = Convert.ToDateTime(EditRow["Date"]);
 			eValue.Text = EditRow["Value"];
-			cbType.SelectedIndex = cbType.Items.IndexOf(Directory.GetNameByID("Cost", EditRow["Type"]));
-			cbPlace.SelectedIndex = cbPlace.Items.IndexOf(Directory.GetNameByID("Place", EditRow["Place"]));
+			if(IsCosts)
+			{
+				cbType.SelectedIndex = cbType.Items.IndexOf(Directory.GetNameByID("Cost", EditRow["Type"]));
+				cbPlace.SelectedIndex = cbPlace.Items.IndexOf(Directory.GetNameByID("Place", EditRow["Place"]));
+			}
+			else
+			{
+				cbType.SelectedIndex = cbType.Items.IndexOf(Directory.GetNameByID("Income", EditRow["Type"]));
+			}
 			eComment.Text = EditRow["Comment"];
 		}
 		
@@ -93,7 +99,7 @@ namespace MW.Forms
 				
 		void AddTypeCostClick(object sender, EventArgs e)
 		{
-			frmEditDirectory editDirectory = new frmEditDirectory((sender as Button).Name, Directory);
+			frmEditDirectory editDirectory = new frmEditDirectory((sender as Button).Name, Directory, IsCosts);
 			editDirectory.ShowDialog();
 			SyncValuesForComboBoxes();
 		}
@@ -105,14 +111,7 @@ namespace MW.Forms
 		
 		void AddPlaceClick(object sender, EventArgs e)
 		{
-			frmEditDirectory editDirectory = new frmEditDirectory((sender as Button).Name, Directory);
-			editDirectory.ShowDialog();
-			SyncValuesForComboBoxes();			
-		}
-		
-		void SelectTagsClick(object sender, EventArgs e)
-		{
-			frmEditDirectory editDirectory = new frmEditDirectory((sender as Button).Name, Directory);
+			frmEditDirectory editDirectory = new frmEditDirectory((sender as Button).Name, Directory, IsCosts);
 			editDirectory.ShowDialog();
 			SyncValuesForComboBoxes();			
 		}
@@ -122,7 +121,7 @@ namespace MW.Forms
 			//Проверки
 			if (Checks.IsNull("Сумма", eValue) ||
 			    Checks.IsNull("Тип расхода", cbType) ||
-			    Checks.IsNull("Место", cbPlace) ||
+			    (IsCosts && Checks.IsNull("Место", cbPlace)) ||
 			    Checks.IsString("Сумма", eValue))
 			{
 				return;
@@ -134,23 +133,37 @@ namespace MW.Forms
 				EditRow["Comment"] = eComment.Text;
 				EditRow["Date"] = eDate.Value.ToString();
 				EditRow["Value"] = eValue.Text;
-				EditRow["Type"] = Directory.GetIDByTypeAndName("Cost", cbType.Text);
-				EditRow["Place"] = Directory.GetIDByTypeAndName("Place", cbPlace.Text);
+				if(IsCosts)
+				{
+					EditRow["Type"] = Directory.GetIDByTypeAndName("Cost", cbType.Text);
+					EditRow["Place"] = Directory.GetIDByTypeAndName("Place", cbPlace.Text);
+				}
+				else
+				{
+					EditRow["Type"] = Directory.GetIDByTypeAndName("Income", cbType.Text);
+				}
 				EditRow["State"] = "edit";
 			}
 			else
 			//Добавление
 			{
 				Dictionary<string, string> vRow = new Dictionary<string, string>();
-				vRow.Add("ID", Costs.GetNextID());
+				vRow.Add("ID", FinModel.GetNextID());
 				vRow.Add("Comment", eComment.Text);
 				vRow.Add("Date", eDate.Value.ToString());
 				vRow.Add("Value", eValue.Text);
-				vRow.Add("Type", Directory.GetIDByTypeAndName("Cost", cbType.Text));
-				vRow.Add("Place", Directory.GetIDByTypeAndName("Place", cbPlace.Text));
+				if(IsCosts)
+				{
+					vRow.Add("Type", Directory.GetIDByTypeAndName("Cost", cbType.Text));
+					vRow.Add("Place", Directory.GetIDByTypeAndName("Place", cbPlace.Text));
+				}
+				else
+				{
+					vRow.Add("Type", Directory.GetIDByTypeAndName("Income", cbType.Text));
+				}
 				vRow.Add("State", "add");
 			
-				Costs.Rows.Add(vRow);
+				FinModel.Rows.Add(vRow);
 			}
 			
 			IsModify = true;

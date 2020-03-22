@@ -46,6 +46,7 @@
 			this.btnIncomeDelete = new System.Windows.Forms.Button();
 			this.btnIncomeAdd = new System.Windows.Forms.Button();
 			this.vIncomes = new System.Windows.Forms.DataGridView();
+			this.Id1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -254,6 +255,7 @@
 			this.btnIncomeEdit.Size = new System.Drawing.Size(32, 32);
 			this.btnIncomeEdit.TabIndex = 3;
 			this.btnIncomeEdit.UseVisualStyleBackColor = true;
+			this.btnIncomeEdit.Click += new System.EventHandler(this.BtnIncomeEditClick);
 			// 
 			// btnIncomeDelete
 			// 
@@ -263,6 +265,7 @@
 			this.btnIncomeDelete.Size = new System.Drawing.Size(32, 32);
 			this.btnIncomeDelete.TabIndex = 2;
 			this.btnIncomeDelete.UseVisualStyleBackColor = true;
+			this.btnIncomeDelete.Click += new System.EventHandler(this.BtnIncomeDeleteClick);
 			// 
 			// btnIncomeAdd
 			// 
@@ -282,6 +285,7 @@
 			this.vIncomes.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.vIncomes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.vIncomes.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+									this.Id1,
 									this.dataGridViewTextBoxColumn1,
 									this.dataGridViewTextBoxColumn2,
 									this.dataGridViewTextBoxColumn4,
@@ -291,6 +295,13 @@
 			this.vIncomes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.vIncomes.Size = new System.Drawing.Size(545, 184);
 			this.vIncomes.TabIndex = 0;
+			this.vIncomes.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.VIncomesCellDoubleClick);
+			// 
+			// Id1
+			// 
+			this.Id1.HeaderText = "";
+			this.Id1.Name = "Id1";
+			this.Id1.Visible = false;
 			// 
 			// dataGridViewTextBoxColumn1
 			// 
@@ -357,6 +368,7 @@
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.DataGridViewTextBoxColumn Id1;
 		private System.Windows.Forms.Label lblIncomeSum;
 		private System.Windows.Forms.Label lblAverageInc;
 		private System.Windows.Forms.Label label1;

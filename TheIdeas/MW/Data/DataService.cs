@@ -17,7 +17,7 @@ namespace MW.Data
 		public string SourceDB = @"D:\MaxiWiki";
 		public string[] LogFields = new string[] {"ID", "Comment", "Date", "ActionType", "AdviceType", "Change", "User"};
 		public string[] DirectoryFields = new string[] {"ID", "Name", "Type", "Comment"};
-		public string[] CostFields = new string[] {"ID", "Comment", "Date", "Value", "Type", "Place", "Tag"};
+		public string[] CostFields = new string[] {"ID", "Comment", "Date", "Value", "Type", "Place"};
 		public string[] IncomeFields = new string[] {"ID", "Date", "Value", "Type", "Comment"};
 		
 		public TData(string ASourceFile)

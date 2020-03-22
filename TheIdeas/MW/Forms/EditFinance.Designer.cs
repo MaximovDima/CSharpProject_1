@@ -25,7 +25,7 @@
 			this.eValue = new System.Windows.Forms.TextBox();
 			this.cbPlace = new System.Windows.Forms.ComboBox();
 			this.eComment = new System.Windows.Forms.TextBox();
-			this.addTypet = new System.Windows.Forms.Button();
+			this.addType = new System.Windows.Forms.Button();
 			this.addPlace = new System.Windows.Forms.Button();
 			this.btnOk = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
@@ -114,15 +114,15 @@
 			this.eComment.Size = new System.Drawing.Size(257, 20);
 			this.eComment.TabIndex = 4;
 			// 
-			// addTypet
+			// addType
 			// 
-			this.addTypet.Location = new System.Drawing.Point(386, 74);
-			this.addTypet.Name = "addTypet";
-			this.addTypet.Size = new System.Drawing.Size(28, 20);
-			this.addTypet.TabIndex = 13;
-			this.addTypet.Text = "+";
-			this.addTypet.UseVisualStyleBackColor = true;
-			this.addTypet.Click += new System.EventHandler(this.AddTypeCostClick);
+			this.addType.Location = new System.Drawing.Point(386, 74);
+			this.addType.Name = "addType";
+			this.addType.Size = new System.Drawing.Size(28, 20);
+			this.addType.TabIndex = 13;
+			this.addType.Text = "+";
+			this.addType.UseVisualStyleBackColor = true;
+			this.addType.Click += new System.EventHandler(this.AddTypeCostClick);
 			// 
 			// addPlace
 			// 
@@ -163,7 +163,7 @@
 			this.Controls.Add(this.btnCancel);
 			this.Controls.Add(this.btnOk);
 			this.Controls.Add(this.addPlace);
-			this.Controls.Add(this.addTypet);
+			this.Controls.Add(this.addType);
 			this.Controls.Add(this.eComment);
 			this.Controls.Add(this.cbPlace);
 			this.Controls.Add(this.eValue);
@@ -182,7 +182,7 @@
 		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.Button btnOk;
 		private System.Windows.Forms.Button addPlace;
-		private System.Windows.Forms.Button addTypet;
+		private System.Windows.Forms.Button addType;
 		private System.Windows.Forms.TextBox eComment;
 		private System.Windows.Forms.ComboBox cbPlace;
 		private System.Windows.Forms.TextBox eValue;

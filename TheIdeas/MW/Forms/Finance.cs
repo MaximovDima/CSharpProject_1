@@ -56,7 +56,7 @@ namespace MW.Forms
 			{
 				object[] vGridRow = new object[6];
 				vGridRow[0] = vRow["ID"];
-				vGridRow[1] = vRow["Date"];
+				vGridRow[1] = Convert.ToDateTime(vRow["Date"]);
 				vGridRow[2] = Directory.GetNameByID("Cost", vRow["Type"]);
 				vGridRow[3] = Directory.GetNameByID("Place", vRow["Place"]);
 				vGridRow[4] = Format.StrToInt(vRow["Value"]);
@@ -75,16 +75,15 @@ namespace MW.Forms
 			{
 				object[] vGridRow = new object[6];
 				vGridRow[0] = vRow["ID"];
-				vGridRow[1] = vRow["Date"];
-				vGridRow[2] = Directory.GetNameByID("Cost", vRow["Type"]);
-				vGridRow[3] = Directory.GetNameByID("Place", vRow["Place"]);
-				vGridRow[4] = Format.StrToInt(vRow["Value"]);
-				vGridRow[5] = vRow["Comment"];
+				vGridRow[1] = Convert.ToDateTime(vRow["Date"]);
+				vGridRow[2] = Directory.GetNameByID("Income", vRow["Type"]);
+				vGridRow[3] = Format.StrToInt(vRow["Value"]);
+				vGridRow[4] = vRow["Comment"];
 				
-				vCosts.Rows.Add(vGridRow);
+				vIncomes.Rows.Add(vGridRow);
 			}
 
-			vCosts.FirstDisplayedScrollingRowIndex = vCosts.RowCount - 1;		
+			vIncomes.FirstDisplayedScrollingRowIndex = vIncomes.RowCount - 1;		
 		}
 		
 		void BtnAddCostClick(object sender, EventArgs e)
@@ -150,13 +149,13 @@ namespace MW.Forms
 			{
 				vRow["State"] = "delete";
 				Data.UpdateModel("Cost");
-				SyncForm();
+				SyncCostsInfo();
 			}
 		}
 		
 		void BtnIncomeAddClick(object sender, EventArgs e)
 		{
-			FrmEditFinance editForm = new FrmEditFinance(Incomes, Costs);
+			FrmEditFinance editForm = new FrmEditFinance(Directory, Incomes);
 			editForm.Text = "Новый доход...";
 			editForm.IsEdit = false;
 			editForm.IsCosts = false;
@@ -166,8 +165,59 @@ namespace MW.Forms
 			{
 				Data.UpdateModel("Directory");
 				Data.UpdateModel("Income");
-				SyncForm();
+				SyncIncomesInfo();
 			}			
+		}
+		
+		void VIncomesCellDoubleClick(object sender, DataGridViewCellEventArgs e)
+		{
+			EditIncome(e.RowIndex);
+		}
+		
+		public void EditIncome(int ARowIndex)
+		{
+			if (ARowIndex >= vIncomes.RowCount - 1)
+				return;
+				
+			string vID = vIncomes.Rows[ARowIndex].Cells["id1"].Value.ToString();
+			Dictionary<string, string> vRow = Incomes.Rows[Format.StrToInt(vID) - 1];
+
+			FrmEditFinance editForm = new FrmEditFinance(Directory, Incomes);
+			editForm.Text = "Редактировать расход...";
+			editForm.IsEdit = true;
+			editForm.IsCosts = false;
+			editForm.EditRow = vRow;
+			editForm.SyncForm();
+			editForm.ShowDialog();		
+			
+			if (editForm.IsModify)
+			{
+				Data.UpdateModel("Directory");
+				Data.UpdateModel("Income");
+				SyncIncomesInfo();
+			}
+		}
+		
+		void BtnIncomeDeleteClick(object sender, EventArgs e)
+		{
+			if (vIncomes.CurrentRow.Index >= vIncomes.RowCount - 1)
+				return;
+			string vID = vIncomes.Rows[vCosts.CurrentRow.Index].Cells["id1"].Value.ToString();
+			Dictionary<string, string> vRow = Incomes.Rows[Format.StrToInt(vID) - 1];
+			
+			DialogResult vResult = MessageBox.Show("Удалить доход " + vRow["Value"] + " за " + vRow["Date"],
+			                                      "Удаление", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+			if (vResult == DialogResult.Yes)
+			{
+				vRow["State"] = "delete";
+				Data.UpdateModel("Income");
+				SyncIncomesInfo();
+			}			
+		}
+		
+		void BtnIncomeEditClick(object sender, EventArgs e)
+		{
+			EditIncome(vCosts.CurrentRow.Index);	
 		}
 	}
 }

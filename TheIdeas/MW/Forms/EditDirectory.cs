@@ -13,11 +13,14 @@ namespace MW.Forms
 		public TModel Directory;
 		//Тип справочной информации
 		public string Type;
+		//Флаг расхода
+		public bool IsCost;
 		
-		public frmEditDirectory(string ATypeName, TModel ADirectory)
+		public frmEditDirectory(string ATypeName, TModel ADirectory, bool AIsCost)
 		{
 			InitializeComponent();
 			Directory = ADirectory;
+			IsCost = AIsCost;
 			SyncForm(ATypeName);
 		}
 		
@@ -32,14 +35,17 @@ namespace MW.Forms
 		{
 			switch (ATypeName)
 			{
-				case "addCost":
+				case "addType":
 					Text = "Добавить тип";
-					Type = "Cost";
+					if(IsCost)
+					{
+						Type = "Cost";
+					}
+					else
+					{
+						Type= "Income";
+					}
 					break;
-				case "addIncome":
-					Text = "Добавить тип";
-					Type = "Income";
-					break;	
 				case "addPlace":
 					Text = "Добавить место расхода";
 					Type = "Place";
