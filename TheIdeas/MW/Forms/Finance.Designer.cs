@@ -40,9 +40,11 @@
 			this.Comment = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.gbIncomes = new System.Windows.Forms.GroupBox();
 			this.label2 = new System.Windows.Forms.Label();
-			this.button3 = new System.Windows.Forms.Button();
-			this.button4 = new System.Windows.Forms.Button();
-			this.btnAddIncome = new System.Windows.Forms.Button();
+			this.lblAverageInc = new System.Windows.Forms.Label();
+			this.lblIncomeSum = new System.Windows.Forms.Label();
+			this.btnIncomeEdit = new System.Windows.Forms.Button();
+			this.btnIncomeDelete = new System.Windows.Forms.Button();
+			this.btnIncomeAdd = new System.Windows.Forms.Button();
 			this.vIncomes = new System.Windows.Forms.DataGridView();
 			this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -203,9 +205,11 @@
 			// 
 			this.gbIncomes.AutoSize = true;
 			this.gbIncomes.Controls.Add(this.label2);
-			this.gbIncomes.Controls.Add(this.button3);
-			this.gbIncomes.Controls.Add(this.button4);
-			this.gbIncomes.Controls.Add(this.btnAddIncome);
+			this.gbIncomes.Controls.Add(this.lblAverageInc);
+			this.gbIncomes.Controls.Add(this.lblIncomeSum);
+			this.gbIncomes.Controls.Add(this.btnIncomeEdit);
+			this.gbIncomes.Controls.Add(this.btnIncomeDelete);
+			this.gbIncomes.Controls.Add(this.btnIncomeAdd);
 			this.gbIncomes.Controls.Add(this.vIncomes);
 			this.gbIncomes.Location = new System.Drawing.Point(592, 12);
 			this.gbIncomes.Name = "gbIncomes";
@@ -216,41 +220,59 @@
 			// 
 			// label2
 			// 
-			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.label2.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-			this.label2.Location = new System.Drawing.Point(427, 16);
+			this.label2.Location = new System.Drawing.Point(505, 34);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(124, 32);
-			this.label2.TabIndex = 4;
-			this.label2.Text = "100000";
+			this.label2.Size = new System.Drawing.Size(40, 13);
+			this.label2.TabIndex = 9;
+			this.label2.Text = "в день";
 			// 
-			// button3
+			// lblAverageInc
 			// 
-			this.button3.Image = ((System.Drawing.Image)(resources.GetObject("button3.Image")));
-			this.button3.Location = new System.Drawing.Point(44, 19);
-			this.button3.Name = "button3";
-			this.button3.Size = new System.Drawing.Size(32, 32);
-			this.button3.TabIndex = 3;
-			this.button3.UseVisualStyleBackColor = true;
+			this.lblAverageInc.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.lblAverageInc.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+			this.lblAverageInc.Location = new System.Drawing.Point(448, 24);
+			this.lblAverageInc.Name = "lblAverageInc";
+			this.lblAverageInc.Size = new System.Drawing.Size(60, 23);
+			this.lblAverageInc.TabIndex = 8;
+			this.lblAverageInc.Text = "1000";
 			// 
-			// button4
+			// lblIncomeSum
 			// 
-			this.button4.Image = ((System.Drawing.Image)(resources.GetObject("button4.Image")));
-			this.button4.Location = new System.Drawing.Point(82, 19);
-			this.button4.Name = "button4";
-			this.button4.Size = new System.Drawing.Size(32, 32);
-			this.button4.TabIndex = 2;
-			this.button4.UseVisualStyleBackColor = true;
+			this.lblIncomeSum.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.lblIncomeSum.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+			this.lblIncomeSum.Location = new System.Drawing.Point(319, 15);
+			this.lblIncomeSum.Name = "lblIncomeSum";
+			this.lblIncomeSum.Size = new System.Drawing.Size(123, 32);
+			this.lblIncomeSum.TabIndex = 7;
+			this.lblIncomeSum.Text = "100000";
 			// 
-			// btnAddIncome
+			// btnIncomeEdit
 			// 
-			this.btnAddIncome.Image = ((System.Drawing.Image)(resources.GetObject("btnAddIncome.Image")));
-			this.btnAddIncome.Location = new System.Drawing.Point(6, 19);
-			this.btnAddIncome.Name = "btnAddIncome";
-			this.btnAddIncome.Size = new System.Drawing.Size(32, 32);
-			this.btnAddIncome.TabIndex = 1;
-			this.btnAddIncome.UseVisualStyleBackColor = true;
+			this.btnIncomeEdit.Image = ((System.Drawing.Image)(resources.GetObject("btnIncomeEdit.Image")));
+			this.btnIncomeEdit.Location = new System.Drawing.Point(44, 19);
+			this.btnIncomeEdit.Name = "btnIncomeEdit";
+			this.btnIncomeEdit.Size = new System.Drawing.Size(32, 32);
+			this.btnIncomeEdit.TabIndex = 3;
+			this.btnIncomeEdit.UseVisualStyleBackColor = true;
+			// 
+			// btnIncomeDelete
+			// 
+			this.btnIncomeDelete.Image = ((System.Drawing.Image)(resources.GetObject("btnIncomeDelete.Image")));
+			this.btnIncomeDelete.Location = new System.Drawing.Point(82, 19);
+			this.btnIncomeDelete.Name = "btnIncomeDelete";
+			this.btnIncomeDelete.Size = new System.Drawing.Size(32, 32);
+			this.btnIncomeDelete.TabIndex = 2;
+			this.btnIncomeDelete.UseVisualStyleBackColor = true;
+			// 
+			// btnIncomeAdd
+			// 
+			this.btnIncomeAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnIncomeAdd.Image")));
+			this.btnIncomeAdd.Location = new System.Drawing.Point(6, 19);
+			this.btnIncomeAdd.Name = "btnIncomeAdd";
+			this.btnIncomeAdd.Size = new System.Drawing.Size(32, 32);
+			this.btnIncomeAdd.TabIndex = 1;
+			this.btnIncomeAdd.UseVisualStyleBackColor = true;
+			this.btnIncomeAdd.Click += new System.EventHandler(this.BtnIncomeAddClick);
 			// 
 			// vIncomes
 			// 
@@ -335,6 +357,8 @@
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.Label lblIncomeSum;
+		private System.Windows.Forms.Label lblAverageInc;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label lblAverage;
 		private System.Windows.Forms.DataGridViewTextBoxColumn ID;
@@ -344,9 +368,9 @@
 		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
 		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
 		private System.Windows.Forms.DataGridView vIncomes;
-		private System.Windows.Forms.Button btnAddIncome;
-		private System.Windows.Forms.Button button4;
-		private System.Windows.Forms.Button button3;
+		private System.Windows.Forms.Button btnIncomeAdd;
+		private System.Windows.Forms.Button btnIncomeDelete;
+		private System.Windows.Forms.Button btnIncomeEdit;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.GroupBox gbIncomes;
 		private System.Windows.Forms.Label lblCostSum;

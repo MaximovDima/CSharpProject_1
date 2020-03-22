@@ -107,7 +107,7 @@ namespace MW.Core
 		{
 			double vResult = 0;
 			DateTime vFirstDate = new DateTime(2020, 1, 1);
-			string vDate = Rows[Rows.Count - 1]["Date"];
+			string vDate = Convert.ToString(DateTime.Now);
 			TimeSpan vTime = Convert.ToDateTime(vDate) - vFirstDate;
 
 			foreach(Dictionary<string, string> vRow in Rows)
@@ -115,7 +115,7 @@ namespace MW.Core
 				vResult = vResult + Format.StrToInt(vRow[AFieldName]);
 			}
 			
-			return Format.ObjToStr(vResult / (vTime.Days + 1));
+			return Format.ObjToStr(vResult / (vTime.Days));
 		}
 	}
 }

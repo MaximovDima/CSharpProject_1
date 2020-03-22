@@ -14,6 +14,7 @@ namespace MW.Forms
 		//Инициализация моделей
 		public TModel Directory;
 		public TModel Costs;
+		public TModel Incomes;
 		//Флаг регистрации изменения
 		public bool IsModify;
 		//Флаг редактирования
@@ -23,10 +24,11 @@ namespace MW.Forms
 		//Редактируемая строка
 		public Dictionary<string, string> EditRow;
 		
-		public FrmEditFinance(TModel ADirectory, TModel ACosts)
+		public FrmEditFinance(TModel ADirectory, TModel AModel)
 		{
 			Directory = ADirectory;
-		    Costs = ACosts;
+			Incomes = AModel;
+		    Costs = AModel;
 			IsModify = false;
 		    
 			InitializeComponent();
@@ -35,6 +37,12 @@ namespace MW.Forms
 		//синхронизация формы(параметров, выпадающих списков)
 		public void SyncForm()
 		{
+			if(!IsCosts)
+			{
+				lblPalce.Enabled = false;
+				cbPlace.Enabled = false;
+				addPlace.Enabled = false;
+			}
 			SyncValuesForComboBoxes();
 			if(IsEdit)
 			{
@@ -47,27 +55,40 @@ namespace MW.Forms
 		{
 			eDate.Value = Convert.ToDateTime(EditRow["Date"]);
 			eValue.Text = EditRow["Value"];
-			cbTypeCost.SelectedIndex = cbTypeCost.Items.IndexOf(Directory.GetNameByID("Cost", EditRow["Type"]));
+			cbType.SelectedIndex = cbType.Items.IndexOf(Directory.GetNameByID("Cost", EditRow["Type"]));
 			cbPlace.SelectedIndex = cbPlace.Items.IndexOf(Directory.GetNameByID("Place", EditRow["Place"]));
 			eComment.Text = EditRow["Comment"];
 		}
 		
 		public void SyncValuesForComboBoxes()
 		{
-			cbTypeCost.Items.Clear();
-			cbPlace.Items.Clear();
-			foreach(Dictionary<string, string> vRow in Directory.Rows)
+			if(IsCosts)
 			{
-				if (vRow["Type"] == "Cost")
+				cbType.Items.Clear();
+				cbPlace.Items.Clear();
+				foreach(Dictionary<string, string> vRow in Directory.Rows)
 				{
-					cbTypeCost.Items.Add(vRow["Name"]);
+					if (vRow["Type"] == "Cost")
+					{
+						cbType.Items.Add(vRow["Name"]);
+					}
+					if (vRow["Type"] == "Place")
+					{
+						cbPlace.Items.Add(vRow["Name"]);
+					}				
 				}
-				if (vRow["Type"] == "Place")
-				{
-					cbPlace.Items.Add(vRow["Name"]);
-				}				
 			}
-			
+			else
+			{
+				cbType.Items.Clear();
+				foreach(Dictionary<string, string> vRow in Directory.Rows)
+				{
+					if (vRow["Type"] == "Income")
+					{
+						cbType.Items.Add(vRow["Name"]);
+					}			
+				}
+			}
 		}
 				
 		void AddTypeCostClick(object sender, EventArgs e)
@@ -100,7 +121,7 @@ namespace MW.Forms
 		{
 			//Проверки
 			if (Checks.IsNull("Сумма", eValue) ||
-			    Checks.IsNull("Тип расхода", cbTypeCost) ||
+			    Checks.IsNull("Тип расхода", cbType) ||
 			    Checks.IsNull("Место", cbPlace) ||
 			    Checks.IsString("Сумма", eValue))
 			{
@@ -113,9 +134,8 @@ namespace MW.Forms
 				EditRow["Comment"] = eComment.Text;
 				EditRow["Date"] = eDate.Value.ToString();
 				EditRow["Value"] = eValue.Text;
-				EditRow["Type"] = Directory.GetIDByTypeAndName("Cost", cbTypeCost.Text);
+				EditRow["Type"] = Directory.GetIDByTypeAndName("Cost", cbType.Text);
 				EditRow["Place"] = Directory.GetIDByTypeAndName("Place", cbPlace.Text);
-				EditRow["Tag"] = eTags.Text;
 				EditRow["State"] = "edit";
 			}
 			else
@@ -126,9 +146,8 @@ namespace MW.Forms
 				vRow.Add("Comment", eComment.Text);
 				vRow.Add("Date", eDate.Value.ToString());
 				vRow.Add("Value", eValue.Text);
-				vRow.Add("Type", Directory.GetIDByTypeAndName("Cost", cbTypeCost.Text));
+				vRow.Add("Type", Directory.GetIDByTypeAndName("Cost", cbType.Text));
 				vRow.Add("Place", Directory.GetIDByTypeAndName("Place", cbPlace.Text));
-				vRow.Add("Tag", eTags.Text);
 				vRow.Add("State", "add");
 			
 				Costs.Rows.Add(vRow);

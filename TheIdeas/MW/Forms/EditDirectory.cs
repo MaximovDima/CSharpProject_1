@@ -32,10 +32,14 @@ namespace MW.Forms
 		{
 			switch (ATypeName)
 			{
-				case "addTypeCost":
-					Text = "Добавить тип расхода";
+				case "addCost":
+					Text = "Добавить тип";
 					Type = "Cost";
 					break;
+				case "addIncome":
+					Text = "Добавить тип";
+					Type = "Income";
+					break;	
 				case "addPlace":
 					Text = "Добавить место расхода";
 					Type = "Place";
@@ -50,13 +54,6 @@ namespace MW.Forms
 					break;
 			}
 		}	
-		
-		//синхронизация текущих значений (необходима для исключения
-		// дублирующих значений)
-		public void SyncExistValueByType(string AType)
-		{
-			
-		}
 		
 		void BtnCancelClick(object sender, EventArgs e)
 		{

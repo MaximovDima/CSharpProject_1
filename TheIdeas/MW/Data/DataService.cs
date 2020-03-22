@@ -18,6 +18,7 @@ namespace MW.Data
 		public string[] LogFields = new string[] {"ID", "Comment", "Date", "ActionType", "AdviceType", "Change", "User"};
 		public string[] DirectoryFields = new string[] {"ID", "Name", "Type", "Comment"};
 		public string[] CostFields = new string[] {"ID", "Comment", "Date", "Value", "Type", "Place", "Tag"};
+		public string[] IncomeFields = new string[] {"ID", "Date", "Value", "Type", "Comment"};
 		
 		public TData(string ASourceFile)
 		{
@@ -35,6 +36,8 @@ namespace MW.Data
 					return DirectoryFields;
 				case "Cost":
 					return CostFields;
+				case "Income":
+					return IncomeFields;
 				
 				default:
 					throw new ArgumentException("Таблицы " + AName + " не существует!");
