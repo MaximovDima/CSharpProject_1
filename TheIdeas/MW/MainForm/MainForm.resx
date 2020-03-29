@@ -124,7 +124,7 @@
   <data name="Finance.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsEAAA7BAbiRa+0AAF1VSURBVHhe7X0HeJTVtrb33v9YD+d4LMd27B3F3ivFLoIN
+        YQUAAAAJcEhZcwAADsAAAA7AAWrWiQkAAF1VSURBVHhe7X0HeJTVtrb33v9YD+d4LMd27B3F3ivFLoIN
         wYJdUewUQRABpfcaCKSQkN577733ZJLJZJJMz2RKegIJrP9d+5tJgYkGPPcq9+Lz7CchRGbm2+9e611r
         vWvtM844/d/pJ3D6CZx+AqefwO94Akfzp1zYlz1lak/axCVdyRN9u5MfL+1KesTYHvNAT1vEPT3WwDt6
         zF63GkyuNxTqN15+UL3wb4uavz33GcuiM/7+O1729P/6Rz6Bo7Jp4442vfHVQN2rOYfrXunvK36eOqIf
@@ -528,7 +528,7 @@
   <data name="GKH.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAA+KSURBVHhe7V0LrBxVGa6KiBoRUCL44PbuOXtba0Ik+Igx
+        YQUAAAAJcEhZcwAADsEAAA7BAbiRa+0AAA+KSURBVHhe7V0LrBxVGa6KiBoRUCL44PbuOXtba0Ik+Igx
         WB+gaIxGEzASIIrRSsVKfKPiyj5u66MqFFBUqIol2iB93Jm9JZQUsAE0iIkvamMrFqJt8EELl1q01P+f
         mf/M2bmzO2fOzO7O7P5NJtu7O3PmnP//zn/+87/OggUF+3fkyIKn1WoLno7dqrXlsU2n+oGGK65suuK7
         DVde13Tk1fDdZxqbpia9e+BefMZ0GNQ23t9wqm9oOHK66Yhrod3vNRzxHXjXqoZbebPqQ9AX0/bpPnp+

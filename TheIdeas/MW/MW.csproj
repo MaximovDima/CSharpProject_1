@@ -57,6 +57,8 @@
     <Compile Include="Core\View.cs" />
     <Compile Include="Data\DataService.cs" />
     <Compile Include="Data\DataBase.cs" />
+    <Compile Include="Drawing\DrwShapeClasses.cs" />
+    <Compile Include="Drawing\Painter.cs" />
     <Compile Include="Forms\EditDirectory.cs" />
     <Compile Include="Forms\EditDirectory.Designer.cs">
       <DependentUpon>EditDirectory.cs</DependentUpon>
@@ -85,6 +87,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Drawing" />
     <Folder Include="MainForm" />
     <Folder Include="Data" />
     <Folder Include="Forms" />

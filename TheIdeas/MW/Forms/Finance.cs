@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 using MW.Data;
 using MW.Core;
@@ -18,6 +19,8 @@ namespace MW.Forms
 		public TModel Costs;
 		//Доходы
 		public TModel Incomes;
+		//Режим масштабирования
+		public bool IsScale;
 		
 		public FrmFinance(TData AData)
 		{
@@ -33,6 +36,12 @@ namespace MW.Forms
 		{
 			SyncCostsInfo();
 			SyncIncomesInfo();
+			InitPainter();
+		}
+		
+		public void InitPainter()
+		{
+//			View.Draw();
 		}
 		
 		public void SyncCostsInfo()
@@ -218,6 +227,22 @@ namespace MW.Forms
 		void BtnIncomeEditClick(object sender, EventArgs e)
 		{
 			EditIncome(vCosts.CurrentRow.Index);	
+		}
+		
+		void PnlGraphicResize(object sender, EventArgs e)
+		{
+			if (!IsScale)
+			{
+				Painter.Width = pnlGraphic.Width - 5;
+				Painter.Height = pnlGraphic.Height - 20;
+			}
+		}
+		
+		void Button1Click(object sender, EventArgs e)
+		{
+			IsScale = true;
+			Painter.Width = Convert.ToInt32(Painter.Width * 1.2);
+			IsScale = false;
 		}
 	}
 }
