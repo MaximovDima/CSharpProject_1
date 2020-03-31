@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data.SQLite;
 using System.Collections.Generic;
-using MW.Utils;
+using MW.Core;
 
 namespace MW.Data
 {

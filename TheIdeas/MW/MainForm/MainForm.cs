@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using MW.Data;
-using MW.View;
 using MW.Forms;
 
 

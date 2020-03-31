@@ -33,7 +33,9 @@ namespace GamePlay
 		{
 			//Ландшафт
 			TGround Ground = new TGround(Scene.X, Scene.Y);
+			TPlayer Player = new TPlayer(Convert.ToInt32(Scene.X * 0.1), Convert.ToInt32(Scene.Y * 0.2));
 			Scene.SceneObjectList.Add(Ground);	
+			Scene.SceneObjectList.Add(Player);	
 		}		
 	}
 		

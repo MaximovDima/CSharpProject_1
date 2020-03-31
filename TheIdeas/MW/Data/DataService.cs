@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 
 using MW.Core;
-using MW.Utils;
 
 namespace MW.Data
 {

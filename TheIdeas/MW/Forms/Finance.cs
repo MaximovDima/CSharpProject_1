@@ -5,7 +5,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 using MW.Data;
 using MW.Core;
-using MW.Utils;
+using MW.Drawing;
 
 namespace MW.Forms
 {
@@ -21,6 +21,8 @@ namespace MW.Forms
 		public TModel Incomes;
 		//Режим масштабирования
 		public bool IsScale;
+		//Отрисовщик
+		public TPainter Painter;
 		
 		public FrmFinance(TData AData)
 		{
@@ -29,6 +31,7 @@ namespace MW.Forms
 			Directory = Data.GetModel("Directory");
 			Costs = Data.GetModel("Cost");
 			Incomes = Data.GetModel("Income");
+			Painter = new TPainter(DrwControl);
 			SyncForm();
 		}
 		
@@ -36,12 +39,12 @@ namespace MW.Forms
 		{
 			SyncCostsInfo();
 			SyncIncomesInfo();
-			InitPainter();
+			SyncView();
 		}
 		
-		public void InitPainter()
+		public void SyncView()
 		{
-//			View.Draw();
+			Painter.Scene.LoadModels(Data.Models);
 		}
 		
 		public void SyncCostsInfo()
@@ -233,15 +236,26 @@ namespace MW.Forms
 		{
 			if (!IsScale)
 			{
-				Painter.Width = pnlGraphic.Width - 5;
-				Painter.Height = pnlGraphic.Height - 20;
+				pnlGraphic.AutoScroll = false;
+				try
+				{
+					DrwControl.Width = pnlGraphic.Width - 5;
+					DrwControl.Height = pnlGraphic.Height - 20;
+					Painter.ReDraw(DrwControl.Width, DrwControl.Height);
+				}
+				finally 
+				{
+					pnlGraphic.AutoScroll = true;
+				}
+			    
 			}
 		}
 		
 		void Button1Click(object sender, EventArgs e)
 		{
 			IsScale = true;
-			Painter.Width = Convert.ToInt32(Painter.Width * 1.2);
+			DrwControl.Width = Convert.ToInt32(DrwControl.Width * 1.2);
+			Painter.ReDraw(DrwControl.Width, DrwControl.Height);
 			IsScale = false;
 		}
 	}

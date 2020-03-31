@@ -4,7 +4,7 @@ using System;
 using System.Drawing;
 using System.Collections.Generic;
 
-namespace DrwShapeClasses
+namespace MW.Drawing
 {	
 	
 	public struct TInitPoint
@@ -20,12 +20,6 @@ namespace DrwShapeClasses
 		public int Y;
 	}
 	
-	public enum TLayerType 
-	{
-		ltBack,
-		ltFront
-	}
-	
 	public abstract class TDrwShape
 	{
 		public int ID;
@@ -36,7 +30,6 @@ namespace DrwShapeClasses
     	public int PenWidth;
     	public bool ByGroup;
     	public bool Visible;
-    	public TLayerType LayerType;
 		
 		public TDrwShape()
 		{
@@ -45,7 +38,6 @@ namespace DrwShapeClasses
   			Color = Color.Black;
   			ByGroup = false;
   			Visible = true;
-  			LayerType = TLayerType.ltBack;
 		}
 		
 		public abstract void Draw(Graphics G);
@@ -64,7 +56,8 @@ namespace DrwShapeClasses
  		
     	public override void Draw(Graphics G)
     	{
-    		
+    		Pen mypen = new Pen(Color, PenWidth);
+    		G.DrawLine(mypen, StartPoint.X, StartPoint.Y, EndPoint.X, EndPoint.Y);
     	}
 	}
 	

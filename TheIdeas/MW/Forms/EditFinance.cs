@@ -4,7 +4,6 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 
 using MW;
-using MW.Utils;
 using MW.Core;
 
 namespace MW.Forms

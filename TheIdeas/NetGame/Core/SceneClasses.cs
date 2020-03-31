@@ -16,6 +16,18 @@ namespace SceneClasses
 		public int Y;		
 	}
 	
+//	public class TPlayer : TSceneObject
+//	{
+//		public int X;
+//		public int Y;
+//		
+//		public TPlayer(double AX, double AY)
+//		{
+//			X = (int)AX;
+//			Y = (int)AY;
+//		}
+//	}
+	
 	public class TGround : TSceneObject
 	{
 		public List<TPoint> PointList;

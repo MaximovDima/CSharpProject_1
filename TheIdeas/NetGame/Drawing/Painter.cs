@@ -54,7 +54,14 @@ namespace Painter
   				foreach (TDrwShape Shape in SceneObj.DrwObjList)
   				{
   					SceneObj.CodeList.Add(Shape.GroupCode);
-    				Shape.LayerType = TLayerType.ltBack;
+  					if (Shape is TDrwCircle)
+  					{
+  						Shape.LayerType = TLayerType.ltFront;
+  					}
+  					else
+  					{
+    					Shape.LayerType = TLayerType.ltBack;
+  					}
     				Shape.ScObjName = SceneObj.Name;
     				Painter.AddShape(Shape);
   				}

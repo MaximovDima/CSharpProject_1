@@ -52,14 +52,14 @@
 			this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.pnlGraphic = new System.Windows.Forms.Panel();
-			this.Painter = new System.Windows.Forms.PictureBox();
+			this.DrwControl = new System.Windows.Forms.PictureBox();
 			this.button1 = new System.Windows.Forms.Button();
 			this.gbCosts.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.vCosts)).BeginInit();
 			this.gbIncomes.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.vIncomes)).BeginInit();
 			this.pnlGraphic.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.Painter)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.DrwControl)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// gbCosts
@@ -350,22 +350,22 @@
 									| System.Windows.Forms.AnchorStyles.Right)));
 			this.pnlGraphic.AutoScroll = true;
 			this.pnlGraphic.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.pnlGraphic.BackColor = System.Drawing.SystemColors.ActiveCaption;
-			this.pnlGraphic.Controls.Add(this.Painter);
+			this.pnlGraphic.BackColor = System.Drawing.Color.White;
+			this.pnlGraphic.Controls.Add(this.DrwControl);
 			this.pnlGraphic.Location = new System.Drawing.Point(6, 296);
 			this.pnlGraphic.Name = "pnlGraphic";
 			this.pnlGraphic.Size = new System.Drawing.Size(1152, 276);
 			this.pnlGraphic.TabIndex = 0;
 			this.pnlGraphic.Resize += new System.EventHandler(this.PnlGraphicResize);
 			// 
-			// Painter
+			// DrwControl
 			// 
-			this.Painter.BackColor = System.Drawing.Color.White;
-			this.Painter.Location = new System.Drawing.Point(3, 3);
-			this.Painter.Name = "Painter";
-			this.Painter.Size = new System.Drawing.Size(1146, 270);
-			this.Painter.TabIndex = 0;
-			this.Painter.TabStop = false;
+			this.DrwControl.BackColor = System.Drawing.Color.White;
+			this.DrwControl.Location = new System.Drawing.Point(3, 3);
+			this.DrwControl.Name = "DrwControl";
+			this.DrwControl.Size = new System.Drawing.Size(1146, 270);
+			this.DrwControl.TabIndex = 0;
+			this.DrwControl.TabStop = false;
 			// 
 			// button1
 			// 
@@ -393,12 +393,12 @@
 			this.gbIncomes.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.vIncomes)).EndInit();
 			this.pnlGraphic.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.Painter)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.DrwControl)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
 		private System.Windows.Forms.Button button1;
-		private System.Windows.Forms.PictureBox Painter;
+		private System.Windows.Forms.PictureBox DrwControl;
 		private System.Windows.Forms.Panel pnlGraphic;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Id1;
 		private System.Windows.Forms.Label lblIncomeSum;
