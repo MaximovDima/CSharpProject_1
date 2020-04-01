@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using MW.Drawing;
 
 namespace MW.Core
@@ -23,7 +24,13 @@ namespace MW.Core
 		
 		public void LoadModels(List<TModel> AModels)
 		{
-			TScObjCoord Coord = new TScObjCoord();
+			//Построение системы координат
+			CreateCoord();
+		}
+		
+		public void CreateCoord()
+		{
+			TScObjCoord Coord = new TScObjCoord(this);
 			SceneObjectList.Add(Coord);
 		}
 		
@@ -46,34 +53,86 @@ namespace MW.Core
     		DrwObjList = new List<TDrwShape>();
     	}
     	//Построение объекта из примитивов
-    	public abstract void Build(TScene AScene, double ACoeffX, double ACoeffY);
-    
+    	public abstract void Build(double ACoeffX, double ACoeffY);
+	}
+	
+	public static class DrwObjects
+	{
+		public static TDrwLine GetLine(double AX0, double AY0, double AX1, double AY1, Color AColor,
+	                       int APenWidth, int AOpacity = 100, DashStyle ADashStyle = DashStyle.Solid, string AGroupCode = "",
+	                       string ACode = "")
+		{
+			TDrwLine vLine = new TDrwLine();
+			vLine.StartPoint.X = AX0;
+			vLine.StartPoint.Y = AY0;
+			vLine.EndPoint.X = AX1;
+			vLine.EndPoint.Y = AY1;
+			vLine.Color = AColor; 
+			vLine.PenWidth = APenWidth;
+			vLine.Opacity = AOpacity;
+			vLine.DashStyle = ADashStyle;
+			vLine.CodeElement = ACode;
+			vLine.GroupCode = AGroupCode;
+			
+			return vLine;		
+		}
 	}
 	
 	//Система координат
 	public class TScObjCoord : TSceneObject
 	{
-//		public double X0;
-//		public double X1;
-//		public double Y0;
-//		public double Y1;
+//		//Ось X
+//		public TAxis AxisX;
+//		//Ось Y
+//		public TAxis AxisY;
 		
-		public override void Build(TScene AScene, double ACoeffX, double ACoeffY)
+		public double X0;
+		public double X1;
+		public double Y0;
+		public double Y1;
+		
+		public TScObjCoord(TScene AScene)
 		{
-			DrwObjList.Clear();
-			TDrwLine vXline = new TDrwLine();
-			vXline.Color = Color.Red; 
-			vXline.PenWidth = 1;
-			
-		
-			vXline.GroupCode = "Coord";
-			vXline.CodeElement = "AxisX";
-			vXline.StartPoint.X = Convert.ToInt32(5 * ACoeffX);
-			vXline.StartPoint.Y = Convert.ToInt32(5 * ACoeffY);
-			vXline.EndPoint.X = Convert.ToInt32((AScene.X / 2) * ACoeffX);
-			vXline.EndPoint.Y = Convert.ToInt32(5 * ACoeffY);
-			DrwObjList.Add(vXline);
+			Name = "Coord";
+			X0 = 5;
+			Y0 = 5;
+			X1 = AScene.X - 5;
+			Y1 = AScene.Y - 5;
 		}
 		
-	}
+		public override void Build(double ACoeffX, double ACoeffY)
+		{			
+			DrwObjList.Clear();
+			TDrwLine vXLine, vYLine;
+			double vStep, vX, vY;
+			//ось OX
+			vXLine = DrwObjects.GetLine(X0*ACoeffX, Y0*ACoeffY, X1*ACoeffX, Y0*ACoeffY, Color.Black, 2);
+			DrwObjList.Add(vXLine);
+			//Сетка OX
+			vStep = (X1 - X0) / 10;
+			for (int i = 1; i < 10; i++) 
+			{
+				vX = i*vStep;
+				vXLine = DrwObjects.GetLine(vX*ACoeffX, Y0*ACoeffY, vX*ACoeffX, (Y0+2)*ACoeffY, Color.Black, 2);
+				DrwObjList.Add(vXLine);
+				vXLine = DrwObjects.GetLine(vX*ACoeffX, Y0*ACoeffY, vX*ACoeffX, Y1*ACoeffY, Color.Black, 1, 20);				
+				DrwObjList.Add(vXLine);
+			}
+			//ось OY
+			vYLine = DrwObjects.GetLine(X0*ACoeffX, Y0*ACoeffY, X0*ACoeffX, Y1*ACoeffY, Color.Black, 2);
+			DrwObjList.Add(vYLine);
+			//Сетка
+			vStep = (Y1 - Y0) / 10;
+			for (int i = 1; i < 10; i++) 
+			{
+				vY = i*vStep;
+				vYLine = DrwObjects.GetLine(X0*ACoeffX, vY*ACoeffY, (X0 + 2)*ACoeffX, vY*ACoeffY, Color.Black, 2);
+				DrwObjList.Add(vYLine);
+				vYLine = DrwObjects.GetLine((X0 - 2)*ACoeffX, vY*ACoeffY, X1*ACoeffX, vY*ACoeffY, Color.Black, 1, 20);				
+				DrwObjList.Add(vYLine);
+			}
+			
+		}
+		
+	}			
 }

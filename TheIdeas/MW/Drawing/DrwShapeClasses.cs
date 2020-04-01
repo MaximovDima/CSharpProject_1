@@ -3,21 +3,14 @@
 using System;
 using System.Drawing;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 
 namespace MW.Drawing
 {	
-	
-	public struct TInitPoint
-	{
-		public int X;
-		public int Y;
-	}
-	
 	public class TDrwPoint
 	{
-		public TInitPoint InitPoint;
-		public int X;
-		public int Y;
+		public double X;
+		public double Y;
 	}
 	
 	public abstract class TDrwShape
@@ -28,6 +21,8 @@ namespace MW.Drawing
     	public string CodeElement;
     	public Color Color;
     	public int PenWidth;
+    	public DashStyle DashStyle;
+    	public int Opacity;
     	public bool ByGroup;
     	public bool Visible;
 		
@@ -36,6 +31,8 @@ namespace MW.Drawing
 			ID = 0;
   			PenWidth = 1;
   			Color = Color.Black;
+  			DashStyle = DashStyle.Solid;
+  			Opacity = 100;
   			ByGroup = false;
   			Visible = true;
 		}
@@ -56,8 +53,10 @@ namespace MW.Drawing
  		
     	public override void Draw(Graphics G)
     	{
-    		Pen mypen = new Pen(Color, PenWidth);
-    		G.DrawLine(mypen, StartPoint.X, StartPoint.Y, EndPoint.X, EndPoint.Y);
+    		int vOpacity = Convert.ToInt32(255 * Opacity / 100);
+    		Pen mypen = new Pen(Color.FromArgb(vOpacity, Color), PenWidth);
+    		mypen.DashStyle = DashStyle;
+    		G.DrawLine(mypen, Convert.ToInt32(StartPoint.X), Convert.ToInt32(StartPoint.Y), Convert.ToInt32(EndPoint.X), Convert.ToInt32(EndPoint.Y));
     	}
 	}
 	

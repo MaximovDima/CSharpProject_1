@@ -47,7 +47,7 @@ namespace MW.Drawing
 			DrwShapeList.Clear();
 			foreach (TSceneObject SceneObj in Scene.SceneObjectList)
         	{
-				SceneObj.Build(Scene, CoeffX, CoeffY);
+				SceneObj.Build(CoeffX, CoeffY);
   				
   				foreach (TDrwShape Shape in SceneObj.DrwObjList)
   				{
@@ -80,25 +80,19 @@ namespace MW.Drawing
 			{
 				(AShape as TDrwLine).StartPoint.Y = CtrlScene.Height - (AShape as TDrwLine).StartPoint.Y;
     			(AShape as TDrwLine).EndPoint.Y = CtrlScene.Height - (AShape as TDrwLine).EndPoint.Y;
-    			(AShape as TDrwLine).StartPoint.InitPoint.X = (AShape as TDrwLine).StartPoint.X;
-    			(AShape as TDrwLine).StartPoint.InitPoint.Y = (AShape as TDrwLine).StartPoint.Y;
-    			(AShape as TDrwLine).EndPoint.InitPoint.X = (AShape as TDrwLine).EndPoint.X;
-    			(AShape as TDrwLine).EndPoint.InitPoint.Y = (AShape as TDrwLine).EndPoint.Y;
+
 			}
 			if (AShape is TDrwPolyLine)
 			{
 				foreach (TDrwPoint vPoint in (AShape as TDrwPolyLine).DrwPointList)
 				{
 					vPoint.Y = CtrlScene.Height - vPoint.Y;
-      				vPoint.InitPoint.X = vPoint.X;
-      				vPoint.InitPoint.Y = vPoint.Y;	
+
 				}
 			}
 			if (AShape is TDrwCircle)
 			{
 				(AShape as TDrwCircle).Center.Y = CtrlScene.Height - (AShape as TDrwCircle).Center.Y;
-    			(AShape as TDrwCircle).Center.InitPoint.X = (AShape as TDrwCircle).Center.X;
-    			(AShape as TDrwCircle).Center.InitPoint.Y = (AShape as TDrwCircle).Center.Y;
     			(AShape as TDrwCircle).InitRadius = (AShape as TDrwCircle).Radius;
     			(AShape as TDrwCircle).InitRadius = (AShape as TDrwCircle).Radius;
 			}
