@@ -60,6 +60,11 @@ namespace MW.Drawing
     	}
 	}
 	
+//	public class TDrwLabel : TDrwShape
+//	{
+//		
+//	}
+	
 	public class TDrwPolyLine : TDrwShape
 	{
     	public List<TDrwPoint> DrwPointList;

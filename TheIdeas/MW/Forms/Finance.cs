@@ -241,6 +241,7 @@ namespace MW.Forms
 				{
 					DrwControl.Width = pnlGraphic.Width - 5;
 					DrwControl.Height = pnlGraphic.Height - 20;
+					Painter.Scene.Scale = 1;
 					Painter.ReDraw(DrwControl.Width, DrwControl.Height);
 				}
 				finally 
@@ -255,6 +256,7 @@ namespace MW.Forms
 		{
 			IsScale = true;
 			DrwControl.Width = Convert.ToInt32(DrwControl.Width * 1.2);
+			Painter.Scene.Scale = 1.2;
 			Painter.ReDraw(DrwControl.Width, DrwControl.Height);
 			IsScale = false;
 		}
