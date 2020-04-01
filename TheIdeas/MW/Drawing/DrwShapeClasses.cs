@@ -60,10 +60,57 @@ namespace MW.Drawing
     	}
 	}
 	
-//	public class TDrwLabel : TDrwShape
-//	{
-//		
-//	}
+	public class TDrwLabel : TDrwShape
+	{
+		public enum THAlig {HLeft, HCenter, HRight}
+		public enum TVAlig {VTop, VCenter, VBottom}
+		public string Text;
+		public TDrwPoint Point;
+		//Выравнивание
+		public THAlig HAlig;
+		public TVAlig VAlig;
+
+		public TDrwLabel()
+		{
+			Point = new TDrwPoint();
+		}
+		
+		public override void Draw(Graphics G)
+    	{
+			float vX, vY;
+			Font vFont = new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular);
+			Brush vBrush = new SolidBrush(Color);
+			float vWidth = G.MeasureString(Text, vFont).Width;
+			float vHeight = G.MeasureString(Text, vFont).Height;
+			switch (HAlig) {
+				case TDrwLabel.THAlig.HLeft:
+					vX = (float)Point.X - vWidth;
+					break;
+				case TDrwLabel.THAlig.HCenter:
+					vX = (float)Point.X - vWidth/2;
+					break;
+				case TDrwLabel.THAlig.HRight:
+					vX = (float)Point.X;
+					break;
+				default:
+					throw new Exception("Invalid value for THAlig");
+			}
+			switch (VAlig) {
+				case TDrwLabel.TVAlig.VTop:
+					vY = (float)Point.Y - vHeight;
+					break;
+				case TDrwLabel.TVAlig.VCenter:
+					vY = (float)Point.Y - vHeight/2;
+					break;
+				case TDrwLabel.TVAlig.VBottom:
+					vY = (float)Point.Y;
+					break;
+				default:
+					throw new Exception("Invalid value for TVAlig");
+			}
+			G.DrawString(Text, vFont, vBrush, vX, vY);
+    	}
+	}
 	
 	public class TDrwPolyLine : TDrwShape
 	{

@@ -82,12 +82,15 @@ namespace MW.Drawing
     			(AShape as TDrwLine).EndPoint.Y = CtrlScene.Height - (AShape as TDrwLine).EndPoint.Y;
 
 			}
+			if (AShape is TDrwLabel)
+			{
+				(AShape as TDrwLabel).Point.Y = CtrlScene.Height - (AShape as TDrwLabel).Point.Y;	
+			}
 			if (AShape is TDrwPolyLine)
 			{
 				foreach (TDrwPoint vPoint in (AShape as TDrwPolyLine).DrwPointList)
 				{
 					vPoint.Y = CtrlScene.Height - vPoint.Y;
-
 				}
 			}
 			if (AShape is TDrwCircle)
