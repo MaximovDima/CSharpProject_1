@@ -39,6 +39,28 @@ namespace MW.Drawing
 		
 		public abstract void Draw(Graphics G);
 	}
+		
+	public static class DrwObjects
+	{
+		public static TDrwLine GetLine(double AX0, double AY0, double AX1, double AY1, Color AColor,
+	                       int APenWidth, int AOpacity = 100, DashStyle ADashStyle = DashStyle.Solid, string AGroupCode = "",
+	                       string ACode = "")
+		{
+			TDrwLine vLine = new TDrwLine();
+			vLine.StartPoint.X = AX0;
+			vLine.StartPoint.Y = AY0;
+			vLine.EndPoint.X = AX1;
+			vLine.EndPoint.Y = AY1;
+			vLine.Color = AColor; 
+			vLine.PenWidth = APenWidth;
+			vLine.Opacity = AOpacity;
+			vLine.DashStyle = ADashStyle;
+			vLine.CodeElement = ACode;
+			vLine.GroupCode = AGroupCode;
+			
+			return vLine;		
+		}
+	}
 	
 	public class TDrwLine : TDrwShape
 	{

@@ -116,5 +116,37 @@ namespace MW.Core
 			
 			return Format.ObjToStr(vResult / (vTime.Days));
 		}
+		
+		//Заполняет список точками для графика
+		public void ReFill(List<TFuncPoint> APoints)
+		{
+			APoints.Clear();
+			DateTime d1 = new DateTime(2020, 1, 1);
+    		DateTime d2 = DateTime.Now;
+    		TimeSpan time = d2 - d1;
+    		for (int i = 1; i < time.Days; i++) 
+    		{
+    			double vSum = GetSumByDate(d1.AddDays(i));
+    			TFuncPoint p = new TFuncPoint(i, d1.AddDays(i).ToString("dd/MM/yyyy"), vSum);
+    			APoints.Add(p);
+    		}
+		}
+		
+		//Возвращает сумму за определенный период
+		public double GetSumByDate(DateTime ADateTime)
+		{
+			double vResult = 0;
+			foreach(Dictionary<string, string> vRow in Rows)
+			{
+				DateTime vDay = Convert.ToDateTime(vRow["Date"]);
+				if ((vDay.Day == ADateTime.Day) && (vDay.Month == ADateTime.Month) && (vDay.Year == ADateTime.Year))
+				{
+					vResult = vResult + Format.StrToInt(vRow["Value"]);
+				}
+			}
+			
+			return vResult;
+		}
+		
 	}
 }

@@ -25,19 +25,24 @@ namespace MW.Core
 			Scale = 1;
 		}	
 		
-		public void LoadModels(List<TModel> AModels)
+		public void LoadModels(TModel ACosts, TModel AIncomes, bool AViewCosts,
+		                      bool AViewIncomes, bool AViewBalance)
 		{
+			List<TFuncPoint> vPoints = new List<TFuncPoint>();
+			AIncomes.ReFill(vPoints);
 			//Построение системы координат
-			CreateCoord();
+			CreateCoord(vPoints);
 		}
 		
-		public void CreateCoord()
+		public void CreateCoord(List<TFuncPoint> APoints)
 		{
 			TScObjCoord Coord = new TScObjCoord(this);
+			Coord.SetAxis(APoints);
 			SceneObjectList.Add(Coord);
 		}
 		
 	}
+	
 	//Шаблон модели объекта отрисовки
 	public abstract class TSceneObject
 	{
@@ -61,40 +66,38 @@ namespace MW.Core
     	public abstract void Build(double ACoeffX, double ACoeffY);
 	}
 	
-	public static class DrwObjects
-	{
-		public static TDrwLine GetLine(double AX0, double AY0, double AX1, double AY1, Color AColor,
-	                       int APenWidth, int AOpacity = 100, DashStyle ADashStyle = DashStyle.Solid, string AGroupCode = "",
-	                       string ACode = "")
-		{
-			TDrwLine vLine = new TDrwLine();
-			vLine.StartPoint.X = AX0;
-			vLine.StartPoint.Y = AY0;
-			vLine.EndPoint.X = AX1;
-			vLine.EndPoint.Y = AY1;
-			vLine.Color = AColor; 
-			vLine.PenWidth = APenWidth;
-			vLine.Opacity = AOpacity;
-			vLine.DashStyle = ADashStyle;
-			vLine.CodeElement = ACode;
-			vLine.GroupCode = AGroupCode;
-			
-			return vLine;		
-		}
-	}
-	
 	//Система координат
 	public class TScObjCoord : TSceneObject
 	{
-//		//Ось X
-//		public TAxis AxisX;
-//		//Ось Y
-//		public TAxis AxisY;
-		
+		//Точка начала координат
 		public double X0;
 		public double X1;
 		public double Y0;
 		public double Y1;
+		//Настройки для оси X
+		public double XMin;
+		public double XMax;
+		public double CoeffX;
+		public double GetXDrwByUsr(double AXUsr)
+		{
+			return (((X1-X0)*AXUsr)/(XMax - XMin))*CoeffX;
+		}
+		public double GetXUsrByDrw(double AXDrw)
+		{
+			return (((XMax-XMin)*AXDrw)/(X1 - X0))/CoeffX;
+		}
+		//Настройки для оси Y
+		public double YMin;
+		public double YMax;
+		public double CoeffY;
+		public double GetYUsrByDrw(double AYDrw)
+		{
+			return (((YMax-YMin)*AYDrw)/(Y1 - Y0))/CoeffY;
+		}
+		public double GetYDrwByUsr(double AYUsr)
+		{
+			return (((Y1-Y0)*AYUsr)/(YMax - YMin))*CoeffY;
+		}
 		
 		public TScObjCoord(TScene AScene)
 		{
@@ -108,53 +111,110 @@ namespace MW.Core
 		
 		public override void Build(double ACoeffX, double ACoeffY)
 		{			
-//			if (Scene.Scale > 1) {Y0 = 15;} else {Y0 = 10;}
 			DrwObjList.Clear();
+			CoeffX = ACoeffX;
+			CoeffY = ACoeffY;
 			TDrwLine vXLine, vYLine;
 			TDrwLabel vLabel;
 			double vStep, vX, vY;
 			//ось OX
 			vXLine = DrwObjects.GetLine(X0, Y0, X1*ACoeffX, Y0, Color.Black, 2);
 			DrwObjList.Add(vXLine);
-			//Сетка OX
-			vStep = (X1 - X0) / 10;
-			for (int i = 1; i < 10; i++) 
-			{
-				vX = X0 + i*vStep;
-				vXLine = DrwObjects.GetLine(vX*ACoeffX, Y0, vX*ACoeffX, Y0+3, Color.Black, 2);
-				DrwObjList.Add(vXLine);
-				vXLine = DrwObjects.GetLine(vX*ACoeffX, Y0, vX*ACoeffX, Y1*ACoeffY, Color.Black, 1, 20);				
-				DrwObjList.Add(vXLine);
-				vLabel = new TDrwLabel();
-				vLabel.HAlig = TDrwLabel.THAlig.HCenter;
-				vLabel.VAlig = TDrwLabel.TVAlig.VBottom;
-				vLabel.Point.X = vX*ACoeffX;
-				vLabel.Point.Y = Y0-1;
-				vLabel.Text = "30.04_"+Format.IntToStr(i);
-				DrwObjList.Add(vLabel);
-			}
 			//ось OY
 			vYLine = DrwObjects.GetLine(X0, Y0, X0, Y1*ACoeffY, Color.Black, 2);
 			DrwObjList.Add(vYLine);
-			//Сетка OY
-			vStep = (Y1 - Y0) / 10;
-			for (int i = 1; i < 10; i++) 
+			//Сетка OX
+			vStep = (X1 - X0) / XMax;
+			for (int i = 0; i < Math.Round(XMax); i++)
 			{
-				vY = Y0 + i*vStep;
-				vYLine = DrwObjects.GetLine(X0, vY*ACoeffY, X0 + 3, vY*ACoeffY, Color.Black, 2);
-				DrwObjList.Add(vYLine);
-				vYLine = DrwObjects.GetLine(X0, vY*ACoeffY, X1*ACoeffX, vY*ACoeffY, Color.Black, 1, 20);				
-				DrwObjList.Add(vYLine);
-				vLabel = new TDrwLabel();
-				vLabel.HAlig = TDrwLabel.THAlig.HLeft;
-				vLabel.VAlig = TDrwLabel.TVAlig.VCenter;
-				vLabel.Point.X = X0-1;
-				vLabel.Point.Y = vY*ACoeffY;
-				vLabel.Text = Format.IntToStr(-100*i);
-				DrwObjList.Add(vLabel);
+				if ((i % 7) == 0 & i!=0)
+				{
+					vX = X0 + i*vStep*ACoeffX;
+					vXLine = DrwObjects.GetLine(vX, Y0, vX, Y0+4, Color.Black, 2);
+					DrwObjList.Add(vXLine);
+					vXLine = DrwObjects.GetLine(vX, Y0, vX, Y1*ACoeffY, Color.Black, 1, 20);				
+					DrwObjList.Add(vXLine);
+
+					vLabel = new TDrwLabel();
+					vLabel.HAlig = TDrwLabel.THAlig.HCenter;
+					vLabel.VAlig = TDrwLabel.TVAlig.VBottom;
+					vLabel.Point.X = vX;
+					vLabel.Point.Y = Y0-1;					
+					DateTime d1 = new DateTime(2020, 1, 1);							
+					vLabel.Text = d1.AddDays(i).ToString("d MMM");
+					DrwObjList.Add(vLabel);
+				}
 			}
-			
+			//Сетка OY
+			vStep = (Y1-Y0)/YMax;
+			for (int i = 0; i < Math.Round(YMax); i++)
+			{
+				vY = Y0 + i*vStep*ACoeffY;
+				vYLine = DrwObjects.GetLine(X0, vY, X0+3, vY, Color.Black, 2);
+				DrwObjList.Add(vYLine);
+				vYLine = DrwObjects.GetLine(X0, vY, X1*ACoeffX, vY, Color.Black, 1, 20);				
+				DrwObjList.Add(vYLine);
+				if ((i % 2) == 0 & i!=0)
+				{
+					vLabel = new TDrwLabel();
+					vLabel.HAlig = TDrwLabel.THAlig.HLeft;
+					vLabel.VAlig = TDrwLabel.TVAlig.VCenter;
+					vLabel.Point.X = X0-1;
+					vLabel.Point.Y = vY;
+					vLabel.Text = Format.IntToStr(i)+"K";
+					DrwObjList.Add(vLabel);
+				}
+			}
 		}
 		
-	}			
+		//Настройка осей
+		public void SetAxis(List<TFuncPoint> APoints)
+		{
+			//Временная шкала
+			XMin = 0;
+			DateTime d1 = new DateTime(2020, 1, 1);
+    		DateTime d2 = DateTime.Now;
+    		TimeSpan time = d2 - d1;
+			XMax = time.Days + 7;
+			//Шкала значений
+			//Анализ модельных значений
+			YMax = 0;
+			YMin = APoints[0].Value;
+			foreach (TFuncPoint vPoint in APoints)
+			{
+				YMin = Math.Min(YMin, vPoint.Value);
+				YMax = Math.Max(YMax, vPoint.Value);
+			}
+			YMax = YMax/1000;
+			YMin = YMin/1000;
+		}
+	}
+	
+	//Класс-обертка для загрузки значений в функцию
+	public class TFuncPoint
+	{
+		public int ID;
+		public string Date;
+		public double Value;
+		
+		public TFuncPoint(int AID, string ADate, double AValue)
+		{
+			ID = AID;
+			Date = ADate;
+			Value = AValue;
+		}
+	}
+	
+	public class TScObjFunc : TSceneObject
+	{
+		public TScObjFunc(TModel AModel)
+		{
+			Name = "Func" + AModel.Name;
+		}
+		
+		public override void Build(double ACoeffX, double ACoeffY)
+		{
+			
+		}
+	}
 }

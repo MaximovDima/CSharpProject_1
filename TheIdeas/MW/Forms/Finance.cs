@@ -44,7 +44,7 @@ namespace MW.Forms
 		
 		public void SyncView()
 		{
-			Painter.Scene.LoadModels(Data.Models);
+			Painter.Scene.LoadModels(Costs, Incomes, true, false, false);
 		}
 		
 		public void SyncCostsInfo()
@@ -140,6 +140,7 @@ namespace MW.Forms
 				Data.UpdateModel("Directory");
 				Data.UpdateModel("Cost");
 				SyncCostsInfo();
+				SyncView();
 			}
 		}	
 		
@@ -162,6 +163,7 @@ namespace MW.Forms
 				vRow["State"] = "delete";
 				Data.UpdateModel("Cost");
 				SyncCostsInfo();
+				SyncView();
 			}
 		}
 		
@@ -178,6 +180,7 @@ namespace MW.Forms
 				Data.UpdateModel("Directory");
 				Data.UpdateModel("Income");
 				SyncIncomesInfo();
+				SyncView();
 			}			
 		}
 		
@@ -207,6 +210,7 @@ namespace MW.Forms
 				Data.UpdateModel("Directory");
 				Data.UpdateModel("Income");
 				SyncIncomesInfo();
+				SyncView();
 			}
 		}
 		
@@ -224,6 +228,7 @@ namespace MW.Forms
 				vRow["State"] = "delete";
 				Data.UpdateModel("Income");
 				SyncIncomesInfo();
+				SyncView();
 			}			
 		}
 		
