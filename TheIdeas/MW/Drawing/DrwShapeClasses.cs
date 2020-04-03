@@ -134,6 +134,32 @@ namespace MW.Drawing
     	}
 	}
 	
+	public class TDrwPolygon : TDrwShape
+	{
+    	public List<TDrwPoint> DrwPointList;
+
+    	public TDrwPolygon()
+    	{
+    		DrwPointList = new List<TDrwPoint>();
+    	}
+    	
+    	public override void Draw(Graphics G)
+    	{
+    		if (!Visible)
+    		{
+    			return;
+    		}
+			Point[] points = new Point[DrwPointList.Count];
+			for(int i = 0; i < DrwPointList.Count; i++)
+			{
+				points[i].X = (int)DrwPointList[i].X;
+				points[i].Y = (int)DrwPointList[i].Y;
+			}  				
+    		int vOpacity = Convert.ToInt32(255 * Opacity / 100);
+			G.FillPolygon(new SolidBrush(Color.FromArgb(vOpacity, Color)), points, FillMode.Alternate);
+    	}
+	}
+	
 	public class TDrwPolyLine : TDrwShape
 	{
     	public List<TDrwPoint> DrwPointList;
@@ -155,9 +181,10 @@ namespace MW.Drawing
 				points[i].X = (int)DrwPointList[i].X;
 				points[i].Y = (int)DrwPointList[i].Y;
 			}  				
-    		Pen mypen = new Pen(Color, PenWidth);
-    		G.DrawLines(mypen, points);
-			
+    		int vOpacity = Convert.ToInt32(255 * Opacity / 100);
+    		Pen mypen = new Pen(Color.FromArgb(255, Color), PenWidth);
+    		mypen.DashStyle = DashStyle;   		
+			G.DrawLines(mypen, points);
     	}
 	}
 	
@@ -182,8 +209,11 @@ namespace MW.Drawing
     		{
     			return;
     		}
+    		 
+    		int vOpacity = Convert.ToInt32(255 * Opacity / 100);
+    		Pen mypen = new Pen(Color.FromArgb(vOpacity, Color), PenWidth);
+    		mypen.DashStyle = DashStyle;
     		
-    		Pen mypen = new Pen(Color, PenWidth);
     		G.DrawEllipse(mypen, (int)(Center.X - Radius),
     		              		 (int)(Center.Y + Radius),
     		              		 (int)(2*Radius),

@@ -54,6 +54,7 @@
 			this.pnlGraphic = new System.Windows.Forms.Panel();
 			this.DrwControl = new System.Windows.Forms.PictureBox();
 			this.button1 = new System.Windows.Forms.Button();
+			this.cbIsCost = new System.Windows.Forms.CheckBox();
 			this.gbCosts.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.vCosts)).BeginInit();
 			this.gbIncomes.SuspendLayout();
@@ -377,10 +378,23 @@
 			this.button1.UseVisualStyleBackColor = true;
 			this.button1.Click += new System.EventHandler(this.Button1Click);
 			// 
+			// cbIsCost
+			// 
+			this.cbIsCost.Checked = true;
+			this.cbIsCost.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbIsCost.Location = new System.Drawing.Point(50, 270);
+			this.cbIsCost.Name = "cbIsCost";
+			this.cbIsCost.Size = new System.Drawing.Size(104, 24);
+			this.cbIsCost.TabIndex = 4;
+			this.cbIsCost.Text = "Расходы";
+			this.cbIsCost.UseVisualStyleBackColor = true;
+			this.cbIsCost.CheckStateChanged += new System.EventHandler(this.CbIsCostCheckStateChanged);
+			// 
 			// FrmFinance
 			// 
 			this.ClientSize = new System.Drawing.Size(1160, 574);
 			this.ControlBox = false;
+			this.Controls.Add(this.cbIsCost);
 			this.Controls.Add(this.pnlGraphic);
 			this.Controls.Add(this.button1);
 			this.Controls.Add(this.gbIncomes);
@@ -397,6 +411,7 @@
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.CheckBox cbIsCost;
 		private System.Windows.Forms.Button button1;
 		private System.Windows.Forms.PictureBox DrwControl;
 		private System.Windows.Forms.Panel pnlGraphic;

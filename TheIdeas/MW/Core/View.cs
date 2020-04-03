@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 using MW.Drawing;
 
 namespace MW.Core
@@ -29,9 +30,19 @@ namespace MW.Core
 		                      bool AViewIncomes, bool AViewBalance)
 		{
 			List<TFuncPoint> vPoints = new List<TFuncPoint>();
-			AIncomes.ReFill(vPoints);
+			if (AViewCosts)
+			{
+				ACosts.ReFill(vPoints);	
+			}
+			else
+			{
+				AIncomes.ReFill(vPoints);
+			}
+			
 			//Построение системы координат
 			CreateCoord(vPoints);
+			//Отображение модельных данных
+			CreateFunc(vPoints);
 		}
 		
 		public void CreateCoord(List<TFuncPoint> APoints)
@@ -41,6 +52,25 @@ namespace MW.Core
 			SceneObjectList.Add(Coord);
 		}
 		
+		public void CreateFunc(List<TFuncPoint> APoints)
+		{
+			TScObjFunc Func = new TScObjFunc(this);
+			Func.Load(APoints);
+			SceneObjectList.Add(Func);
+		}
+		
+		public TSceneObject GetSceneObject(string AName)
+		{
+			TSceneObject vResult = null;
+			foreach (TSceneObject vObj in SceneObjectList) 
+			{
+				if (vObj.Name == AName)
+				{
+					vResult = vObj;
+				}
+			}
+			return vResult;		
+		}
 	}
 	
 	//Шаблон модели объекта отрисовки
@@ -148,14 +178,17 @@ namespace MW.Core
 			//Сетка OY
 			vStep = (Y1-Y0)/YMax;
 			for (int i = 0; i < Math.Round(YMax); i++)
-			{
-				vY = Y0 + i*vStep*ACoeffY;
-				vYLine = DrwObjects.GetLine(X0, vY, X0+3, vY, Color.Black, 2);
-				DrwObjList.Add(vYLine);
-				vYLine = DrwObjects.GetLine(X0, vY, X1*ACoeffX, vY, Color.Black, 1, 20);				
-				DrwObjList.Add(vYLine);
-				if ((i % 2) == 0 & i!=0)
+			{	
+				int vInc = 2;
+				if(YMax > 20) {vInc = 4;}
+				if ((i % vInc) == 0 & i!=0)
 				{
+					vY = Y0 + i*vStep*ACoeffY;
+					vYLine = DrwObjects.GetLine(X0, vY, X0+3, vY, Color.Black, 2);
+					DrwObjList.Add(vYLine);
+					vYLine = DrwObjects.GetLine(X0, vY, X1*ACoeffX, vY, Color.Black, 1, 20);				
+					DrwObjList.Add(vYLine);
+
 					vLabel = new TDrwLabel();
 					vLabel.HAlig = TDrwLabel.THAlig.HLeft;
 					vLabel.VAlig = TDrwLabel.TVAlig.VCenter;
@@ -185,8 +218,6 @@ namespace MW.Core
 				YMin = Math.Min(YMin, vPoint.Value);
 				YMax = Math.Max(YMax, vPoint.Value);
 			}
-			YMax = YMax/1000;
-			YMin = YMin/1000;
 		}
 	}
 	
@@ -207,14 +238,56 @@ namespace MW.Core
 	
 	public class TScObjFunc : TSceneObject
 	{
-		public TScObjFunc(TModel AModel)
+		public List<TFuncPoint> Points;
+		public TScObjCoord Coord;
+		
+		public TScObjFunc(TScene AScene)
 		{
-			Name = "Func" + AModel.Name;
+			Scene = AScene;
+			Name = "Func";
+			Coord = (Scene.GetSceneObject("Coord") as TScObjCoord);
+		}
+		
+		public void Load(List<TFuncPoint> APoints)
+		{
+			Points = APoints;
 		}
 		
 		public override void Build(double ACoeffX, double ACoeffY)
 		{
-			
+			DrwObjList.Clear();
+			TDrwPolyLine vPolyline = new TDrwPolyLine();
+			vPolyline.Color = Color.Red;
+			foreach (TFuncPoint vPoint in Points)
+			{
+				TDrwPoint vDrwPoint = new TDrwPoint();
+				vDrwPoint.X = Coord.X0 + Coord.GetXDrwByUsr(vPoint.ID);
+				vDrwPoint.Y = Coord.Y0 + Coord.GetYDrwByUsr(vPoint.Value);
+				vPolyline.DrwPointList.Add(vDrwPoint);
+			}
+			TDrwPolygon vPolygon = new TDrwPolygon();
+			vPolygon.Color = Color.Red;
+			vPolygon.Opacity = 20;
+			//Первая виртуальная точка
+			TDrwPoint vDrwPointVirtual = new TDrwPoint();
+			vDrwPointVirtual.X = Coord.X0 + Coord.GetXDrwByUsr(Points[0].ID);
+			vDrwPointVirtual.Y = Coord.Y0;
+			vPolygon.DrwPointList.Add(vDrwPointVirtual);
+			//Массив
+			foreach (TFuncPoint vPoint in Points)
+			{
+				TDrwPoint vDrwPoint = new TDrwPoint();
+				vDrwPoint.X = Coord.X0 + Coord.GetXDrwByUsr(vPoint.ID);
+				vDrwPoint.Y = Coord.Y0 + Coord.GetYDrwByUsr(vPoint.Value);
+				vPolygon.DrwPointList.Add(vDrwPoint);
+			}
+			//последняя виртуальная точка
+			vDrwPointVirtual = new TDrwPoint();
+			vDrwPointVirtual.X = Coord.X0 + Coord.GetXDrwByUsr(Points[Points.Count-1].ID);
+			vDrwPointVirtual.Y = Coord.Y0;
+			vPolygon.DrwPointList.Add(vDrwPointVirtual);
+			DrwObjList.Add(vPolygon);
+			DrwObjList.Add(vPolyline);
 		}
 	}
 }

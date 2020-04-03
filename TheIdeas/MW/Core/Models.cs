@@ -127,7 +127,7 @@ namespace MW.Core
     		for (int i = 1; i < time.Days; i++) 
     		{
     			double vSum = GetSumByDate(d1.AddDays(i));
-    			TFuncPoint p = new TFuncPoint(i, d1.AddDays(i).ToString("dd/MM/yyyy"), vSum);
+    			TFuncPoint p = new TFuncPoint(i, d1.AddDays(i).ToString("dd/MM/yyyy"), vSum/1000);
     			APoints.Add(p);
     		}
 		}
@@ -139,7 +139,7 @@ namespace MW.Core
 			foreach(Dictionary<string, string> vRow in Rows)
 			{
 				DateTime vDay = Convert.ToDateTime(vRow["Date"]);
-				if ((vDay.Day == ADateTime.Day) && (vDay.Month == ADateTime.Month) && (vDay.Year == ADateTime.Year))
+				if (vDay == ADateTime)
 				{
 					vResult = vResult + Format.StrToInt(vRow["Value"]);
 				}

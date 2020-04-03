@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Collections.Generic;
-
 using MW.Core;
 
 namespace MW.Drawing
@@ -37,6 +37,7 @@ namespace MW.Drawing
   			CoeffY = AY / Scene.Y;
   			DrawArea = new Bitmap(Convert.ToInt32(AX), Convert.ToInt32(AY));
 			Layer = Graphics.FromImage(DrawArea);
+			Layer.SmoothingMode = SmoothingMode.HighQuality;
 			CtrlScene.Image = DrawArea; 
 			Layer.Clear(Color.White); 		
 		}
@@ -86,9 +87,16 @@ namespace MW.Drawing
 			{
 				(AShape as TDrwLabel).Point.Y = CtrlScene.Height - (AShape as TDrwLabel).Point.Y;	
 			}
-			if (AShape is TDrwPolyLine)
+			if (AShape is TDrwPolyLine) 
 			{
 				foreach (TDrwPoint vPoint in (AShape as TDrwPolyLine).DrwPointList)
+				{
+					vPoint.Y = CtrlScene.Height - vPoint.Y;
+				}
+			}
+			if (AShape is TDrwPolygon) 
+			{
+				foreach (TDrwPoint vPoint in (AShape as TDrwPolygon).DrwPointList)
 				{
 					vPoint.Y = CtrlScene.Height - vPoint.Y;
 				}

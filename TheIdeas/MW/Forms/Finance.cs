@@ -265,5 +265,12 @@ namespace MW.Forms
 			Painter.ReDraw(DrwControl.Width, DrwControl.Height);
 			IsScale = false;
 		}
+		
+		void CbIsCostCheckStateChanged(object sender, EventArgs e)
+		{
+			Painter.Scene.SceneObjectList.Clear();
+			Painter.Scene.LoadModels(Costs, Incomes, cbIsCost.Checked, false, false);
+			Painter.ReDraw(DrwControl.Width, DrwControl.Height);
+		}
 	}
 }

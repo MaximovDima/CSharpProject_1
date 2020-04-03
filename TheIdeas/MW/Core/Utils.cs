@@ -47,6 +47,17 @@ namespace MW.Core
 	//Форматирование
 	public static class Format
 	{
+		public static DateTime ObjToDate(object AObj)
+		{
+			if (AObj == null)
+			{
+				return DateTime.Now;
+			} else
+			{
+				return Convert.ToDateTime(AObj);
+			}
+		}
+		
 		public static string ObjToStr(object AObj)
 		{
 			if (AObj == null)

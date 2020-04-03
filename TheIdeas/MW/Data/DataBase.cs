@@ -31,7 +31,17 @@ namespace MW.Data
             	Dictionary<string, string> vRow = new Dictionary<string, string>();
             	for(int i = 0; i < AFields.Length; i++)
             	{
-            		vRow.Add(AFields[i], Format.ObjToStr(vReader[AFields[i]]));
+            		//Упрощение записи даты
+            		if (AFields[i] == "Date")
+            		{
+            			DateTime vDate = Format.ObjToDate(vReader["Date"]);
+            			string vDateStr = vDate.ToString("dd.MM.yy");
+            			vRow.Add("Date", vDateStr);
+            		}
+            		else
+            		{
+            			vRow.Add(AFields[i], Format.ObjToStr(vReader[AFields[i]]));
+            		}
             	}
             	vRow.Add("State", "current");
             	
