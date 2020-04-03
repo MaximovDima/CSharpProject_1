@@ -14,35 +14,58 @@ namespace MW.Core
 		public double X;
 		public double Y;
 		//Коллеккция моделей объектов сцены
-		public List<TSceneObject> SceneObjectList;
-		//Масштаб
-		public double Scale;		
+		public List<TSceneObject> SceneObjectList;		
 		
 		public TScene(double AX, double AY)
 		{
 			X = AX;
 			Y = AY;
 			SceneObjectList = new List<TSceneObject>();
-			Scale = 1;
 		}	
 		
-		public void LoadModels(TModel ACosts, TModel AIncomes, bool AViewCosts,
-		                      bool AViewIncomes, bool AViewBalance)
+		public void LoadModels(TModel ACosts, TModel AIncomes, bool AViewTime, int ATimeType)
 		{
-			List<TFuncPoint> vPoints = new List<TFuncPoint>();
-			if (AViewCosts)
+			/*ATimeType
+			 * 0-costs
+			 * 1-incomes
+			 * 2-costs+incomes
+			 * 3-balance*/
+			if(AViewTime)
 			{
-				ACosts.ReFill(vPoints);	
+				List<TFuncPoint> vPoints = new List<TFuncPoint>();
+				if (ATimeType == 0)
+				{
+					ACosts.ReFill(vPoints);
+					//Построение системы координат
+					CreateCoord(vPoints);
+					//Отображение модельных данных
+					CreateFunc(vPoints, ATimeType);					
+				}
+				else if (ATimeType == 1)
+				{
+					AIncomes.ReFill(vPoints);
+					CreateCoord(vPoints);
+					CreateFunc(vPoints, ATimeType);
+				}
+				else if (ATimeType == 2)
+				{
+					AIncomes.ReFill(vPoints);
+					List<TFuncPoint> vPoints2 = new List<TFuncPoint>();
+					ACosts.ReFill(vPoints2);
+					CreateCoord(vPoints, vPoints2);
+					CreateFunc(vPoints, 1);
+					CreateFunc(vPoints2, 0);
+				}
+				else if (ATimeType == 3)
+				{
+					AIncomes.ReFill(vPoints);
+					List<TFuncPoint> vPoints2 = new List<TFuncPoint>();
+					ACosts.ReFill(vPoints2);
+					CreateCoord(vPoints, vPoints2);
+					CreateFunc(vPoints, 1);
+					CreateFunc(vPoints2, 0);
+				}
 			}
-			else
-			{
-				AIncomes.ReFill(vPoints);
-			}
-			
-			//Построение системы координат
-			CreateCoord(vPoints);
-			//Отображение модельных данных
-			CreateFunc(vPoints);
 		}
 		
 		public void CreateCoord(List<TFuncPoint> APoints)
@@ -52,9 +75,18 @@ namespace MW.Core
 			SceneObjectList.Add(Coord);
 		}
 		
-		public void CreateFunc(List<TFuncPoint> APoints)
+				
+		public void CreateCoord(List<TFuncPoint> APoints1, List<TFuncPoint> APoints2)
+		{
+			TScObjCoord Coord = new TScObjCoord(this);
+			Coord.SetAxis(APoints1, APoints2);
+			SceneObjectList.Add(Coord);
+		}
+		
+		public void CreateFunc(List<TFuncPoint> APoints, int ATimeType)
 		{
 			TScObjFunc Func = new TScObjFunc(this);
+			Func.TimeType = ATimeType;
 			Func.Load(APoints);
 			SceneObjectList.Add(Func);
 		}
@@ -176,8 +208,8 @@ namespace MW.Core
 				}
 			}
 			//Сетка OY
-			vStep = (Y1-Y0)/YMax;
-			for (int i = 0; i < Math.Round(YMax); i++)
+			vStep = (Y1-Y0)/(YMax);
+			for (int i = 0; i < Math.Round(YMax-YMin); i++)
 			{	
 				int vInc = 2;
 				if(YMax > 20) {vInc = 4;}
@@ -219,6 +251,32 @@ namespace MW.Core
 				YMax = Math.Max(YMax, vPoint.Value);
 			}
 		}
+		
+		//Настройка осей
+		public void SetAxis(List<TFuncPoint> APoints1, List<TFuncPoint> APoints2)
+		{
+			//Временная шкала
+			XMin = 0;
+			DateTime d1 = new DateTime(2020, 1, 1);
+    		DateTime d2 = DateTime.Now;
+    		TimeSpan time = d2 - d1;
+			XMax = time.Days + 7;
+			//Шкала значений
+			//Анализ модельных значений
+			
+			YMax = 0;
+			YMin = APoints1[0].Value;
+			foreach (TFuncPoint vPoint in APoints1)
+			{
+				YMin = Math.Min(YMin, vPoint.Value);
+				YMax = Math.Max(YMax, vPoint.Value);
+			}
+			foreach (TFuncPoint vPoint in APoints2)
+			{
+				YMin = Math.Min(YMin, vPoint.Value);
+				YMax = Math.Max(YMax, vPoint.Value);
+			}
+		}
 	}
 	
 	//Класс-обертка для загрузки значений в функцию
@@ -240,6 +298,7 @@ namespace MW.Core
 	{
 		public List<TFuncPoint> Points;
 		public TScObjCoord Coord;
+		public int TimeType;
 		
 		public TScObjFunc(TScene AScene)
 		{
@@ -256,8 +315,10 @@ namespace MW.Core
 		public override void Build(double ACoeffX, double ACoeffY)
 		{
 			DrwObjList.Clear();
+			//Линия контура
 			TDrwPolyLine vPolyline = new TDrwPolyLine();
-			vPolyline.Color = Color.Red;
+			if (TimeType == 0) {vPolyline.Color = Color.Red;}
+			if (TimeType == 1) {vPolyline.Color = Color.Green;}
 			foreach (TFuncPoint vPoint in Points)
 			{
 				TDrwPoint vDrwPoint = new TDrwPoint();
@@ -266,8 +327,11 @@ namespace MW.Core
 				vPolyline.DrwPointList.Add(vDrwPoint);
 			}
 			TDrwPolygon vPolygon = new TDrwPolygon();
-			vPolygon.Color = Color.Red;
+			if (TimeType == 0) {vPolygon.Color = Color.Red;}
+			if (TimeType == 1) {vPolygon.Color = Color.Green;}
 			vPolygon.Opacity = 20;
+			
+			//Область закрашивания
 			//Первая виртуальная точка
 			TDrwPoint vDrwPointVirtual = new TDrwPoint();
 			vDrwPointVirtual.X = Coord.X0 + Coord.GetXDrwByUsr(Points[0].ID);
@@ -286,6 +350,7 @@ namespace MW.Core
 			vDrwPointVirtual.X = Coord.X0 + Coord.GetXDrwByUsr(Points[Points.Count-1].ID);
 			vDrwPointVirtual.Y = Coord.Y0;
 			vPolygon.DrwPointList.Add(vDrwPointVirtual);
+			
 			DrwObjList.Add(vPolygon);
 			DrwObjList.Add(vPolyline);
 		}

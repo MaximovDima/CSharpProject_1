@@ -53,8 +53,14 @@
 			this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.pnlGraphic = new System.Windows.Forms.Panel();
 			this.DrwControl = new System.Windows.Forms.PictureBox();
-			this.button1 = new System.Windows.Forms.Button();
-			this.cbIsCost = new System.Windows.Forms.CheckBox();
+			this.ReZoom = new System.Windows.Forms.Button();
+			this.rbTime = new System.Windows.Forms.RadioButton();
+			this.rbStructura = new System.Windows.Forms.RadioButton();
+			this.cbTimeType = new System.Windows.Forms.ComboBox();
+			this.ZoomIn = new System.Windows.Forms.Button();
+			this.ZoomOut = new System.Windows.Forms.Button();
+			this.cbScale = new System.Windows.Forms.CheckBox();
+			this.cbInfo = new System.Windows.Forms.CheckBox();
 			this.gbCosts.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.vCosts)).BeginInit();
 			this.gbIncomes.SuspendLayout();
@@ -368,35 +374,105 @@
 			this.DrwControl.TabIndex = 0;
 			this.DrwControl.TabStop = false;
 			// 
-			// button1
+			// ReZoom
 			// 
-			this.button1.Location = new System.Drawing.Point(6, 269);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(32, 24);
-			this.button1.TabIndex = 1;
-			this.button1.Text = "button1";
-			this.button1.UseVisualStyleBackColor = true;
-			this.button1.Click += new System.EventHandler(this.Button1Click);
+			this.ReZoom.Location = new System.Drawing.Point(288, 271);
+			this.ReZoom.Name = "ReZoom";
+			this.ReZoom.Size = new System.Drawing.Size(32, 23);
+			this.ReZoom.TabIndex = 1;
+			this.ReZoom.Text = "0";
+			this.ReZoom.UseVisualStyleBackColor = true;
+			this.ReZoom.Click += new System.EventHandler(this.PnlGraphicResize);
 			// 
-			// cbIsCost
+			// rbTime
 			// 
-			this.cbIsCost.Checked = true;
-			this.cbIsCost.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.cbIsCost.Location = new System.Drawing.Point(50, 270);
-			this.cbIsCost.Name = "cbIsCost";
-			this.cbIsCost.Size = new System.Drawing.Size(104, 24);
-			this.cbIsCost.TabIndex = 4;
-			this.cbIsCost.Text = "Расходы";
-			this.cbIsCost.UseVisualStyleBackColor = true;
-			this.cbIsCost.CheckStateChanged += new System.EventHandler(this.CbIsCostCheckStateChanged);
+			this.rbTime.Checked = true;
+			this.rbTime.Location = new System.Drawing.Point(9, 272);
+			this.rbTime.Name = "rbTime";
+			this.rbTime.Size = new System.Drawing.Size(62, 20);
+			this.rbTime.TabIndex = 5;
+			this.rbTime.TabStop = true;
+			this.rbTime.Text = "Время";
+			this.rbTime.UseVisualStyleBackColor = true;
+			this.rbTime.CheckedChanged += new System.EventHandler(this.RbTimeCheckedChanged);
+			// 
+			// rbStructura
+			// 
+			this.rbStructura.Location = new System.Drawing.Point(203, 272);
+			this.rbStructura.Name = "rbStructura";
+			this.rbStructura.Size = new System.Drawing.Size(78, 20);
+			this.rbStructura.TabIndex = 7;
+			this.rbStructura.Text = "Структура";
+			this.rbStructura.UseVisualStyleBackColor = true;
+			this.rbStructura.CheckedChanged += new System.EventHandler(this.RbStructuraCheckedChanged);
+			// 
+			// cbTimeType
+			// 
+			this.cbTimeType.FormattingEnabled = true;
+			this.cbTimeType.Items.AddRange(new object[] {
+									"Расходы",
+									"Доходы",
+									"Расходы+доходы",
+									"Баланс"});
+			this.cbTimeType.Location = new System.Drawing.Point(77, 272);
+			this.cbTimeType.Name = "cbTimeType";
+			this.cbTimeType.Size = new System.Drawing.Size(120, 21);
+			this.cbTimeType.TabIndex = 8;
+			this.cbTimeType.SelectedIndexChanged += new System.EventHandler(this.CbTimeTypeSelectedIndexChanged);
+			// 
+			// ZoomIn
+			// 
+			this.ZoomIn.Location = new System.Drawing.Point(325, 271);
+			this.ZoomIn.Name = "ZoomIn";
+			this.ZoomIn.Size = new System.Drawing.Size(32, 23);
+			this.ZoomIn.TabIndex = 9;
+			this.ZoomIn.Text = "+";
+			this.ZoomIn.UseVisualStyleBackColor = true;
+			this.ZoomIn.Click += new System.EventHandler(this.ZoomInClick);
+			// 
+			// ZoomOut
+			// 
+			this.ZoomOut.Location = new System.Drawing.Point(362, 271);
+			this.ZoomOut.Name = "ZoomOut";
+			this.ZoomOut.Size = new System.Drawing.Size(32, 23);
+			this.ZoomOut.TabIndex = 11;
+			this.ZoomOut.Text = "-";
+			this.ZoomOut.UseVisualStyleBackColor = true;
+			this.ZoomOut.Click += new System.EventHandler(this.ZoomOutClick);
+			// 
+			// cbScale
+			// 
+			this.cbScale.Location = new System.Drawing.Point(410, 271);
+			this.cbScale.Name = "cbScale";
+			this.cbScale.Size = new System.Drawing.Size(82, 24);
+			this.cbScale.TabIndex = 12;
+			this.cbScale.Text = "Масштаб";
+			this.cbScale.UseVisualStyleBackColor = true;
+			this.cbScale.CheckedChanged += new System.EventHandler(this.CbScaleCheckedChanged);
+			// 
+			// cbInfo
+			// 
+			this.cbInfo.Location = new System.Drawing.Point(484, 270);
+			this.cbInfo.Name = "cbInfo";
+			this.cbInfo.Size = new System.Drawing.Size(82, 24);
+			this.cbInfo.TabIndex = 13;
+			this.cbInfo.Text = "Данные";
+			this.cbInfo.UseVisualStyleBackColor = true;
+			this.cbInfo.CheckedChanged += new System.EventHandler(this.CbInfoCheckedChanged);
 			// 
 			// FrmFinance
 			// 
 			this.ClientSize = new System.Drawing.Size(1160, 574);
 			this.ControlBox = false;
-			this.Controls.Add(this.cbIsCost);
+			this.Controls.Add(this.cbInfo);
+			this.Controls.Add(this.cbScale);
+			this.Controls.Add(this.ZoomOut);
+			this.Controls.Add(this.ZoomIn);
+			this.Controls.Add(this.cbTimeType);
+			this.Controls.Add(this.rbStructura);
+			this.Controls.Add(this.rbTime);
 			this.Controls.Add(this.pnlGraphic);
-			this.Controls.Add(this.button1);
+			this.Controls.Add(this.ReZoom);
 			this.Controls.Add(this.gbIncomes);
 			this.Controls.Add(this.gbCosts);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -411,8 +487,14 @@
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
-		private System.Windows.Forms.CheckBox cbIsCost;
-		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.CheckBox cbInfo;
+		private System.Windows.Forms.CheckBox cbScale;
+		private System.Windows.Forms.Button ZoomOut;
+		private System.Windows.Forms.Button ZoomIn;
+		private System.Windows.Forms.ComboBox cbTimeType;
+		private System.Windows.Forms.RadioButton rbStructura;
+		private System.Windows.Forms.RadioButton rbTime;
+		private System.Windows.Forms.Button ReZoom;
 		private System.Windows.Forms.PictureBox DrwControl;
 		private System.Windows.Forms.Panel pnlGraphic;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Id1;

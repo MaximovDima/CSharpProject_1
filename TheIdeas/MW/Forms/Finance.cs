@@ -32,6 +32,7 @@ namespace MW.Forms
 			Costs = Data.GetModel("Cost");
 			Incomes = Data.GetModel("Income");
 			Painter = new TPainter(DrwControl);
+			cbTimeType.SelectedIndex = 0;
 			SyncForm();
 		}
 		
@@ -44,7 +45,9 @@ namespace MW.Forms
 		
 		public void SyncView()
 		{
-			Painter.Scene.LoadModels(Costs, Incomes, true, false, false);
+			Painter.Scene.SceneObjectList.Clear();
+			Painter.Scene.LoadModels(Costs, Incomes, rbTime.Checked, cbTimeType.SelectedIndex);
+			Painter.ReDraw(DrwControl.Width, DrwControl.Height);
 		}
 		
 		public void SyncCostsInfo()
@@ -111,6 +114,7 @@ namespace MW.Forms
 				Data.UpdateModel("Directory");
 				Data.UpdateModel("Cost");
 				SyncCostsInfo();
+				SyncView();
 			}
 		}
 		
@@ -246,8 +250,7 @@ namespace MW.Forms
 				{
 					DrwControl.Width = pnlGraphic.Width - 5;
 					DrwControl.Height = pnlGraphic.Height - 20;
-					Painter.Scene.Scale = 1;
-					Painter.ReDraw(DrwControl.Width, DrwControl.Height);
+					SyncView();
 				}
 				finally 
 				{
@@ -257,20 +260,64 @@ namespace MW.Forms
 			}
 		}
 		
-		void Button1Click(object sender, EventArgs e)
-		{
-			IsScale = true;
-			DrwControl.Width = Convert.ToInt32(DrwControl.Width * 1.2);
-			Painter.Scene.Scale = 1.2;
-			Painter.ReDraw(DrwControl.Width, DrwControl.Height);
-			IsScale = false;
-		}
-		
 		void CbIsCostCheckStateChanged(object sender, EventArgs e)
 		{
-			Painter.Scene.SceneObjectList.Clear();
-			Painter.Scene.LoadModels(Costs, Incomes, cbIsCost.Checked, false, false);
+			SyncView();
+		}
+		
+		void RbTimeCheckedChanged(object sender, EventArgs e)
+		{
+			cbTimeType.SelectedIndex = 0;
+			cbTimeType.Enabled = true;
+			ReZoom.Visible = true;
+			ZoomIn.Visible = true;
+			ZoomOut.Visible = true;
+			cbScale.Visible = true;
+			cbInfo.Visible = true;
+			SyncView();
+		}
+		
+		void RbStructuraCheckedChanged(object sender, EventArgs e)
+		{
+			cbTimeType.SelectedIndex = -1;
+			cbTimeType.Enabled = false;
+			ReZoom.Visible = false;
+			ZoomIn.Visible = false;
+			ZoomOut.Visible = false;
+			cbScale.Visible = false;
+			cbInfo.Visible = false;
+			SyncView();
+		}
+		
+		void ZoomOutClick(object sender, EventArgs e)
+		{
+			IsScale = true;
+			DrwControl.Width = Convert.ToInt32(DrwControl.Width * 0.9);
 			Painter.ReDraw(DrwControl.Width, DrwControl.Height);
+			IsScale = false;			
+		}
+		
+		void CbScaleCheckedChanged(object sender, EventArgs e)
+		{
+			cbInfo.Checked = false;
+		}
+		
+		void ZoomInClick(object sender, EventArgs e)
+		{
+			IsScale = true;
+			DrwControl.Width = Convert.ToInt32(DrwControl.Width * 1.1);
+			Painter.ReDraw(DrwControl.Width, DrwControl.Height);
+			IsScale = false;
+		}		
+		
+		void CbTimeTypeSelectedIndexChanged(object sender, EventArgs e)
+		{
+			SyncView();
+		}
+		
+		void CbInfoCheckedChanged(object sender, EventArgs e)
+		{
+			cbScale.Checked = false;
 		}
 	}
 }

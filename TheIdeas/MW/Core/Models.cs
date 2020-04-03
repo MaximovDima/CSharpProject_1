@@ -124,7 +124,7 @@ namespace MW.Core
 			DateTime d1 = new DateTime(2020, 1, 1);
     		DateTime d2 = DateTime.Now;
     		TimeSpan time = d2 - d1;
-    		for (int i = 1; i < time.Days; i++) 
+    		for (int i = 1; i < time.Days+1; i++) 
     		{
     			double vSum = GetSumByDate(d1.AddDays(i));
     			TFuncPoint p = new TFuncPoint(i, d1.AddDays(i).ToString("dd/MM/yyyy"), vSum/1000);
