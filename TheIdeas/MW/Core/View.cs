@@ -60,7 +60,7 @@ namespace MW.Core
 				{
 					ACosts.ReFill(vPoints, AIncomes);
 					CreateCoord(vPoints);
-//					CreateFunc(vPoints, 3);
+					CreateFunc(vPoints, 3);
 				}
 			}
 		}
@@ -136,33 +136,24 @@ namespace MW.Core
 		//Настройки для оси X
 		public double XMin;
 		public double XMax;
-		public double CoeffX;
 		public double GetXDrwByUsr(double AXUsr)
 		{
-			return (((X1-X0)*AXUsr)/(XMax - XMin))*CoeffX;
+			return ((X1-X0)*Math.Abs(AXUsr - XMin))/(XMax - XMin);
 		}
 		public double GetXUsrByDrw(double AXDrw)
 		{
-			if (XMin >= 0)
-			{
-				return (((XMax-XMin)*AXDrw)/(X1 - X0))/CoeffX;
-			}
-			else
-			{
-				return -1*(((XMax-XMin)*AXDrw)/(X1 - X0))/CoeffX;
-			}
+			return XMin + (((XMax - XMin)*(AXDrw - X0))/(X1 - X0));
 		}
 		//Настройки для оси Y
 		public double YMin;
 		public double YMax;
-		public double CoeffY;
 		public double GetYUsrByDrw(double AYDrw)
 		{
-			return (((YMax-YMin)*AYDrw)/(Y1 - Y0))/CoeffY;
+			return YMin + (((YMax - YMin)*(AYDrw - Y0))/(Y1 - Y0));
 		}
 		public double GetYDrwByUsr(double AYUsr)
 		{
-			return (((Y1-Y0)*AYUsr)/(YMax - YMin))*CoeffY;
+			return ((Y1-Y0)*Math.Abs(AYUsr - YMin))/(YMax - YMin);
 		}
 		
 		public TScObjCoord(TScene AScene)
@@ -178,8 +169,6 @@ namespace MW.Core
 		public override void Build(double ACoeffX, double ACoeffY)
 		{			
 			DrwObjList.Clear();
-			CoeffX = ACoeffX;
-			CoeffY = ACoeffY;
 			TDrwLine vXLine, vYLine;
 			TDrwLabel vLabel;
 			double vStep, vX, vY;
@@ -212,15 +201,14 @@ namespace MW.Core
 				}
 			}
 			//Сетка OY
-			vStep = (Y1-Y0)/(YMax-YMin);
-			for (int i = (int)YMin; i < (YMax-YMin); i++)
+			for (int i = (int)YMin; i < YMax; i++)
 			{	
 				int vInc = 2;
 				if(YMax > 20) {vInc = 5;}
 				if(YMax > 80) {vInc = 10;}
-				if ((i % vInc) == 0 & i!=0)
+				if ((i % vInc) == 0)
 				{
-					vY = Y0 + i*vStep*ACoeffY;
+					vY = Y0 + GetYDrwByUsr(i)*ACoeffY;
 					vYLine = DrwObjects.GetLine(X0, vY, X0+3, vY, Color.Black, 2);
 					DrwObjList.Add(vYLine);
 					vYLine = DrwObjects.GetLine(X0, vY, X1*ACoeffX, vY, Color.Black, 1, 20);				
@@ -255,6 +243,8 @@ namespace MW.Core
 				YMin = Math.Min(YMin, vPoint.Value);
 				YMax = Math.Max(YMax, vPoint.Value);
 			}
+			//Запас
+			if (YMin<0) {YMin = YMin - 5;}
 		}
 		
 		//Настройка осей
@@ -328,8 +318,8 @@ namespace MW.Core
 			foreach (TFuncPoint vPoint in Points)
 			{
 				TDrwPoint vDrwPoint = new TDrwPoint();
-				vDrwPoint.X = Coord.X0 + Coord.GetXDrwByUsr(vPoint.ID);
-				vDrwPoint.Y = Coord.Y0 + Coord.GetYDrwByUsr(vPoint.Value);
+				vDrwPoint.X = Coord.X0 + Coord.GetXDrwByUsr(vPoint.ID)*ACoeffX;
+				vDrwPoint.Y = Coord.Y0 + Coord.GetYDrwByUsr(vPoint.Value)*ACoeffY;
 				vPolyline.DrwPointList.Add(vDrwPoint);
 			}
 			TDrwPolygon vPolygon = new TDrwPolygon();
@@ -341,20 +331,20 @@ namespace MW.Core
 			//Область закрашивания
 			//Первая виртуальная точка
 			TDrwPoint vDrwPointVirtual = new TDrwPoint();
-			vDrwPointVirtual.X = Coord.X0 + Coord.GetXDrwByUsr(Points[0].ID);
+			vDrwPointVirtual.X = Coord.X0 + Coord.GetXDrwByUsr(Points[0].ID)*ACoeffX;
 			vDrwPointVirtual.Y = Coord.Y0;
 			vPolygon.DrwPointList.Add(vDrwPointVirtual);
 			//Массив
 			foreach (TFuncPoint vPoint in Points)
 			{
 				TDrwPoint vDrwPoint = new TDrwPoint();
-				vDrwPoint.X = Coord.X0 + Coord.GetXDrwByUsr(vPoint.ID);
-				vDrwPoint.Y = Coord.Y0 + Coord.GetYDrwByUsr(vPoint.Value);
+				vDrwPoint.X = Coord.X0 + Coord.GetXDrwByUsr(vPoint.ID)*ACoeffX;
+				vDrwPoint.Y = Coord.Y0 + Coord.GetYDrwByUsr(vPoint.Value)*ACoeffY;
 				vPolygon.DrwPointList.Add(vDrwPoint);
 			}
 			//последняя виртуальная точка
 			vDrwPointVirtual = new TDrwPoint();
-			vDrwPointVirtual.X = Coord.X0 + Coord.GetXDrwByUsr(Points[Points.Count-1].ID);
+			vDrwPointVirtual.X = Coord.X0 + Coord.GetXDrwByUsr(Points[Points.Count-1].ID)*ACoeffX;
 			vDrwPointVirtual.Y = Coord.Y0;
 			vPolygon.DrwPointList.Add(vDrwPointVirtual);
 			
