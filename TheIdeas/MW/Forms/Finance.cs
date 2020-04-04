@@ -40,13 +40,16 @@ namespace MW.Forms
 		{
 			SyncCostsInfo();
 			SyncIncomesInfo();
-			SyncView();
+			SyncView(true);
 		}
 		
-		public void SyncView()
+		public void SyncView(bool AReLoadData = false)
 		{
 			Painter.Scene.SceneObjectList.Clear();
-			Painter.Scene.LoadModels(Costs, Incomes, rbTime.Checked, cbTimeType.SelectedIndex);
+			if (AReLoadData)
+			{
+				Painter.Scene.LoadModels(Costs, Incomes, rbTime.Checked, cbTimeType.SelectedIndex);
+			}
 			Painter.ReDraw(DrwControl.Width, DrwControl.Height);
 		}
 		
@@ -114,7 +117,7 @@ namespace MW.Forms
 				Data.UpdateModel("Directory");
 				Data.UpdateModel("Cost");
 				SyncCostsInfo();
-				SyncView();
+				SyncView(true);
 			}
 		}
 		
@@ -144,7 +147,7 @@ namespace MW.Forms
 				Data.UpdateModel("Directory");
 				Data.UpdateModel("Cost");
 				SyncCostsInfo();
-				SyncView();
+				SyncView(true);
 			}
 		}	
 		
@@ -167,7 +170,7 @@ namespace MW.Forms
 				vRow["State"] = "delete";
 				Data.UpdateModel("Cost");
 				SyncCostsInfo();
-				SyncView();
+				SyncView(true);
 			}
 		}
 		
@@ -184,7 +187,7 @@ namespace MW.Forms
 				Data.UpdateModel("Directory");
 				Data.UpdateModel("Income");
 				SyncIncomesInfo();
-				SyncView();
+				SyncView(true);
 			}			
 		}
 		
@@ -214,7 +217,7 @@ namespace MW.Forms
 				Data.UpdateModel("Directory");
 				Data.UpdateModel("Income");
 				SyncIncomesInfo();
-				SyncView();
+				SyncView(true);
 			}
 		}
 		
@@ -232,7 +235,7 @@ namespace MW.Forms
 				vRow["State"] = "delete";
 				Data.UpdateModel("Income");
 				SyncIncomesInfo();
-				SyncView();
+				SyncView(true);
 			}			
 		}
 		
@@ -250,7 +253,7 @@ namespace MW.Forms
 				{
 					DrwControl.Width = pnlGraphic.Width - 5;
 					DrwControl.Height = pnlGraphic.Height - 20;
-					SyncView();
+					SyncView(true);
 				}
 				finally 
 				{
@@ -274,7 +277,7 @@ namespace MW.Forms
 			ZoomOut.Visible = true;
 			cbScale.Visible = true;
 			cbInfo.Visible = true;
-			SyncView();
+			SyncView(true);
 		}
 		
 		void RbStructuraCheckedChanged(object sender, EventArgs e)
@@ -286,7 +289,7 @@ namespace MW.Forms
 			ZoomOut.Visible = false;
 			cbScale.Visible = false;
 			cbInfo.Visible = false;
-			SyncView();
+			SyncView(true);
 		}
 		
 		void ZoomOutClick(object sender, EventArgs e)
@@ -312,7 +315,7 @@ namespace MW.Forms
 		
 		void CbTimeTypeSelectedIndexChanged(object sender, EventArgs e)
 		{
-			SyncView();
+			SyncView(true);
 		}
 		
 		void CbInfoCheckedChanged(object sender, EventArgs e)

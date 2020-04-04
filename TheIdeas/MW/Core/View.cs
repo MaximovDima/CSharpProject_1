@@ -58,12 +58,9 @@ namespace MW.Core
 				}
 				else if (ATimeType == 3)
 				{
-					AIncomes.ReFill(vPoints);
-					List<TFuncPoint> vPoints2 = new List<TFuncPoint>();
-					ACosts.ReFill(vPoints2);
-					CreateCoord(vPoints, vPoints2);
-					CreateFunc(vPoints, 1);
-					CreateFunc(vPoints2, 0);
+					ACosts.ReFill(vPoints, AIncomes);
+					CreateCoord(vPoints);
+//					CreateFunc(vPoints, 3);
 				}
 			}
 		}
@@ -146,7 +143,14 @@ namespace MW.Core
 		}
 		public double GetXUsrByDrw(double AXDrw)
 		{
-			return (((XMax-XMin)*AXDrw)/(X1 - X0))/CoeffX;
+			if (XMin >= 0)
+			{
+				return (((XMax-XMin)*AXDrw)/(X1 - X0))/CoeffX;
+			}
+			else
+			{
+				return -1*(((XMax-XMin)*AXDrw)/(X1 - X0))/CoeffX;
+			}
 		}
 		//Настройки для оси Y
 		public double YMin;
@@ -208,11 +212,12 @@ namespace MW.Core
 				}
 			}
 			//Сетка OY
-			vStep = (Y1-Y0)/(YMax);
-			for (int i = 0; i < Math.Round(YMax-YMin); i++)
+			vStep = (Y1-Y0)/(YMax-YMin);
+			for (int i = (int)YMin; i < (YMax-YMin); i++)
 			{	
 				int vInc = 2;
-				if(YMax > 20) {vInc = 4;}
+				if(YMax > 20) {vInc = 5;}
+				if(YMax > 80) {vInc = 10;}
 				if ((i % vInc) == 0 & i!=0)
 				{
 					vY = Y0 + i*vStep*ACoeffY;
@@ -225,8 +230,8 @@ namespace MW.Core
 					vLabel.HAlig = TDrwLabel.THAlig.HLeft;
 					vLabel.VAlig = TDrwLabel.TVAlig.VCenter;
 					vLabel.Point.X = X0-1;
-					vLabel.Point.Y = vY;
-					vLabel.Text = Format.IntToStr(i)+"K";
+					vLabel.Point.Y = Math.Abs(vY);
+					vLabel.Text = Format.ObjToStr(i)+"K";
 					DrwObjList.Add(vLabel);
 				}
 			}
@@ -319,6 +324,7 @@ namespace MW.Core
 			TDrwPolyLine vPolyline = new TDrwPolyLine();
 			if (TimeType == 0) {vPolyline.Color = Color.Red;}
 			if (TimeType == 1) {vPolyline.Color = Color.Green;}
+			if (TimeType == 3) {vPolyline.Color = Color.Blue;}
 			foreach (TFuncPoint vPoint in Points)
 			{
 				TDrwPoint vDrwPoint = new TDrwPoint();
@@ -329,6 +335,7 @@ namespace MW.Core
 			TDrwPolygon vPolygon = new TDrwPolygon();
 			if (TimeType == 0) {vPolygon.Color = Color.Red;}
 			if (TimeType == 1) {vPolygon.Color = Color.Green;}
+			if (TimeType == 3) {vPolygon.Color = Color.Blue;}
 			vPolygon.Opacity = 20;
 			
 			//Область закрашивания

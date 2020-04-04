@@ -132,6 +132,28 @@ namespace MW.Core
     		}
 		}
 		
+		//Заполняет список точками для графика с учетом доп модели с отриц воздействием
+		public void ReFill(List<TFuncPoint> APoints, TModel AIncomes)
+		{
+			APoints.Clear();
+			DateTime d1 = new DateTime(2020, 1, 1);
+			//Исходное значение баланса = 0;
+			TFuncPoint p0 = new TFuncPoint(0, d1.ToString("dd/MM/yyyy"), 0);
+    		APoints.Add(p0);
+    		DateTime d2 = DateTime.Now;
+    		TimeSpan time = d2 - d1;
+    		double vBalance = 0;
+    		for (int i = 1; i < time.Days+1; i++) 
+    		{
+    			double vSumCosts = GetSumByDate(d1.AddDays(i));
+    			double vSumIncomes = AIncomes.GetSumByDate(d1.AddDays(i));
+    			
+    			vBalance = vBalance + (vSumIncomes - vSumCosts);
+    			TFuncPoint p = new TFuncPoint(i, d1.AddDays(i).ToString("dd/MM/yyyy"), vBalance/1000);
+    			APoints.Add(p);
+    		}
+		}
+		
 		//Возвращает сумму за определенный период
 		public double GetSumByDate(DateTime ADateTime)
 		{
