@@ -297,6 +297,10 @@ namespace MW.Forms
 			IsScale = true;
 			DrwControl.Width = Convert.ToInt32(DrwControl.Width * 0.9);
 			Painter.ReDraw(DrwControl.Width, DrwControl.Height);
+			if ((DrwControl.Width - pnlGraphic.Width) > 0)
+			{
+				pnlGraphic.HorizontalScroll.Value = (DrwControl.Width - pnlGraphic.Width)/2;
+			}
 			IsScale = false;			
 		}
 		
@@ -310,6 +314,10 @@ namespace MW.Forms
 			IsScale = true;
 			DrwControl.Width = Convert.ToInt32(DrwControl.Width * 1.1);
 			Painter.ReDraw(DrwControl.Width, DrwControl.Height);
+			if ((DrwControl.ClientSize.Width - pnlGraphic.ClientSize.Width) > 0)
+			{
+				pnlGraphic.HorizontalScroll.Value = (DrwControl.ClientSize.Width - pnlGraphic.ClientSize.Width)/2;
+			}
 			IsScale = false;
 		}		
 		

@@ -310,25 +310,15 @@ namespace MW.Core
 		public override void Build(double ACoeffX, double ACoeffY)
 		{
 			DrwObjList.Clear();
-			//Линия контура
-			TDrwPolyLine vPolyline = new TDrwPolyLine();
-			if (TimeType == 0) {vPolyline.Color = Color.Red;}
-			if (TimeType == 1) {vPolyline.Color = Color.Green;}
-			if (TimeType == 3) {vPolyline.Color = Color.Blue;}
-			foreach (TFuncPoint vPoint in Points)
-			{
-				TDrwPoint vDrwPoint = new TDrwPoint();
-				vDrwPoint.X = Coord.X0 + Coord.GetXDrwByUsr(vPoint.ID)*ACoeffX;
-				vDrwPoint.Y = Coord.Y0 + Coord.GetYDrwByUsr(vPoint.Value)*ACoeffY;
-				vPolyline.DrwPointList.Add(vDrwPoint);
-			}
 			TDrwPolygon vPolygon = new TDrwPolygon();
 			if (TimeType == 0) {vPolygon.Color = Color.Red;}
 			if (TimeType == 1) {vPolygon.Color = Color.Green;}
 			if (TimeType == 3) {vPolygon.Color = Color.Blue;}
-			vPolygon.Opacity = 20;
+			vPolygon.Filled = true;
+			vPolygon.OnlyOutLine = true;
+			vPolygon.FillOpacity = 20;
+			vPolygon.FillColor = vPolygon.Color;
 			
-			//Область закрашивания
 			//Первая виртуальная точка
 			TDrwPoint vDrwPointVirtual = new TDrwPoint();
 			vDrwPointVirtual.X = Coord.X0 + Coord.GetXDrwByUsr(Points[0].ID)*ACoeffX;
@@ -349,7 +339,19 @@ namespace MW.Core
 			vPolygon.DrwPointList.Add(vDrwPointVirtual);
 			
 			DrwObjList.Add(vPolygon);
-			DrwObjList.Add(vPolyline);
+			
+			//Точки событий
+			foreach (TFuncPoint vPoint in Points)
+			{
+				if (vPoint.Value == 0)
+					continue;
+				TDrwCircle vDrwPoint = new TDrwCircle(Coord.X0 + Coord.GetXDrwByUsr(vPoint.ID)*ACoeffX,
+										Coord.Y0 + Coord.GetYDrwByUsr(vPoint.Value)*ACoeffY,
+										2);
+				vDrwPoint.Color = vPolygon.Color;
+				vDrwPoint.PenWidth = 2;
+				DrwObjList.Add(vDrwPoint);
+			}
 		}
 	}
 }

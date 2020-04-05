@@ -17,13 +17,13 @@
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmFinance));
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.gbCosts = new System.Windows.Forms.GroupBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.lblAverage = new System.Windows.Forms.Label();
@@ -61,6 +61,7 @@
 			this.ZoomOut = new System.Windows.Forms.Button();
 			this.cbScale = new System.Windows.Forms.CheckBox();
 			this.cbInfo = new System.Windows.Forms.CheckBox();
+			this.rbColumns = new System.Windows.Forms.RadioButton();
 			this.gbCosts.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.vCosts)).BeginInit();
 			this.gbIncomes.SuspendLayout();
@@ -169,8 +170,8 @@
 			// 
 			// Date
 			// 
-			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			this.Date.DefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			this.Date.DefaultCellStyle = dataGridViewCellStyle15;
 			this.Date.HeaderText = "Дата";
 			this.Date.Name = "Date";
 			this.Date.ReadOnly = true;
@@ -179,8 +180,8 @@
 			// TypeCost
 			// 
 			this.TypeCost.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			this.TypeCost.DefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			this.TypeCost.DefaultCellStyle = dataGridViewCellStyle16;
 			this.TypeCost.HeaderText = "Тип";
 			this.TypeCost.Name = "TypeCost";
 			this.TypeCost.ReadOnly = true;
@@ -189,8 +190,8 @@
 			// Place
 			// 
 			this.Place.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			this.Place.DefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			this.Place.DefaultCellStyle = dataGridViewCellStyle17;
 			this.Place.HeaderText = "Место";
 			this.Place.Name = "Place";
 			this.Place.ReadOnly = true;
@@ -199,8 +200,8 @@
 			// Value
 			// 
 			this.Value.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			this.Value.DefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			this.Value.DefaultCellStyle = dataGridViewCellStyle18;
 			this.Value.HeaderText = "Сумма";
 			this.Value.Name = "Value";
 			this.Value.ReadOnly = true;
@@ -316,8 +317,8 @@
 			// 
 			// dataGridViewTextBoxColumn1
 			// 
-			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			this.dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle5;
+			dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			this.dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle19;
 			this.dataGridViewTextBoxColumn1.HeaderText = "Дата";
 			this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
 			this.dataGridViewTextBoxColumn1.ReadOnly = true;
@@ -326,8 +327,8 @@
 			// dataGridViewTextBoxColumn2
 			// 
 			this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			this.dataGridViewTextBoxColumn2.DefaultCellStyle = dataGridViewCellStyle6;
+			dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			this.dataGridViewTextBoxColumn2.DefaultCellStyle = dataGridViewCellStyle20;
 			this.dataGridViewTextBoxColumn2.HeaderText = "Тип";
 			this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
 			this.dataGridViewTextBoxColumn2.ReadOnly = true;
@@ -336,8 +337,8 @@
 			// dataGridViewTextBoxColumn4
 			// 
 			this.dataGridViewTextBoxColumn4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-			dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			this.dataGridViewTextBoxColumn4.DefaultCellStyle = dataGridViewCellStyle7;
+			dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			this.dataGridViewTextBoxColumn4.DefaultCellStyle = dataGridViewCellStyle21;
 			this.dataGridViewTextBoxColumn4.HeaderText = "Сумма";
 			this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
 			this.dataGridViewTextBoxColumn4.ReadOnly = true;
@@ -376,7 +377,7 @@
 			// 
 			// ReZoom
 			// 
-			this.ReZoom.Location = new System.Drawing.Point(288, 271);
+			this.ReZoom.Location = new System.Drawing.Point(405, 271);
 			this.ReZoom.Name = "ReZoom";
 			this.ReZoom.Size = new System.Drawing.Size(32, 23);
 			this.ReZoom.TabIndex = 1;
@@ -391,14 +392,13 @@
 			this.rbTime.Name = "rbTime";
 			this.rbTime.Size = new System.Drawing.Size(62, 20);
 			this.rbTime.TabIndex = 5;
-			this.rbTime.TabStop = true;
 			this.rbTime.Text = "Время";
 			this.rbTime.UseVisualStyleBackColor = true;
 			this.rbTime.CheckedChanged += new System.EventHandler(this.RbTimeCheckedChanged);
 			// 
 			// rbStructura
 			// 
-			this.rbStructura.Location = new System.Drawing.Point(203, 272);
+			this.rbStructura.Location = new System.Drawing.Point(291, 272);
 			this.rbStructura.Name = "rbStructura";
 			this.rbStructura.Size = new System.Drawing.Size(78, 20);
 			this.rbStructura.TabIndex = 7;
@@ -414,7 +414,7 @@
 									"Доходы",
 									"Расходы+доходы",
 									"Баланс"});
-			this.cbTimeType.Location = new System.Drawing.Point(77, 272);
+			this.cbTimeType.Location = new System.Drawing.Point(156, 272);
 			this.cbTimeType.Name = "cbTimeType";
 			this.cbTimeType.Size = new System.Drawing.Size(120, 21);
 			this.cbTimeType.TabIndex = 8;
@@ -422,7 +422,7 @@
 			// 
 			// ZoomIn
 			// 
-			this.ZoomIn.Location = new System.Drawing.Point(325, 271);
+			this.ZoomIn.Location = new System.Drawing.Point(442, 271);
 			this.ZoomIn.Name = "ZoomIn";
 			this.ZoomIn.Size = new System.Drawing.Size(32, 23);
 			this.ZoomIn.TabIndex = 9;
@@ -432,7 +432,7 @@
 			// 
 			// ZoomOut
 			// 
-			this.ZoomOut.Location = new System.Drawing.Point(362, 271);
+			this.ZoomOut.Location = new System.Drawing.Point(479, 271);
 			this.ZoomOut.Name = "ZoomOut";
 			this.ZoomOut.Size = new System.Drawing.Size(32, 23);
 			this.ZoomOut.TabIndex = 11;
@@ -442,7 +442,7 @@
 			// 
 			// cbScale
 			// 
-			this.cbScale.Location = new System.Drawing.Point(410, 271);
+			this.cbScale.Location = new System.Drawing.Point(527, 272);
 			this.cbScale.Name = "cbScale";
 			this.cbScale.Size = new System.Drawing.Size(82, 24);
 			this.cbScale.TabIndex = 12;
@@ -452,7 +452,7 @@
 			// 
 			// cbInfo
 			// 
-			this.cbInfo.Location = new System.Drawing.Point(484, 270);
+			this.cbInfo.Location = new System.Drawing.Point(601, 272);
 			this.cbInfo.Name = "cbInfo";
 			this.cbInfo.Size = new System.Drawing.Size(82, 24);
 			this.cbInfo.TabIndex = 13;
@@ -460,10 +460,21 @@
 			this.cbInfo.UseVisualStyleBackColor = true;
 			this.cbInfo.CheckedChanged += new System.EventHandler(this.CbInfoCheckedChanged);
 			// 
+			// rbColumns
+			// 
+			this.rbColumns.Location = new System.Drawing.Point(78, 272);
+			this.rbColumns.Name = "rbColumns";
+			this.rbColumns.Size = new System.Drawing.Size(82, 20);
+			this.rbColumns.TabIndex = 14;
+			this.rbColumns.Text = "Столбики";
+			this.rbColumns.UseVisualStyleBackColor = true;
+			this.rbColumns.CheckedChanged += new System.EventHandler(this.RbTimeCheckedChanged);
+			// 
 			// FrmFinance
 			// 
 			this.ClientSize = new System.Drawing.Size(1160, 574);
 			this.ControlBox = false;
+			this.Controls.Add(this.rbColumns);
 			this.Controls.Add(this.cbInfo);
 			this.Controls.Add(this.cbScale);
 			this.Controls.Add(this.ZoomOut);
@@ -487,6 +498,7 @@
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.RadioButton rbColumns;
 		private System.Windows.Forms.CheckBox cbInfo;
 		private System.Windows.Forms.CheckBox cbScale;
 		private System.Windows.Forms.Button ZoomOut;

@@ -23,6 +23,10 @@ namespace MW.Drawing
     	public int PenWidth;
     	public DashStyle DashStyle;
     	public int Opacity;
+    	//Свойства заливки
+    	public bool Filled;
+    	public int FillOpacity;
+    	public Color FillColor;
     	public bool ByGroup;
     	public bool Visible;
 		
@@ -33,6 +37,7 @@ namespace MW.Drawing
   			Color = Color.Black;
   			DashStyle = DashStyle.Solid;
   			Opacity = 100;
+  			Filled = false;
   			ByGroup = false;
   			Visible = true;
 		}
@@ -134,9 +139,12 @@ namespace MW.Drawing
     	}
 	}
 	
+	
 	public class TDrwPolygon : TDrwShape
 	{
     	public List<TDrwPoint> DrwPointList;
+    	//Отрисовка контура (пока что только сверху)
+    	public bool OnlyOutLine;
 
     	public TDrwPolygon()
     	{
@@ -149,57 +157,50 @@ namespace MW.Drawing
     		{
     			return;
     		}
-			Point[] points = new Point[DrwPointList.Count];
+    		
+			Point[] FilledPoints = new Point[DrwPointList.Count];
 			for(int i = 0; i < DrwPointList.Count; i++)
 			{
-				points[i].X = (int)DrwPointList[i].X;
-				points[i].Y = (int)DrwPointList[i].Y;
-			}  				
+				FilledPoints[i].X = (int)DrwPointList[i].X;
+				FilledPoints[i].Y = (int)DrwPointList[i].Y;
+			}  					
     		int vOpacity = Convert.ToInt32(255 * Opacity / 100);
-			G.FillPolygon(new SolidBrush(Color.FromArgb(vOpacity, Color)), points, FillMode.Alternate);
-    	}
-	}
-	
-	public class TDrwPolyLine : TDrwShape
-	{
-    	public List<TDrwPoint> DrwPointList;
-
-    	public TDrwPolyLine()
-    	{
-    		DrwPointList = new List<TDrwPoint>();
-    	}
-    	
-    	public override void Draw(Graphics G)
-    	{
-    		if (!Visible)
-    		{
-    			return;
-    		}
-			Point[] points = new Point[DrwPointList.Count];
-			for(int i = 0; i < DrwPointList.Count; i++)
-			{
-				points[i].X = (int)DrwPointList[i].X;
-				points[i].Y = (int)DrwPointList[i].Y;
-			}  				
-    		int vOpacity = Convert.ToInt32(255 * Opacity / 100);
+    		int vFillOpacity = Convert.ToInt32(255 * FillOpacity / 100); 
     		Pen mypen = new Pen(Color.FromArgb(255, Color), PenWidth);
-    		mypen.DashStyle = DashStyle;   		
-			G.DrawLines(mypen, points);
-    	}
+    		mypen.DashStyle = DashStyle;
+    		if (Filled)
+    		{
+				G.FillPolygon(new SolidBrush(Color.FromArgb(vFillOpacity, FillColor)), FilledPoints, FillMode.Alternate);
+    		}
+    		if (OnlyOutLine)
+    		{
+    			DrwPointList.RemoveAt(DrwPointList.Count-1);
+    			DrwPointList.RemoveAt(0);
+    			Point[] OutLinePoints = new Point[DrwPointList.Count];
+				for(int i = 0; i < DrwPointList.Count; i++)
+				{
+					OutLinePoints[i].X = (int)DrwPointList[i].X;
+					OutLinePoints[i].Y = (int)DrwPointList[i].Y;
+				}    			
+				G.DrawLines(mypen, OutLinePoints);
+    		}
+    		else
+    		{
+    			G.DrawLines(mypen, FilledPoints);
+    		}
+    	}	
 	}
 	
 	public class TDrwCircle : TDrwShape
 	{
     	public TDrwPoint Center;
     	public double Radius;
-    	public double InitRadius;
     	
-    	public TDrwCircle(int AX, int AY, int ARadius)
+    	public TDrwCircle(double AX, double AY, double ARadius)
     	{
     		Center = new TDrwPoint();
     		Center.X = AX;
     		Center.Y = AY;
-    		InitRadius = ARadius;
     		Radius = ARadius;
     	}
  		
@@ -211,13 +212,22 @@ namespace MW.Drawing
     		}
     		 
     		int vOpacity = Convert.ToInt32(255 * Opacity / 100);
+    		int vFillOpacity = Convert.ToInt32(255 * FillOpacity / 100); 
     		Pen mypen = new Pen(Color.FromArgb(vOpacity, Color), PenWidth);
     		mypen.DashStyle = DashStyle;
     		
     		G.DrawEllipse(mypen, (int)(Center.X - Radius),
-    		              		 (int)(Center.Y + Radius),
+    		              		 (int)(Center.Y - Radius),
     		              		 (int)(2*Radius),
     		              		 (int)(2*Radius));
+    		if (Filled)
+    		{
+    			G.FillEllipse(new SolidBrush(Color.FromArgb(vFillOpacity, FillColor)),
+    			    	     (int)(Center.X - Radius),
+    		            	 (int)(Center.Y - Radius),
+    		              	 (int)(2*Radius),
+    		              	 (int)(2*Radius));
+    		}
     	}
 	}
 }

@@ -87,13 +87,6 @@ namespace MW.Drawing
 			{
 				(AShape as TDrwLabel).Point.Y = CtrlScene.Height - (AShape as TDrwLabel).Point.Y;	
 			}
-			if (AShape is TDrwPolyLine) 
-			{
-				foreach (TDrwPoint vPoint in (AShape as TDrwPolyLine).DrwPointList)
-				{
-					vPoint.Y = CtrlScene.Height - vPoint.Y;
-				}
-			}
 			if (AShape is TDrwPolygon) 
 			{
 				foreach (TDrwPoint vPoint in (AShape as TDrwPolygon).DrwPointList)
@@ -104,8 +97,6 @@ namespace MW.Drawing
 			if (AShape is TDrwCircle)
 			{
 				(AShape as TDrwCircle).Center.Y = CtrlScene.Height - (AShape as TDrwCircle).Center.Y;
-    			(AShape as TDrwCircle).InitRadius = (AShape as TDrwCircle).Radius;
-    			(AShape as TDrwCircle).InitRadius = (AShape as TDrwCircle).Radius;
 			}
 			AddShapeToList(AShape);	
 		}
