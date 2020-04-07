@@ -23,14 +23,14 @@ namespace MW.Core
 			SceneObjectList = new List<TSceneObject>();
 		}	
 		
-		public void LoadModels(TModel ACosts, TModel AIncomes, bool AViewTime, int ATimeType)
+		public void LoadModels(TModel ACosts, TModel AIncomes, bool AViewTime, int ATimeType, bool AViewColumns)
 		{
 			/*ATimeType
 			 * 0-costs
 			 * 1-incomes
 			 * 2-costs+incomes
 			 * 3-balance*/
-			if(AViewTime)
+			if(AViewTime || AViewColumns)
 			{
 				List<TFuncPoint> vPoints = new List<TFuncPoint>();
 				if (ATimeType == 0)
@@ -39,13 +39,27 @@ namespace MW.Core
 					//Построение системы координат
 					CreateCoord(vPoints);
 					//Отображение модельных данных
-					CreateFunc(vPoints, ATimeType);					
+					if (AViewTime)
+					{
+						CreateFunc(vPoints, ATimeType);					
+					}
+					else
+					{
+						CreateColumns(vPoints, ATimeType);
+					}
 				}
 				else if (ATimeType == 1)
 				{
 					AIncomes.ReFill(vPoints);
 					CreateCoord(vPoints);
-					CreateFunc(vPoints, ATimeType);
+					if (AViewTime)
+					{
+						CreateFunc(vPoints, ATimeType);
+					}
+					else
+					{
+						CreateColumns(vPoints, ATimeType);
+					}
 				}
 				else if (ATimeType == 2)
 				{
@@ -53,14 +67,29 @@ namespace MW.Core
 					List<TFuncPoint> vPoints2 = new List<TFuncPoint>();
 					ACosts.ReFill(vPoints2);
 					CreateCoord(vPoints, vPoints2);
-					CreateFunc(vPoints, 1);
-					CreateFunc(vPoints2, 0);
+					if (AViewTime)
+					{
+						CreateFunc(vPoints, 1);
+						CreateFunc(vPoints2, 0);
+					}
+					else
+					{
+						CreateColumns(vPoints, 1);
+						CreateColumns(vPoints2, 0);
+					}
 				}
 				else if (ATimeType == 3)
 				{
 					ACosts.ReFill(vPoints, AIncomes);
 					CreateCoord(vPoints);
-					CreateFunc(vPoints, 3);
+					if (AViewTime)
+					{
+						CreateFunc(vPoints, 3);
+					}
+					else
+					{
+						CreateColumns(vPoints, 3);
+					}
 				}
 			}
 		}
@@ -86,6 +115,14 @@ namespace MW.Core
 			Func.TimeType = ATimeType;
 			Func.Load(APoints);
 			SceneObjectList.Add(Func);
+		}
+		
+		public void CreateColumns(List<TFuncPoint> APoints, int ATimeType)
+		{
+			TScObjColumns Columns = new TScObjColumns(this);
+			Columns.TimeType = ATimeType;
+			Columns.Load(APoints);
+			SceneObjectList.Add(Columns);
 		}
 		
 		public TSceneObject GetSceneObject(string AName)
@@ -315,7 +352,7 @@ namespace MW.Core
 			if (TimeType == 1) {vPolygon.Color = Color.Green;}
 			if (TimeType == 3) {vPolygon.Color = Color.Blue;}
 			vPolygon.Filled = true;
-			vPolygon.OnlyOutLine = true;
+			vPolygon.OutLine = true;
 			vPolygon.FillOpacity = 20;
 			vPolygon.FillColor = vPolygon.Color;
 			
@@ -350,8 +387,57 @@ namespace MW.Core
 										2);
 				vDrwPoint.Color = vPolygon.Color;
 				vDrwPoint.PenWidth = 2;
+				vDrwPoint.Filled = true;
+				vDrwPoint.OutLine = true;
 				DrwObjList.Add(vDrwPoint);
 			}
 		}
 	}
+	
+	public class TScObjColumns : TSceneObject
+	{
+		public List<TFuncPoint> Points;
+		public TScObjCoord Coord;
+		public int TimeType;
+		
+		public TScObjColumns(TScene AScene)
+		{
+			Scene = AScene;
+			Name = "Columns";
+			Coord = (Scene.GetSceneObject("Coord") as TScObjCoord);
+		}
+		
+		public void Load(List<TFuncPoint> APoints)
+		{
+			Points = APoints;
+		}
+		
+		public override void Build(double ACoeffX, double ACoeffY)
+		{
+			DrwObjList.Clear();
+			Color vColor = Color.Black;
+			if (TimeType == 0) {vColor = Color.Red;}
+			if (TimeType == 1) {vColor = Color.Green;}
+			if (TimeType == 3) {vColor = Color.Blue;}
+			double vWidth = Coord.GetXDrwByUsr(1)*ACoeffX;
+						
+			//Массив
+			foreach (TFuncPoint vPoint in Points)
+			{
+				if (vPoint.Value == 0)
+					continue;
+				TDrwRect vDrwRect = new TDrwRect(Coord.X0 + Coord.GetXDrwByUsr(vPoint.ID)*ACoeffX,
+				                                Coord.Y0 + Coord.GetYDrwByUsr(vPoint.Value)*ACoeffY,
+				                               	vWidth, Coord.GetYDrwByUsr(vPoint.Value)*ACoeffY);
+				vDrwRect.Color = vColor;
+				vDrwRect.Filled = true;
+				vDrwRect.OutLine = true;
+				vDrwRect.FillOpacity = 20;
+				vDrwRect.FillColor = vColor;
+				
+				DrwObjList.Add(vDrwRect);
+			}
+		}
+	}
+	
 }

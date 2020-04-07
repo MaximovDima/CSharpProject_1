@@ -98,6 +98,12 @@ namespace MW.Drawing
 			{
 				(AShape as TDrwCircle).Center.Y = CtrlScene.Height - (AShape as TDrwCircle).Center.Y;
 			}
+			if (AShape is TDrwRect)
+			{
+				(AShape as TDrwRect).InitPoint.Y = CtrlScene.Height - (AShape as TDrwRect).InitPoint.Y;
+			}
+			
+			
 			AddShapeToList(AShape);	
 		}
 		

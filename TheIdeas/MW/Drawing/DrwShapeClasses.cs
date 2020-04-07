@@ -19,6 +19,8 @@ namespace MW.Drawing
     	public string ScObjName;
     	public string GroupCode;
     	public string CodeElement;
+    	//Отрисовка контура
+    	public bool OutLine;
     	public Color Color;
     	public int PenWidth;
     	public DashStyle DashStyle;
@@ -38,6 +40,8 @@ namespace MW.Drawing
   			DashStyle = DashStyle.Solid;
   			Opacity = 100;
   			Filled = false;
+  			FillOpacity = 100;
+  			FillColor = Color;
   			ByGroup = false;
   			Visible = true;
 		}
@@ -143,8 +147,6 @@ namespace MW.Drawing
 	public class TDrwPolygon : TDrwShape
 	{
     	public List<TDrwPoint> DrwPointList;
-    	//Отрисовка контура (пока что только сверху)
-    	public bool OnlyOutLine;
 
     	public TDrwPolygon()
     	{
@@ -172,7 +174,7 @@ namespace MW.Drawing
     		{
 				G.FillPolygon(new SolidBrush(Color.FromArgb(vFillOpacity, FillColor)), FilledPoints, FillMode.Alternate);
     		}
-    		if (OnlyOutLine)
+    		if (OutLine)
     		{
     			DrwPointList.RemoveAt(DrwPointList.Count-1);
     			DrwPointList.RemoveAt(0);
@@ -214,12 +216,8 @@ namespace MW.Drawing
     		int vOpacity = Convert.ToInt32(255 * Opacity / 100);
     		int vFillOpacity = Convert.ToInt32(255 * FillOpacity / 100); 
     		Pen mypen = new Pen(Color.FromArgb(vOpacity, Color), PenWidth);
-    		mypen.DashStyle = DashStyle;
+    		mypen.DashStyle = DashStyle;  		
     		
-    		G.DrawEllipse(mypen, (int)(Center.X - Radius),
-    		              		 (int)(Center.Y - Radius),
-    		              		 (int)(2*Radius),
-    		              		 (int)(2*Radius));
     		if (Filled)
     		{
     			G.FillEllipse(new SolidBrush(Color.FromArgb(vFillOpacity, FillColor)),
@@ -227,6 +225,60 @@ namespace MW.Drawing
     		            	 (int)(Center.Y - Radius),
     		              	 (int)(2*Radius),
     		              	 (int)(2*Radius));
+    		}
+    		
+    		if (OutLine)
+    		{
+    			G.DrawEllipse(mypen, (int)(Center.X - Radius),
+    		              		 (int)(Center.Y - Radius),
+    		              		 (int)(2*Radius),
+    		              		 (int)(2*Radius));
+    		}
+    	}
+	}
+	
+	public class TDrwRect : TDrwShape
+	{
+    	public TDrwPoint InitPoint;
+    	public double Width;
+    	public double Height;
+    	
+    	public TDrwRect(double AX, double AY, double AWidth, double AHeight)
+    	{
+    		InitPoint = new TDrwPoint();
+    		InitPoint.X = AX;
+    		InitPoint.Y = AY;
+    		Width = AWidth;
+    		Height = AHeight;
+    	}
+ 		
+    	public override void Draw(Graphics G)
+    	{
+    		 if (!Visible)
+    		{
+    			return;
+    		}
+    		 
+    		int vOpacity = Convert.ToInt32(255 * Opacity / 100);
+    		int vFillOpacity = Convert.ToInt32(255 * FillOpacity / 100); 
+    		Pen mypen = new Pen(Color.FromArgb(vOpacity, Color), PenWidth);
+    		mypen.DashStyle = DashStyle;  		
+    		
+    		if (Filled)
+    		{
+    			G.FillRectangle(new SolidBrush(Color.FromArgb(vFillOpacity, FillColor)),
+    			    	     (float)(InitPoint.X - Width/2),
+    		            	 (float)(InitPoint.Y),
+    		              	 (float)(Width),
+    		              	 (float)(Height));
+    		}
+    		
+    		if (OutLine)
+    		{
+    			G.DrawRectangle(mypen, (float)(InitPoint.X - Width/2),
+    		            	 	(float)(InitPoint.Y),
+    		              	 	(float)(Width),
+    		              	 	(float)(Height));
     		}
     	}
 	}
