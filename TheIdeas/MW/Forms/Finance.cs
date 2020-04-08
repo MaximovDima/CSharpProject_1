@@ -322,5 +322,11 @@ namespace MW.Forms
 		{
 			cbScale.Checked = false;
 		}
+		
+		void DrwControlMouseDown(object sender, MouseEventArgs e)
+		{
+			int X = e.X;
+			int Y = DrwControl.ClientSize.Height - e.Y;
+		}
 	}
 }

@@ -77,30 +77,19 @@ namespace MW.Drawing
 	
 		public void AddShape(TDrwShape AShape)
 		{
-			if (AShape is TDrwLine)
-			{
-				(AShape as TDrwLine).StartPoint.Y = CtrlScene.Height - (AShape as TDrwLine).StartPoint.Y;
-    			(AShape as TDrwLine).EndPoint.Y = CtrlScene.Height - (AShape as TDrwLine).EndPoint.Y;
-
-			}
-			if (AShape is TDrwLabel)
-			{
-				(AShape as TDrwLabel).Point.Y = CtrlScene.Height - (AShape as TDrwLabel).Point.Y;	
-			}
+			//Перерасчет координаты y для привычной системы координат
+			AShape.CalcY(CtrlScene.Height);
 			if (AShape is TDrwPolygon) 
 			{
-				foreach (TDrwPoint vPoint in (AShape as TDrwPolygon).DrwPointList)
-				{
-					vPoint.Y = CtrlScene.Height - vPoint.Y;
-				}
+
 			}
 			if (AShape is TDrwCircle)
 			{
-				(AShape as TDrwCircle).Center.Y = CtrlScene.Height - (AShape as TDrwCircle).Center.Y;
+				
 			}
 			if (AShape is TDrwRect)
 			{
-				(AShape as TDrwRect).InitPoint.Y = CtrlScene.Height - (AShape as TDrwRect).InitPoint.Y;
+				
 			}
 			
 			

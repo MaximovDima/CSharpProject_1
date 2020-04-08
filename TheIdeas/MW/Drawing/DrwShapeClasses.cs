@@ -45,8 +45,10 @@ namespace MW.Drawing
   			ByGroup = false;
   			Visible = true;
 		}
-		
+		//Отрисовка
 		public abstract void Draw(Graphics G);
+		//переасчет координаты y
+		public abstract void CalcY(int AYScene);
 	}
 		
 	public static class DrwObjects
@@ -89,6 +91,12 @@ namespace MW.Drawing
     		mypen.DashStyle = DashStyle;
     		G.DrawLine(mypen, Convert.ToInt32(StartPoint.X), Convert.ToInt32(StartPoint.Y), Convert.ToInt32(EndPoint.X), Convert.ToInt32(EndPoint.Y));
     	}
+    	
+		public override void CalcY(int AYScene)
+		{
+			StartPoint.Y = AYScene - StartPoint.Y;
+    		EndPoint.Y = AYScene - EndPoint.Y;
+		}
 	}
 	
 	public class TDrwLabel : TDrwShape
@@ -141,6 +149,11 @@ namespace MW.Drawing
 			}
 			G.DrawString(Text, vFont, vBrush, vX, vY);
     	}
+		
+		public override void CalcY(int AYScene)
+		{
+			Point.Y = AYScene - Point.Y;
+		}
 	}
 	
 	
@@ -191,6 +204,14 @@ namespace MW.Drawing
     			G.DrawLines(mypen, FilledPoints);
     		}
     	}	
+    	
+		public override void CalcY(int AYScene)
+		{
+			foreach (TDrwPoint vPoint in DrwPointList)
+			{
+				vPoint.Y = AYScene - vPoint.Y;
+			}
+		}
 	}
 	
 	public class TDrwCircle : TDrwShape
@@ -235,6 +256,11 @@ namespace MW.Drawing
     		              		 (int)(2*Radius));
     		}
     	}
+    	
+		public override void CalcY(int AYScene)
+		{
+			Center.Y = AYScene - Center.Y;
+		}
 	}
 	
 	public class TDrwRect : TDrwShape
@@ -281,5 +307,10 @@ namespace MW.Drawing
     		              	 	(float)(Height));
     		}
     	}
+    	
+		public override void CalcY(int AYScene)
+		{
+			InitPoint.Y = AYScene - InitPoint.Y;
+		}
 	}
 }
