@@ -40,7 +40,6 @@ namespace MW.Forms
 		{
 			SyncCostsInfo();
 			SyncIncomesInfo();
-			SyncView();
 		}
 		
 		public void SyncView(bool AReLoadData = true)
@@ -51,6 +50,7 @@ namespace MW.Forms
 				Painter.Scene.LoadModels(Costs, Incomes, rbTime.Checked, cbTimeType.SelectedIndex, rbColumns.Checked);
 			}
 			Painter.ReDraw(DrwControl.Width, DrwControl.Height);
+			DrwControl.Invalidate();
 		}
 		
 		public void SyncCostsInfo()
@@ -253,7 +253,8 @@ namespace MW.Forms
 				{
 					DrwControl.Width = pnlGraphic.Width - 5;
 					DrwControl.Height = pnlGraphic.Height - 20;
-					SyncView(false);
+					Painter.ReDraw(DrwControl.Width, DrwControl.Height);
+					DrwControl.Invalidate();
 				}
 				finally 
 				{
@@ -270,7 +271,10 @@ namespace MW.Forms
 		
 		void RbTimeCheckedChanged(object sender, EventArgs e)
 		{
-			cbTimeType.SelectedIndex = 0;
+			if (cbTimeType.SelectedIndex == -1)
+			{
+				cbTimeType.SelectedIndex = 0;
+			}
 			cbTimeType.Enabled = true;
 			ReZoom.Visible = true;
 			ZoomIn.Visible = true;
@@ -327,6 +331,17 @@ namespace MW.Forms
 		{
 			int X = e.X;
 			int Y = DrwControl.ClientSize.Height - e.Y;
+		}
+		
+		void DrwControlMouseMove(object sender, MouseEventArgs e)
+		{
+			Painter.MouseMove(e.X, e.Y);
+		}
+		
+		void DrwControlPaint(object sender, PaintEventArgs e)
+		{
+			e.Graphics.DrawImage(Painter.Bitmap_BG, 0,0);
+			e.Graphics.DrawImage(Painter.Bitmap_FT, 0,0);
 		}
 	}
 }

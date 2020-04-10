@@ -110,7 +110,7 @@
 			this.lblCostSum.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
 			this.lblCostSum.Location = new System.Drawing.Point(334, 15);
 			this.lblCostSum.Name = "lblCostSum";
-			this.lblCostSum.Size = new System.Drawing.Size(123, 32);
+			this.lblCostSum.Size = new System.Drawing.Size(134, 32);
 			this.lblCostSum.TabIndex = 4;
 			this.lblCostSum.Text = "100000";
 			// 
@@ -374,7 +374,9 @@
 			this.DrwControl.Size = new System.Drawing.Size(1146, 270);
 			this.DrwControl.TabIndex = 0;
 			this.DrwControl.TabStop = false;
+			this.DrwControl.Paint += new System.Windows.Forms.PaintEventHandler(this.DrwControlPaint);
 			this.DrwControl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DrwControlMouseDown);
+			this.DrwControl.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DrwControlMouseMove);
 			// 
 			// ReZoom
 			// 

@@ -20,8 +20,12 @@ namespace MW.Drawing
 		public double CoeffX;
 		public double CoeffY;
 		//Отрисовочные свойства
-		public Bitmap DrawArea;
-		public Graphics Layer; 
+		//Слой фона
+		public Bitmap Bitmap_BG;
+		public Graphics Layer_BG;
+		//динамический слой
+		public Bitmap Bitmap_FT;
+		public Graphics Layer_FT;		
 		
 		public TPainter(PictureBox ACtrlScene)
 		{
@@ -35,11 +39,14 @@ namespace MW.Drawing
 		{
 			CoeffX = AX / Scene.X;
   			CoeffY = AY / Scene.Y;
-  			DrawArea = new Bitmap(Convert.ToInt32(AX), Convert.ToInt32(AY));
-			Layer = Graphics.FromImage(DrawArea);
-			Layer.SmoothingMode = SmoothingMode.HighQuality;
-			CtrlScene.Image = DrawArea; 
-			Layer.Clear(Color.White); 		
+  			Bitmap_BG = new Bitmap(Convert.ToInt32(AX), Convert.ToInt32(AY));
+  			Bitmap_FT = new Bitmap(Convert.ToInt32(AX), Convert.ToInt32(AY));
+			Layer_BG = Graphics.FromImage(Bitmap_BG);
+			Layer_BG.SmoothingMode = SmoothingMode.HighQuality;
+			Layer_FT = Graphics.FromImage(Bitmap_FT);
+			Layer_FT.SmoothingMode = SmoothingMode.HighQuality;	
+			Layer_BG.Clear(Color.White);
+			Bitmap_FT.MakeTransparent();
 		}
 		
 		//Построение всей сцены
@@ -71,39 +78,50 @@ namespace MW.Drawing
 		{
 			foreach(TDrwShape vShape in DrwShapeList)
 			{
-				vShape.Draw(Layer);
+				vShape.Draw(Layer_BG);
 			}
 		}		
 	
 		public void AddShape(TDrwShape AShape)
 		{
-			//Перерасчет координаты y для привычной системы координат
-			AShape.CalcY(CtrlScene.Height);
-			if (AShape is TDrwPolygon) 
-			{
-
-			}
-			if (AShape is TDrwCircle)
-			{
-				
-			}
-			if (AShape is TDrwRect)
-			{
-				
-			}
-			
-			
+			//Перерасчет координаты Y для привычной системы координат
+			AShape.CalcY(CtrlScene.Height);		
 			AddShapeToList(AShape);	
 		}
 		
 		public void AddShapeToList(TDrwShape AShape)
 		{
-			if (AShape.ID != 0)
-			{
-    		 	AShape.ID = DrwShapeList.Count + 1;
-			}
+   		 	AShape.ID = DrwShapeList.Count + 1;
         	DrwShapeList.Add(AShape);
 		}
-			
+		
+		public void MouseMove(int AX, int AY)
+		{
+			//Подсветка фигуры
+			BacklightShape(AX, AY);
+			CtrlScene.Invalidate();
+		}
+		
+		public void BacklightShape(int AX, int AY)
+		{
+			CtrlScene.Cursor = Cursors.Default;
+			Layer_FT.Clear(Color.Transparent);
+			foreach (TDrwShape vShape in DrwShapeList) 
+			{
+				if (vShape.IncludePoint(AX, AY))
+				{
+					LightOn(vShape);
+					return;
+				}
+			}
+		}
+		
+		//подсветить фигуру
+		public void LightOn(TDrwShape AShape)
+		{
+			CtrlScene.Cursor = Cursors.Hand;
+			AShape.Light();
+			AShape.Draw(Layer_FT);
+		}
 	}
 }

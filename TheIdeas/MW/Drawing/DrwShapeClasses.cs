@@ -49,6 +49,13 @@ namespace MW.Drawing
 		public abstract void Draw(Graphics G);
 		//переасчет координаты y
 		public abstract void CalcY(int AYScene);
+		//Проверка на попадание точки в область фигуры
+		public virtual bool IncludePoint(int X, int Y)
+		{
+			return false;
+		}
+		//Состояние подсветки
+		public virtual void Light(){}
 	}
 		
 	public static class DrwObjects
@@ -218,6 +225,7 @@ namespace MW.Drawing
 	{
     	public TDrwPoint Center;
     	public double Radius;
+    	public bool IsLight;
     	
     	public TDrwCircle(double AX, double AY, double ARadius)
     	{
@@ -225,6 +233,7 @@ namespace MW.Drawing
     		Center.X = AX;
     		Center.Y = AY;
     		Radius = ARadius;
+    		IsLight = false;
     	}
  		
     	public override void Draw(Graphics G)
@@ -255,16 +264,38 @@ namespace MW.Drawing
     		              		 (int)(2*Radius),
     		              		 (int)(2*Radius));
     		}
+    		
+    		if (IsLight)
+    		{
+    			G.FillEllipse(new SolidBrush(Color.FromArgb(75, Color)),
+    			    	     (int)(Center.X - Radius*7),
+    		            	 (int)(Center.Y - Radius*7),
+    		              	 (int)(2*Radius*7),
+    		              	 (int)(2*Radius*7));
+    		}
     	}
     	
 		public override void CalcY(int AYScene)
 		{
 			Center.Y = AYScene - Center.Y;
 		}
+		
+		public override bool IncludePoint(int X, int Y)
+		{
+			return ((X - Center.X)*(X - Center.X) +
+      				(Y - Center.Y)*(Y - Center.Y)) <
+        			(Radius * Radius * 15);
+		}
+
+		public override void Light()
+		{
+			IsLight = true;
+		}		
 	}
 	
 	public class TDrwRect : TDrwShape
 	{
+		//точка, находящаяся на верхней грани прямоугольника в центре
     	public TDrwPoint InitPoint;
     	public double Width;
     	public double Height;
@@ -311,6 +342,17 @@ namespace MW.Drawing
 		public override void CalcY(int AYScene)
 		{
 			InitPoint.Y = AYScene - InitPoint.Y;
+		}
+		
+		public override bool IncludePoint(int X, int Y)
+		{
+			return (X < (InitPoint.X + Width/2)) && (X > (InitPoint.X - Width/2)) 
+				&& (Y > InitPoint.Y);
+		}
+		
+		public override void Light()
+		{
+			FillOpacity = 75;
 		}
 	}
 }
