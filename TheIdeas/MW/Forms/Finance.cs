@@ -27,12 +27,13 @@ namespace MW.Forms
 		public FrmFinance(TData AData)
 		{
 			InitializeComponent();
+			this.DoubleBuffered = true;
 			Data = AData;
 			Directory = Data.GetModel("Directory");
 			Costs = Data.GetModel("Cost");
 			Incomes = Data.GetModel("Income");
 			Painter = new TPainter(DrwControl);
-			cbTimeType.SelectedIndex = 0;
+			cbTimeType.SelectedIndex = 0;		
 			SyncForm();
 		}
 		
@@ -42,14 +43,12 @@ namespace MW.Forms
 			SyncIncomesInfo();
 		}
 		
-		public void SyncView(bool AReLoadData = true)
+		public void SyncView()
 		{
-			if (AReLoadData)
-			{
-				Painter.Scene.SceneObjectList.Clear();
-				Painter.Scene.LoadModels(Costs, Incomes, rbTime.Checked, cbTimeType.SelectedIndex, rbColumns.Checked);
-			}
+			Painter.Scene.SceneObjectList.Clear();
+			Painter.Scene.LoadModels(Costs, Incomes, rbTime.Checked, cbTimeType.SelectedIndex, rbColumns.Checked);
 			Painter.ReDraw(DrwControl.Width, DrwControl.Height);
+			Painter.SelectedShapeID = -1;
 			DrwControl.Invalidate();
 		}
 		
@@ -132,7 +131,7 @@ namespace MW.Forms
 				return;
 				
 			string vID = vCosts.Rows[ARowIndex].Cells["ID"].Value.ToString();
-			Dictionary<string, string> vRow = Costs.Rows[Format.StrToInt(vID) - 1];
+			Dictionary<string, string> vRow = Costs.GetByID(vID);
 
 			FrmEditFinance editForm = new FrmEditFinance(Directory, Costs);
 			editForm.Text = "Редактировать расход...";
@@ -253,7 +252,9 @@ namespace MW.Forms
 				{
 					DrwControl.Width = pnlGraphic.Width - 5;
 					DrwControl.Height = pnlGraphic.Height - 20;
-					Painter.ReDraw(DrwControl.Width, DrwControl.Height);
+					Painter.ReDraw(DrwControl.Width, DrwControl.Height);					
+					//Отрисовка динамического слоя
+					Painter.ReDrawFrontLayer();
 					DrwControl.Invalidate();
 				}
 				finally 
@@ -301,7 +302,13 @@ namespace MW.Forms
 			IsScale = true;
 			DrwControl.Width = Convert.ToInt32(DrwControl.Width * 0.9);
 			Painter.ReDraw(DrwControl.Width, DrwControl.Height);
-			IsScale = false;			
+			//Отрисовка динамического слоя
+			Painter.ReDrawFrontLayer();
+			IsScale = false;
+			DrwControl.Invalidate();
+			int vCenter = DrwControl.Width/2;
+			pnlGraphic.AutoScrollPosition = new Point(vCenter-pnlGraphic.Width/2, DrwControl.Height);			
+			
 		}
 		
 		void CbScaleCheckedChanged(object sender, EventArgs e)
@@ -313,8 +320,12 @@ namespace MW.Forms
 		{
 			IsScale = true;
 			DrwControl.Width = Convert.ToInt32(DrwControl.Width * 1.1);
+			pnlGraphic.HorizontalScroll.Value = Math.Abs(DrwControl.Width/2-pnlGraphic.Width/2);
 			Painter.ReDraw(DrwControl.Width, DrwControl.Height);
+			//Отрисовка динамического слоя
+			Painter.ReDrawFrontLayer();
 			IsScale = false;
+			DrwControl.Invalidate();
 		}		
 		
 		void CbTimeTypeSelectedIndexChanged(object sender, EventArgs e)
@@ -329,19 +340,40 @@ namespace MW.Forms
 		
 		void DrwControlMouseDown(object sender, MouseEventArgs e)
 		{
-			int X = e.X;
-			int Y = DrwControl.ClientSize.Height - e.Y;
+//			Painter.MouseDown(e.X, DrwControl.ClientSize.Height - e.Y, (double)DrwControl.Width/(double)pnlGraphic.Width);
+			//Режим выделения
+			if (cbScale.Checked)
+			{
+				Painter.SelectAreaXStart = e.X;
+			}
 		}
 		
 		void DrwControlMouseMove(object sender, MouseEventArgs e)
 		{
 			Painter.MouseMove(e.X, e.Y);
+			//Режим выделения
+			if ((cbScale.Checked) && (Painter.SelectAreaXStart != -1))
+			{
+				Painter.ViewSelectRect(e.X, e.Y);
+			}
 		}
 		
 		void DrwControlPaint(object sender, PaintEventArgs e)
 		{
-			e.Graphics.DrawImage(Painter.Bitmap_BG, 0,0);
-			e.Graphics.DrawImage(Painter.Bitmap_FT, 0,0);
+			if ((!IsScale) || (!Painter.IsMoveScheme))
+			{
+				e.Graphics.DrawImage(Painter.Bitmap_BG, 0,0);
+				e.Graphics.DrawImage(Painter.Bitmap_FT, 0,0);
+			}
+		}
+		
+		void DrwControlMouseUp(object sender, MouseEventArgs e)
+		{
+			Painter.SelectAreaXStart = -1;
+			Painter.MouseUp(e.X, e.Y);
+			
+			int ID = Painter.SelectedShapeID;
+//			Painter.ReDrawFrontLayer();
 		}
 	}
 }

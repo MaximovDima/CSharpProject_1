@@ -74,6 +74,22 @@ namespace MW.Core
 			return vResult;	
 		}
 		
+		//Определение строки по списку идентфикатору
+		public Dictionary<string, string> GetByID(string AID)
+		{
+			Dictionary<string, string> vResult = null;
+			
+			foreach(Dictionary<string, string> vRow in Rows)
+			{
+				if (vRow["ID"] == AID)
+				{
+					vResult = vRow;
+					break;
+				}
+			}
+			return vResult;	
+		}
+		
 		//Строку которую надо удалить
 		public int GetDeleteRowID()
 		{

@@ -39,6 +39,7 @@ namespace MW.Drawing
   			Color = Color.Black;
   			DashStyle = DashStyle.Solid;
   			Opacity = 100;
+  			OutLine = true;
   			Filled = false;
   			FillOpacity = 100;
   			FillColor = Color;
@@ -46,7 +47,7 @@ namespace MW.Drawing
   			Visible = true;
 		}
 		//Отрисовка
-		public abstract void Draw(Graphics G);
+		public abstract void Draw(Graphics Layer);
 		//переасчет координаты y
 		public abstract void CalcY(int AYScene);
 		//Проверка на попадание точки в область фигуры
@@ -162,7 +163,6 @@ namespace MW.Drawing
 			Point.Y = AYScene - Point.Y;
 		}
 	}
-	
 	
 	public class TDrwPolygon : TDrwShape
 	{
@@ -319,6 +319,8 @@ namespace MW.Drawing
     		int vOpacity = Convert.ToInt32(255 * Opacity / 100);
     		int vFillOpacity = Convert.ToInt32(255 * FillOpacity / 100); 
     		Pen mypen = new Pen(Color.FromArgb(vOpacity, Color), PenWidth);
+    		float[] dashValues = { 5, 5, 5, 5 };
+    		mypen.DashPattern = dashValues;
     		mypen.DashStyle = DashStyle;  		
     		
     		if (Filled)

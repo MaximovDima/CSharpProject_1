@@ -255,7 +255,7 @@
 			this.lblIncomeSum.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
 			this.lblIncomeSum.Location = new System.Drawing.Point(319, 15);
 			this.lblIncomeSum.Name = "lblIncomeSum";
-			this.lblIncomeSum.Size = new System.Drawing.Size(123, 32);
+			this.lblIncomeSum.Size = new System.Drawing.Size(135, 32);
 			this.lblIncomeSum.TabIndex = 7;
 			this.lblIncomeSum.Text = "100000";
 			// 
@@ -377,6 +377,7 @@
 			this.DrwControl.Paint += new System.Windows.Forms.PaintEventHandler(this.DrwControlPaint);
 			this.DrwControl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DrwControlMouseDown);
 			this.DrwControl.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DrwControlMouseMove);
+			this.DrwControl.MouseUp += new System.Windows.Forms.MouseEventHandler(this.DrwControlMouseUp);
 			// 
 			// ReZoom
 			// 

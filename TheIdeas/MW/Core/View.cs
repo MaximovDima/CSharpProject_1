@@ -326,6 +326,7 @@ namespace MW.Core
 		}
 	}
 	
+	//Представление данных в виде непрерывной функции
 	public class TScObjFunc : TSceneObject
 	{
 		public List<TFuncPoint> Points;
@@ -394,6 +395,7 @@ namespace MW.Core
 		}
 	}
 	
+	//Представление данных в виде гистограммы
 	public class TScObjColumns : TSceneObject
 	{
 		public List<TFuncPoint> Points;
@@ -438,6 +440,5 @@ namespace MW.Core
 				DrwObjList.Add(vDrwRect);
 			}
 		}
-	}
-	
+	}	
 }
