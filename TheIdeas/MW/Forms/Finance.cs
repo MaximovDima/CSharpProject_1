@@ -388,7 +388,7 @@ namespace MW.Forms
 			
 			Painter.ReDraw(DrwControl.Width, DrwControl.Height);
 			Painter.SelectAreaXStart = -1;
-			Painter.MouseUp(e.X, e.Y);
+			Painter.MouseUp(e.X, e.Y, Costs, Incomes, Directory);
 		}
 	}
 }

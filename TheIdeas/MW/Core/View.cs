@@ -398,9 +398,24 @@ namespace MW.Core
 		{
 			DrwObjList.Clear();
 			TDrwPolygon vPolygon = new TDrwPolygon();
-			if (TimeType == 0) {vPolygon.Color = Color.Red;}
-			if (TimeType == 1) {vPolygon.Color = Color.Green;}
-			if (TimeType == 3) {vPolygon.Color = Color.Blue;}
+			Color vColor = Color.Black;
+			string vModelName = "";
+			if (TimeType == 0)
+			{
+				vColor = Color.Red;
+				vModelName = "Cost";
+			}
+			if (TimeType == 1) 
+			{
+				vColor = Color.Green;
+				vModelName = "Income";
+			}
+			if (TimeType == 3)
+			{
+				vColor = Color.Blue;
+				vModelName = "Balance";
+			}
+			vPolygon.Color = vColor;
 			vPolygon.Filled = true;
 			vPolygon.OutLine = true;
 			vPolygon.FillOpacity = 20;
@@ -439,6 +454,7 @@ namespace MW.Core
 				vDrwPoint.PenWidth = 2;
 				vDrwPoint.Filled = true;
 				vDrwPoint.OutLine = true;
+				vDrwPoint.GroupCode = vModelName;
 				DrwObjList.Add(vDrwPoint);
 			}
 		}
@@ -497,9 +513,22 @@ namespace MW.Core
 		{
 			DrwObjList.Clear();
 			Color vColor = Color.Black;
-			if (TimeType == 0) {vColor = Color.Red;}
-			if (TimeType == 1) {vColor = Color.Green;}
-			if (TimeType == 3) {vColor = Color.Blue;}
+			string vModelName = "";
+			if (TimeType == 0)
+			{
+				vColor = Color.Red;
+				vModelName = "Cost";
+			}
+			if (TimeType == 1) 
+			{
+				vColor = Color.Green;
+				vModelName = "Income";
+			}
+			if (TimeType == 3)
+			{
+				vColor = Color.Blue;
+				vModelName = "Balance";
+			}
 			double vWidth = Coord.GetXDrwByUsr(1)*ACoeffX;
 						
 			//Массив
@@ -513,6 +542,7 @@ namespace MW.Core
 				vDrwRect.Color = vColor;
 				vDrwRect.Filled = true;
 				vDrwRect.OutLine = true;
+				vDrwRect.GroupCode = vModelName;
 				vDrwRect.FillOpacity = 20;
 				vDrwRect.FillColor = vColor;
 				
@@ -541,5 +571,11 @@ namespace MW.Core
 			Scene = AScene;
 			Name = "Sectors";
 		}
+	}
+	
+	//Данные для отображения
+	public static class DataInfo
+	{
+		
 	}
 }

@@ -33,8 +33,6 @@ namespace MW.Drawing
 		public List<TDrwShape> DrwShapeList;
 		//Список примитивов динамического слоя
 		public List<TDrwShape> DrwFrontShapeList;
-		//Идентификатор выделенного примитива
-//		public int SelectedShapeID;
 		//коэффициенты масштабов по осям
 		public double CoeffX;
 		public double CoeffY;
@@ -93,6 +91,7 @@ namespace MW.Drawing
 		//Перерасчет всей сцены с перерисовкой
 		public void ReDraw(double AX, double AY)
 		{
+			DrwFrontShapeList.Clear();
 			InitDrawArea(AX, AY);
 			BuildScene();
 			Draw();
@@ -237,8 +236,9 @@ namespace MW.Drawing
 			CtrlScene.Invalidate();
 		}
 		
-		public void MouseUp(int AX, int AY)
+		public void MouseUp(int AX, int AY, TModel ACosts, TModel AIncomes, TModel ADirectory)
 		{
+			DrwFrontShapeList.Clear();
   			CtrlScene.Cursor = Cursors.Default;
   			TDrwShape vShape = GetDrwShape(AX, AY);
   			double vX, vY;
@@ -246,6 +246,7 @@ namespace MW.Drawing
 			{
 				if ((vShape is TDrwCircle) || (vShape is TDrwRect))
 				{
+					DrwFrontShapeList.Add(vShape);
 					if (vShape is TDrwCircle)
 					{
 						vX = (vShape as TDrwCircle).Center.X;
@@ -256,20 +257,57 @@ namespace MW.Drawing
 						vY = (vShape as TDrwRect).InitPoint.Y;
 					}
 					vX = (Scene.GetSceneObject("Coord") as TScObjCoord).GetXUsrByDrw(vX)/CoeffX;
-					ViewInfoBox(AX, AY, vX, vY);
+					ViewInfoBox(AX, AY, vX, vY, vShape.GroupCode, ACosts, AIncomes, ADirectory);
 				}
 			}
 			ReDrawFrontLayer();
 		}
 		
-		public void ViewInfoBox(int ADrwX, int ADrwY, double AUsrX, double AUsrY)
+		public void ViewInfoBox(int ADrwX, int ADrwY, double AUsrX, double AUsrY, string AModelView,
+		                       TModel ACosts, TModel AIncomes, TModel ADirectory)
 		{
-			int vDay = Convert.ToInt32(AUsrX);
+			//данные
+			int vFindDay = Convert.ToInt32(AUsrX);
+			DateTime d1 = new DateTime(2020, 1, 1);
+			
+			TModel vModel;
+			List<Dictionary<string, string>> vRows = new List<Dictionary<string, string>>();
+			if(AModelView == "Cost")
+			{
+				vModel = ACosts;
+			}
+			else 
+			{
+				vModel = AIncomes;
+			}
+			
+			foreach (Dictionary<string, string> vRow in vModel.Rows)
+			{
+				string vName = null;
+				DateTime vDay = Convert.ToDateTime(vRow["Date"]);
+				if (vDay == d1.AddDays(vFindDay))
+				{
+					if(AModelView == "Cost")
+					{
+						vName = ADirectory.GetNameByID("Place", vRow["Place"]);
+					}
+					if(AModelView == "Income")
+					{
+						vName = ADirectory.GetNameByID("Income", vRow["Type"]);
+					}
+					
+					Dictionary<string, string> vNewRow = new Dictionary<string, string>();
+					vNewRow.Add(vName, vRow["Value"]);
+					vRows.Add(vNewRow);
+				}
+			}
+			//Отображение
+			
 			TDrwLabel vLabel = new TDrwLabel();
 			vLabel.Point.X = ADrwX + 5;
 			vLabel.Point.Y = ADrwY + 25;
-			DateTime d1 = new DateTime(2020, 1, 1);
-			vLabel.Text = d1.AddDays(vDay).ToString("d MMM");
+//			DateTime d1 = new DateTime(2020, 1, 1);
+//			vLabel.Text = d1.AddDays(vDay).ToString("d MMM");
 			vLabel.HAlig = TDrwLabel.THAlig.HCenter;
 			vLabel.VAlig = TDrwLabel.TVAlig.VTop;
 											
