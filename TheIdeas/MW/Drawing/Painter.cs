@@ -34,7 +34,7 @@ namespace MW.Drawing
 		//Список примитивов динамического слоя
 		public List<TDrwShape> DrwFrontShapeList;
 		//Идентификатор выделенного примитива
-		public int SelectedShapeID;
+//		public int SelectedShapeID;
 		//коэффициенты масштабов по осям
 		public double CoeffX;
 		public double CoeffY;
@@ -45,12 +45,10 @@ namespace MW.Drawing
 		//динамический слой
 		public Bitmap Bitmap_FT;
 		public Graphics Layer_FT;
-		//Режимы движения мышкой
-		public bool IsMoveScheme;
-		public int OldMoveX;
-		public bool IsMoveDelta;
 		//режим выделения (начальная точка X)
 		public int SelectAreaXStart;		
+		//режим выделения (начальная точка Y)
+		public double SelectAreaYStart;
 		
 		public TPainter(PictureBox ACtrlScene)
 		{
@@ -58,7 +56,6 @@ namespace MW.Drawing
 			DrwFrontShapeList = new List<TDrwShape>();
 			Scene = new TScene(ACtrlScene.ClientSize.Width, ACtrlScene.ClientSize.Height);
 			CtrlScene = ACtrlScene;
-			SelectedShapeID = -1;
 			SelectAreaXStart = -1;
         }
 		
@@ -168,29 +165,24 @@ namespace MW.Drawing
 		//Перерисовка динаимческого слоя
 		public void ReDrawFrontLayer()
 		{
-			//Очитска динамического слоя
+			//Очитска
 			Layer_FT.Clear(Color.Transparent);
-			//Отрисовка выделенной фигуры
-			DrawSelectedShape();
-			//Отрисовка динамических фигур
+			//Отрисовка
 			foreach(TDrwShape vShape in DrwFrontShapeList)
 			{
 				vShape.Draw(Layer_FT);
 			}
 		}
 		
-		//Отрисовка выделенной фигуры
-		public void DrawSelectedShape()
+		//добавление/удаление фигуры с динамического слоя
+		public void Add(TDrwShape ADrwShape)
 		{
-			if (SelectedShapeID != -1)
-			{
-				TDrwShape vShape = GetShapeByID(SelectedShapeID);
-				if(vShape != null)
-				{
-					vShape.Light();
-					vShape.Draw(Layer_FT);
-				}
-			}
+			
+		}
+		
+		public void Remove(TDrwShape ADrwShape)
+		{
+			
 		}
 		
 		//подсветить фигуру
@@ -200,71 +192,88 @@ namespace MW.Drawing
 			AShape.Light();
 			//Отрисовка временной фигуры динамического слоя
 			AShape.Draw(Layer_FT);
-		}
+		}	
 		
 		//Отображения "прямоугольника" выделяемой области 
 		public void ViewSelectRect(int AX, int AY)
 		{
 			DrwFrontShapeList.Clear();
-			TDrwRect vRect = new TDrwRect((AX + SelectAreaXStart)/2, 0, Math.Abs(AX - SelectAreaXStart), Scene.Y*CoeffY-1);
-			vRect.PenWidth = 2;
+			double vY0 = (Scene.GetSceneObject("Coord") as TScObjCoord).Y0;
+			double vY1 = (Scene.GetSceneObject("Coord") as TScObjCoord).Y1*CoeffY;
+			TDrwRect vRect = new TDrwRect((AX + SelectAreaXStart)/2, vY1, Math.Abs(AX - SelectAreaXStart), vY1-vY0);
 			vRect.DashStyle = DashStyle.Custom;
-				
+			vRect.CalcY(CtrlScene.Height);
 			DrwFrontShapeList.Add(vRect);
+		}
+		
+		//Отображение "выделенных данных"
+		public void ViewSelectData(int AX, int AY)
+		{
+			DrwFrontShapeList.Clear();
+			//прямоугольник области
+			double vY0 = (Scene.GetSceneObject("Coord") as TScObjCoord).Y0;
+			double vY1 = (Scene.GetSceneObject("Coord") as TScObjCoord).Y1*CoeffY;
+			TDrwRect vRect = new TDrwRect((AX + SelectAreaXStart)/2, vY1, Math.Abs(AX - SelectAreaXStart), vY1-vY0);
+			vRect.DashStyle = DashStyle.Custom;
+			vRect.CalcY(CtrlScene.Height);
+			DrwFrontShapeList.Add(vRect);
+			//Выделение графика
+			TDrwPolygon vPolygon = new TDrwPolygon();
+//			double vY0 = 
+//			vPolygon.
 		}
 		
 		//Работа указателя мышки по умолчанию
 		public void MouseDown(int AX, int AY, double AHorizScaleValue)
 		{
-			IsMoveScheme = false;
-  			if (AHorizScaleValue > 1)
-  			{
-    			IsMoveScheme = true;
-  			}
-  			OldMoveX = AX;
+
 		}
 		
 		public void MouseMove(int AX, int AY)
 		{
-			if (!IsMoveScheme)
-			{
-				//Подсветка фигуры
-				BacklightShape(AX, AY);
-				//Обновление контрола
-				CtrlScene.Invalidate();
-			}
-//			else
-//			{
-//				int vStartX = OldMoveX;
-//			  	OldMoveX = AX;
-//			  	IsMoveDelta = false;
-//			  	if (IsMoveScheme)
-//			  	{
-//			  		IsMoveDelta = true;
-//			  		(CtrlScene.Parent as Panel).AutoScrollPosition = new Point((vStartX - AX), 0);
-////			  			new Point((CtrlScene.Parent as Panel).AutoScrollPosition.X + (vStartX - AX), (CtrlScene.Parent as Panel).AutoScrollPosition.Y);
-//    			 	CtrlScene.Cursor = Cursors.SizeWE;			  	
-//			  	}
-//			}
+			//Подсветка фигуры
+			BacklightShape(AX, AY);
+			//Обновление контрола
+			CtrlScene.Invalidate();
 		}
 		
 		public void MouseUp(int AX, int AY)
 		{
-			IsMoveScheme = false;
   			CtrlScene.Cursor = Cursors.Default;
-			
-			SelectedShapeID = -1;
-			TDrwShape vShape = GetDrwShape(AX, AY);
+  			TDrwShape vShape = GetDrwShape(AX, AY);
+  			double vX, vY;
 			if (vShape != null)
 			{
-				SelectedShapeID = vShape.ID;
+				if ((vShape is TDrwCircle) || (vShape is TDrwRect))
+				{
+					if (vShape is TDrwCircle)
+					{
+						vX = (vShape as TDrwCircle).Center.X;
+						vY = (vShape as TDrwCircle).Center.Y;
+					} else
+					{
+						vX = (vShape as TDrwRect).InitPoint.X;
+						vY = (vShape as TDrwRect).InitPoint.Y;
+					}
+					vX = (Scene.GetSceneObject("Coord") as TScObjCoord).GetXUsrByDrw(vX)/CoeffX;
+					ViewInfoBox(AX, AY, vX, vY);
+				}
 			}
-
-			if (IsMoveDelta)
-			{
-				IsMoveScheme = false;
-				IsMoveDelta = false;
-			}
+			ReDrawFrontLayer();
+		}
+		
+		public void ViewInfoBox(int ADrwX, int ADrwY, double AUsrX, double AUsrY)
+		{
+			int vDay = Convert.ToInt32(AUsrX);
+			TDrwLabel vLabel = new TDrwLabel();
+			vLabel.Point.X = ADrwX + 5;
+			vLabel.Point.Y = ADrwY + 25;
+			DateTime d1 = new DateTime(2020, 1, 1);
+			vLabel.Text = d1.AddDays(vDay).ToString("d MMM");
+			vLabel.HAlig = TDrwLabel.THAlig.HCenter;
+			vLabel.VAlig = TDrwLabel.TVAlig.VTop;
+											
+			vLabel.Draw(Layer_BG);				
 		}
 	}
 }

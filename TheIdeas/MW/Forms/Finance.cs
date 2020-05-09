@@ -46,9 +46,8 @@ namespace MW.Forms
 		public void SyncView()
 		{
 			Painter.Scene.SceneObjectList.Clear();
-			Painter.Scene.LoadModels(Costs, Incomes, rbTime.Checked, cbTimeType.SelectedIndex, rbColumns.Checked);
+			Painter.Scene.LoadModels(Costs, Incomes, rbTime.Checked, cbTimeType.SelectedIndex, rbColumns.Checked, rbStructura.Checked);
 			Painter.ReDraw(DrwControl.Width, DrwControl.Height);
-			Painter.SelectedShapeID = -1;
 			DrwControl.Invalidate();
 		}
 		
@@ -338,11 +337,19 @@ namespace MW.Forms
 			cbScale.Checked = false;
 		}
 		
+		void DrwControlPaint(object sender, PaintEventArgs e)
+		{
+			if (!IsScale)
+			{
+				e.Graphics.DrawImage(Painter.Bitmap_BG, 0,0);
+				e.Graphics.DrawImage(Painter.Bitmap_FT, 0,0);
+			}
+		}
+		
 		void DrwControlMouseDown(object sender, MouseEventArgs e)
 		{
-//			Painter.MouseDown(e.X, DrwControl.ClientSize.Height - e.Y, (double)DrwControl.Width/(double)pnlGraphic.Width);
 			//Режим выделения
-			if (cbScale.Checked)
+			if (cbScale.Checked || cbInfo.Checked)
 			{
 				Painter.SelectAreaXStart = e.X;
 			}
@@ -350,30 +357,38 @@ namespace MW.Forms
 		
 		void DrwControlMouseMove(object sender, MouseEventArgs e)
 		{
-			Painter.MouseMove(e.X, e.Y);
+			if (!rbStructura.Checked)
+			{
+				Painter.MouseMove(e.X, e.Y);
+			}
 			//Режим выделения
-			if ((cbScale.Checked) && (Painter.SelectAreaXStart != -1))
+			if ((cbScale.Checked || cbInfo.Checked) && (Painter.SelectAreaXStart != -1))
 			{
 				Painter.ViewSelectRect(e.X, e.Y);
-			}
-		}
-		
-		void DrwControlPaint(object sender, PaintEventArgs e)
-		{
-			if ((!IsScale) || (!Painter.IsMoveScheme))
-			{
-				e.Graphics.DrawImage(Painter.Bitmap_BG, 0,0);
-				e.Graphics.DrawImage(Painter.Bitmap_FT, 0,0);
+				if (cbInfo.Checked)
+				{
+					Painter.ViewSelectData(e.X, e.Y);
+				}
 			}
 		}
 		
 		void DrwControlMouseUp(object sender, MouseEventArgs e)
-		{
+		{	
+			if ((cbScale.Checked) && (Painter.SelectAreaXStart != -1))
+			{
+				IsScale = true;
+				double vCoeff = pnlGraphic.Width/Math.Abs(e.X - Painter.SelectAreaXStart);
+				double vX = (e.X + Painter.SelectAreaXStart)/2;
+				DrwControl.Width = Convert.ToInt32(DrwControl.Width*vCoeff);
+				pnlGraphic.AutoScrollPosition = new Point(pnlGraphic.HorizontalScroll.Maximum/2, 0);
+			    Painter.ReDraw(DrwControl.Width, DrwControl.Height);
+			    cbScale.Checked = false;
+			    IsScale = false;
+			}
+			
+			Painter.ReDraw(DrwControl.Width, DrwControl.Height);
 			Painter.SelectAreaXStart = -1;
 			Painter.MouseUp(e.X, e.Y);
-			
-			int ID = Painter.SelectedShapeID;
-//			Painter.ReDrawFrontLayer();
 		}
 	}
 }

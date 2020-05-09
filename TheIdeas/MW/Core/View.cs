@@ -23,7 +23,7 @@ namespace MW.Core
 			SceneObjectList = new List<TSceneObject>();
 		}	
 		
-		public void LoadModels(TModel ACosts, TModel AIncomes, bool AViewTime, int ATimeType, bool AViewColumns)
+		public void LoadModels(TModel ACosts, TModel AIncomes, bool AViewTime, int ATimeType, bool AViewColumns, bool AViewStructura)
 		{
 			/*ATimeType
 			 * 0-costs
@@ -92,6 +92,14 @@ namespace MW.Core
 					}
 				}
 			}
+			
+			if (AViewStructura)
+			{
+				List<TFuncPoint> vPoints = new List<TFuncPoint>();
+				ACosts.ReFill(vPoints);
+				AIncomes.ReFill(vPoints);
+				CreatePizza();
+			}
 		}
 		
 		public void CreateCoord(List<TFuncPoint> APoints)
@@ -123,6 +131,29 @@ namespace MW.Core
 			Columns.TimeType = ATimeType;
 			Columns.Load(APoints);
 			SceneObjectList.Add(Columns);
+		}
+		
+		public void CreatePizza()
+		{
+			//Incomes
+			double vRadius = Math.Min(X/6, Y/2);
+			TScObjSector vIncomes = new TScObjSector(this);
+			vIncomes.X = (X/6)*5;
+			vIncomes.Y = Y/2;
+			vIncomes.Radius = vRadius;
+			SceneObjectList.Add(vIncomes);
+			//Costs_Type
+			TScObjSector vCostsType = new TScObjSector(this);
+			vCostsType.X = X/2;
+			vCostsType.Y = Y/2;
+			vCostsType.Radius = vRadius;
+			SceneObjectList.Add(vCostsType);
+			//Costs_Place
+			TScObjSector vCostsPlace = new TScObjSector(this);
+			vCostsPlace.X = X/6;
+			vCostsPlace.Y = Y/2;
+			vCostsPlace.Radius = vRadius;
+			SceneObjectList.Add(vCostsPlace);
 		}
 		
 		public TSceneObject GetSceneObject(string AName)
@@ -219,6 +250,14 @@ namespace MW.Core
 			vStep = (X1 - X0) / XMax;
 			for (int i = 0; i < Math.Round(XMax); i++)
 			{
+				if (i!=0)
+				{
+					vX = X0 + i*vStep*ACoeffX;
+					vXLine = DrwObjects.GetLine(vX, Y0, vX, Y0+4, Color.Black, 1);
+					DrwObjList.Add(vXLine);
+					vXLine = DrwObjects.GetLine(vX, Y0, vX, Y1*ACoeffY, Color.Black, 1, 7);				
+					DrwObjList.Add(vXLine);
+				}
 				if ((i % 7) == 0 & i!=0)
 				{
 					vX = X0 + i*vStep*ACoeffX;
@@ -240,6 +279,16 @@ namespace MW.Core
 			//Сетка OY
 			for (int i = (int)YMin; i < YMax; i++)
 			{	
+				
+				if (((i % 0.5) == 0) && (YMax < 80))
+				{
+					vY = Y0 + GetYDrwByUsr(i)*ACoeffY;
+					vYLine = DrwObjects.GetLine(X0, vY, X0+3, vY, Color.Black, 1);
+					DrwObjList.Add(vYLine);
+					vYLine = DrwObjects.GetLine(X0, vY, X1*ACoeffX, vY, Color.Black, 1, 7);				
+					DrwObjList.Add(vYLine);
+				}
+				
 				int vInc = 2;
 				if(YMax > 20) {vInc = 5;}
 				if(YMax > 80) {vInc = 10;}
@@ -393,6 +442,36 @@ namespace MW.Core
 				DrwObjList.Add(vDrwPoint);
 			}
 		}
+		/*
+		//Возвращает координату Y по X у полигона
+		public double GetPolygonYByX(double AX)
+		{			
+			if (AX <= Points[0].X)
+			{
+				return vPolygon.DrwPointList[0].Y;
+			}
+			
+			if (AX >= vPolygon.DrwPointList[vPolygon.DrwPointList.Count - 1].X)
+			{
+				return vPolygon.DrwPointList[vPolygon.DrwPointList.Count - 1].Y;
+			}
+
+  			int vIndex0 = 0;
+  			int vIndex1 = 0;
+  			for (int i = 0; i < vPolygon.DrwPointList.Count - 1; i++) {
+  				if (vPolygon.DrwPointList[i].X > AX)
+  				{
+  					vIndex1 = i;
+      				vIndex0 = i - 1;
+      				break;				
+  				}
+  			}
+  			
+  			return vPolygon.DrwPointList[vIndex0].Y +
+    			(((vPolygon.DrwPointList[vIndex1].Y - vPolygon.DrwPointList[vIndex0].Y)*(AX - vPolygon.DrwPointList[vIndex0].X))
+      				/((vPolygon.DrwPointList[vIndex1]).X - vPolygon.DrwPointList[vIndex0].X));
+		
+		}*/
 	}
 	
 	//Представление данных в виде гистограммы
@@ -441,4 +520,26 @@ namespace MW.Core
 			}
 		}
 	}	
+	
+	//Представление данных в виде секторной диаграммы
+	public class TScObjSector : TSceneObject
+	{
+		public double Radius;
+		public double X;
+		public double Y;
+		
+		public override void Build(double ACoeffX, double ACoeffY)
+		{
+			DrwObjList.Clear();
+						
+			TDrwCircle vIncomes = new TDrwCircle(X*ACoeffX, Y*ACoeffY, Radius*Math.Min(ACoeffX, ACoeffY));
+			DrwObjList.Add(vIncomes);
+		}
+		
+		public TScObjSector(TScene AScene)
+		{
+			Scene = AScene;
+			Name = "Sectors";
+		}
+	}
 }
