@@ -269,9 +269,9 @@ namespace MW.Drawing
 			//данные
 			int vFindDay = Convert.ToInt32(AUsrX);
 			DateTime d1 = new DateTime(2020, 1, 1);
-			
+			Color vColor = Color.Black;
 			TModel vModel;
-			List<Dictionary<string, string>> vRows = new List<Dictionary<string, string>>();
+			List<string> vRowList = new List<string>();
 			if(AModelView == "Cost")
 			{
 				vModel = ACosts;
@@ -290,28 +290,81 @@ namespace MW.Drawing
 					if(AModelView == "Cost")
 					{
 						vName = ADirectory.GetNameByID("Place", vRow["Place"]);
+						vColor = Color.Red;
 					}
 					if(AModelView == "Income")
 					{
 						vName = ADirectory.GetNameByID("Income", vRow["Type"]);
+						vColor = Color.Green;
 					}
-					
-					Dictionary<string, string> vNewRow = new Dictionary<string, string>();
-					vNewRow.Add(vName, vRow["Value"]);
-					vRows.Add(vNewRow);
+					string vComment = "";
+					if (vRow["Comment"] != "")
+					{
+						vComment = " ("+ vRow["Comment"] + ")";
+					}
+					string vNewRow = vName + ": " + vRow["Value"] + vComment;
+					vRowList.Add(vNewRow);
 				}
 			}
 			//Отображение
-			
-			TDrwLabel vLabel = new TDrwLabel();
-			vLabel.Point.X = ADrwX + 5;
-			vLabel.Point.Y = ADrwY + 25;
-//			DateTime d1 = new DateTime(2020, 1, 1);
-//			vLabel.Text = d1.AddDays(vDay).ToString("d MMM");
-			vLabel.HAlig = TDrwLabel.THAlig.HCenter;
-			vLabel.VAlig = TDrwLabel.TVAlig.VTop;
-											
-			vLabel.Draw(Layer_BG);				
+			int vCount = 1;
+			double vXLabel = 0;
+			double vYLabel = CtrlScene.ClientSize.Height*0.25;
+			double vLeftUpperPointX = 0;
+			double vLeftUpperPointY = CtrlScene.ClientSize.Height*0.25;
+			if (ADrwX < Scene.X / 2)
+			{
+				vXLabel = ADrwX + 100;
+				vLeftUpperPointX = ADrwX + 100;
+			}
+			else
+			{
+				vXLabel = ADrwX - 200;
+				vLeftUpperPointX = ADrwX - 200;
+			}
+			//Date
+			TDrwLabel vDateLabel = new TDrwLabel();
+			vDateLabel.Point.X = vXLabel;
+			vDateLabel.Point.Y = vYLabel;
+			vDateLabel.HAlig = TDrwLabel.THAlig.HRight;
+			vDateLabel.VAlig = TDrwLabel.TVAlig.VBottom;
+			vDateLabel.Text = d1.AddDays(vFindDay).ToString("d MMM");
+			vDateLabel.Draw(Layer_BG);
+			//Values
+			float vInfoBoxWidth = 0;
+			Font vFont = new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular);
+			float vInfoBoxHeight = Layer_BG.MeasureString(vDateLabel.Text, vFont).Height;
+			foreach (string vRow in vRowList)
+			{
+				//Размеры коробочки
+				float vWidth = Layer_BG.MeasureString(vRow, vFont).Width;
+				float vHeight = Layer_BG.MeasureString(vRow, vFont).Height;	
+				vInfoBoxWidth = Math.Max(vInfoBoxWidth, vWidth);
+				vInfoBoxHeight = vInfoBoxHeight + vHeight;
+				//
+				TDrwLabel vLabel = new TDrwLabel();
+				vLabel.Point.X = vXLabel;
+				vLabel.Point.Y = vYLabel + vHeight*vCount++;
+				vLabel.HAlig = TDrwLabel.THAlig.HRight;
+				vLabel.VAlig = TDrwLabel.TVAlig.VBottom;
+				vLabel.Text = vRow;
+				vLabel.Draw(Layer_BG);
+			}
+			//Оформление 
+			TDrwPolygon vPolygon = new TDrwPolygon();
+			vPolygon.DrwPointList.Add(new TDrwPoint(ADrwX, ADrwY));
+			vPolygon.DrwPointList.Add(new TDrwPoint(vLeftUpperPointX, vLeftUpperPointY + vInfoBoxHeight));
+			vPolygon.DrwPointList.Add(new TDrwPoint(vLeftUpperPointX, vLeftUpperPointY));
+			vPolygon.DrwPointList.Add(new TDrwPoint(vLeftUpperPointX + vInfoBoxWidth, vLeftUpperPointY));
+			vPolygon.DrwPointList.Add(new TDrwPoint(vLeftUpperPointX + vInfoBoxWidth, vLeftUpperPointY + vInfoBoxHeight));
+			vPolygon.DrwPointList.Add(new TDrwPoint(ADrwX, ADrwY));
+			vPolygon.Filled = true;
+			vPolygon.OutLine = false;
+			vPolygon.Opacity = 15;
+			vPolygon.Color = vColor;
+			vPolygon.FillOpacity = 15;
+			vPolygon.FillColor = vColor;
+			vPolygon.Draw(Layer_BG);
 		}
 	}
 }

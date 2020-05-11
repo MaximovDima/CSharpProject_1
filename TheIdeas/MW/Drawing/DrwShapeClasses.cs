@@ -11,6 +11,14 @@ namespace MW.Drawing
 	{
 		public double X;
 		public double Y;
+		
+		public TDrwPoint() {}
+		
+		public TDrwPoint(double AX, double AY)
+		{
+			X = AX;
+			Y = AY;
+		}
 	}
 	
 	public abstract class TDrwShape
