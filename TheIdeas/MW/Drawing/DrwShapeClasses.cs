@@ -120,6 +120,7 @@ namespace MW.Drawing
 		public enum THAlig {HLeft, HCenter, HRight}
 		public enum TVAlig {VTop, VCenter, VBottom}
 		public string Text;
+		public int TextFont;
 		public TDrwPoint Point;
 		//Выравнивание
 		public THAlig HAlig;
@@ -128,12 +129,13 @@ namespace MW.Drawing
 		public TDrwLabel()
 		{
 			Point = new TDrwPoint();
+			TextFont = 8;
 		}
 		
 		public override void Draw(Graphics G)
     	{
 			float vX, vY;
-			Font vFont = new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular);
+			Font vFont = new Font(FontFamily.GenericSansSerif, TextFont, FontStyle.Regular);
 			Brush vBrush = new SolidBrush(Color);
 			float vWidth = G.MeasureString(Text, vFont).Width;
 			float vHeight = G.MeasureString(Text, vFont).Height;

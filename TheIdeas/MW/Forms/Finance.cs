@@ -365,9 +365,9 @@ namespace MW.Forms
 			if ((cbScale.Checked || cbInfo.Checked) && (Painter.SelectAreaXStart != -1))
 			{
 				Painter.ViewSelectRect(e.X, e.Y);
-				if (cbInfo.Checked)
+				if ((cbInfo.Checked) && (cbTimeType.SelectedIndex != 3))
 				{
-					Painter.ViewSelectData(e.X, e.Y);
+					Painter.ViewSelectData(e.X, e.Y, cbTimeType.SelectedIndex, Costs, Incomes);
 				}
 			}
 		}

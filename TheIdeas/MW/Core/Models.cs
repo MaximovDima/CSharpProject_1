@@ -186,5 +186,21 @@ namespace MW.Core
 			return vResult;
 		}
 		
+		//Возвращает сумму значений мужду двумя датами
+		public int GetSumByDate(int AXStart, int AXEnd)
+		{
+			DateTime d1 = new DateTime(2020, 1, 1);
+			int vResult = 0;
+			foreach(Dictionary<string, string> vRow in Rows)
+			{
+				DateTime vDay = Convert.ToDateTime(vRow["Date"]);
+				if ((vDay >= d1.AddDays(AXStart)) && (vDay <= d1.AddDays(AXEnd)))
+				{
+					vResult = vResult + Format.StrToInt(vRow["Value"]);
+				}
+			}
+			
+			return vResult;
+		}
 	}
 }

@@ -206,7 +206,7 @@ namespace MW.Drawing
 		}
 		
 		//Отображение "выделенных данных"
-		public void ViewSelectData(int AX, int AY)
+		public void ViewSelectData(int AX, int AY, int AViewIndex, TModel ACosts, TModel AIncomes)
 		{
 			DrwFrontShapeList.Clear();
 			//прямоугольник области
@@ -216,6 +216,77 @@ namespace MW.Drawing
 			vRect.DashStyle = DashStyle.Custom;
 			vRect.CalcY(CtrlScene.Height);
 			DrwFrontShapeList.Add(vRect);
+			//Данные
+			//Дата
+			DateTime d1 = new DateTime(2020, 1, 1);
+			int vXStart = Convert.ToInt32((Scene.GetSceneObject("Coord") as TScObjCoord).GetXUsrByDrw(SelectAreaXStart)/CoeffX);
+			int vXEnd = Convert.ToInt32((Scene.GetSceneObject("Coord") as TScObjCoord).GetXUsrByDrw(AX)/CoeffX);
+			string vBeginDate = d1.AddDays(Math.Min(vXStart, vXEnd)).ToString("d MMM");
+			string vEndDate = d1.AddDays(Math.Max(vXStart, vXEnd)).ToString("d MMM");
+			//Значения
+			int vValue1 = 0;
+			int vValue2 = 0;
+			if (AViewIndex == 0)
+			{
+				vValue1 = ACosts.GetSumByDate(Math.Min(vXStart, vXEnd), Math.Max(vXStart, vXEnd));
+			}
+			if (AViewIndex == 1)
+			{
+				vValue1 = AIncomes.GetSumByDate(Math.Min(vXStart, vXEnd), Math.Max(vXStart, vXEnd));
+			}
+			if (AViewIndex == 2)
+			{
+				vValue1 = ACosts.GetSumByDate(Math.Min(vXStart, vXEnd), Math.Max(vXStart, vXEnd));
+				vValue2 = AIncomes.GetSumByDate(Math.Min(vXStart, vXEnd), Math.Max(vXStart, vXEnd));
+			}
+			//Подпись
+			TDrwLabel vLabelTime = new TDrwLabel();
+			TDrwLabel vLabelValue1 = new TDrwLabel();
+			TDrwLabel vLabelValue2 = new TDrwLabel();
+			vLabelTime.Text = vBeginDate + " - " + vEndDate;
+			vLabelValue1.Text = Format.IntToStr(vValue1);
+			vLabelValue2.Text = Format.IntToStr(vValue2);
+			vLabelTime.TextFont = 12;
+			vLabelValue1.TextFont = 14;
+			vLabelValue2.TextFont = 14;
+			if (AViewIndex == 0)
+			{
+				vLabelValue1.Color = Color.Red;
+			}
+			if (AViewIndex == 1)
+			{
+				vLabelValue1.Color = Color.Green;
+			}
+			if (AViewIndex == 2)
+			{
+				vLabelValue1.Color = Color.Red;
+				vLabelValue2.Color = Color.Green;
+			}
+			
+			vLabelTime.Point.X = SelectAreaXStart;
+			vLabelValue1.Point.X = SelectAreaXStart;
+			vLabelValue2.Point.X = SelectAreaXStart;
+			if (AX < SelectAreaXStart) 
+			{
+				vLabelTime.HAlig = TDrwLabel.THAlig.HLeft;
+				vLabelValue1.HAlig = TDrwLabel.THAlig.HLeft;
+				vLabelValue2.HAlig = TDrwLabel.THAlig.HLeft;
+			}
+			else
+			{
+				vLabelTime.HAlig = TDrwLabel.THAlig.HRight;
+				vLabelValue1.HAlig = TDrwLabel.THAlig.HRight;
+				vLabelValue2.HAlig = TDrwLabel.THAlig.HRight;
+			}
+			vLabelTime.Point.Y = vY0+20;
+			vLabelValue1.Point.Y = vY0+38;
+			vLabelValue2.Point.Y = vY0+56;
+			DrwFrontShapeList.Add(vLabelTime);
+			DrwFrontShapeList.Add(vLabelValue1);
+			if (AViewIndex == 2)
+			{
+				DrwFrontShapeList.Add(vLabelValue2);
+			}
 			//Выделение графика
 			TDrwPolygon vPolygon = new TDrwPolygon();
 //			double vY0 = 
