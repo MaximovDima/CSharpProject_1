@@ -287,10 +287,6 @@ namespace MW.Drawing
 			{
 				DrwFrontShapeList.Add(vLabelValue2);
 			}
-			//Выделение графика
-			TDrwPolygon vPolygon = new TDrwPolygon();
-//			double vY0 = 
-//			vPolygon.
 		}
 		
 		//Работа указателя мышки по умолчанию
@@ -307,7 +303,7 @@ namespace MW.Drawing
 			CtrlScene.Invalidate();
 		}
 		
-		public void MouseUp(int AX, int AY, TModel ACosts, TModel AIncomes, TModel ADirectory)
+		public void MouseUp(int AX, int AY, TModel ACosts, TModel AIncomes, TModel ADirectory, bool AIsStructura)
 		{
 			DrwFrontShapeList.Clear();
   			CtrlScene.Cursor = Cursors.Default;
@@ -327,8 +323,15 @@ namespace MW.Drawing
 						vX = (vShape as TDrwRect).InitPoint.X;
 						vY = (vShape as TDrwRect).InitPoint.Y;
 					}
-					vX = (Scene.GetSceneObject("Coord") as TScObjCoord).GetXUsrByDrw(vX)/CoeffX;
-					ViewInfoBox(AX, AY, vX, vY, vShape.GroupCode, ACosts, AIncomes, ADirectory);
+					if (AIsStructura)
+					{
+						
+					}
+					else 
+					{
+						vX = (Scene.GetSceneObject("Coord") as TScObjCoord).GetXUsrByDrw(vX)/CoeffX;
+						ViewInfoBox(AX, AY, vX, vY, vShape.GroupCode, ACosts, AIncomes, ADirectory);
+					}
 				}
 			}
 			ReDrawFrontLayer();

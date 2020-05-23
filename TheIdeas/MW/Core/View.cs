@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -23,7 +24,8 @@ namespace MW.Core
 			SceneObjectList = new List<TSceneObject>();
 		}	
 		
-		public void LoadModels(TModel ACosts, TModel AIncomes, bool AViewTime, int ATimeType, bool AViewColumns, bool AViewStructura)
+		public void LoadModels(TModel ACosts, TModel AIncomes, TModel ADirectory, 
+		                       bool AViewTime, int ATimeType, bool AViewColumns, bool AViewStructura)
 		{
 			/*ATimeType
 			 * 0-costs
@@ -95,10 +97,10 @@ namespace MW.Core
 			
 			if (AViewStructura)
 			{
-				List<TFuncPoint> vPoints = new List<TFuncPoint>();
-				ACosts.ReFill(vPoints);
-				AIncomes.ReFill(vPoints);
-				CreatePizza();
+				Dictionary<string, int> vPartsIncome = new Dictionary<string, int>();
+//				ACosts.ReFill(vParts, "");
+				AIncomes.ReFill(vPartsIncome, "Type");
+				CreatePizza(vPartsIncome, ADirectory);
 			}
 		}
 		
@@ -133,23 +135,24 @@ namespace MW.Core
 			SceneObjectList.Add(Columns);
 		}
 		
-		public void CreatePizza()
+		public void CreatePizza(Dictionary<string, int> APartsIncome, TModel ADirectory)
 		{
 			//Incomes
 			double vRadius = Math.Min(X/6, Y/2);
-			TScObjSector vIncomes = new TScObjSector(this);
+			TScObjSector vIncomes = new TScObjSector(this, "Incomes");
 			vIncomes.X = (X/6)*5;
 			vIncomes.Y = Y/2;
 			vIncomes.Radius = vRadius;
+			vIncomes.LoadSectors(APartsIncome, ADirectory, "Income");
 			SceneObjectList.Add(vIncomes);
 			//Costs_Type
-			TScObjSector vCostsType = new TScObjSector(this);
+			TScObjSector vCostsType = new TScObjSector(this, "Costs_Type");
 			vCostsType.X = X/2;
 			vCostsType.Y = Y/2;
 			vCostsType.Radius = vRadius;
 			SceneObjectList.Add(vCostsType);
 			//Costs_Place
-			TScObjSector vCostsPlace = new TScObjSector(this);
+			TScObjSector vCostsPlace = new TScObjSector(this, "Costs_Place");
 			vCostsPlace.X = X/6;
 			vCostsPlace.Y = Y/2;
 			vCostsPlace.Radius = vRadius;
@@ -557,19 +560,60 @@ namespace MW.Core
 		public double Radius;
 		public double X;
 		public double Y;
+		//Набор секторов
+		public List<TSector> Sectors;
+		public int Sum;
 		
 		public override void Build(double ACoeffX, double ACoeffY)
 		{
 			DrwObjList.Clear();
-						
+			//Общий круг			
 			TDrwCircle vIncomes = new TDrwCircle(X*ACoeffX, Y*ACoeffY, Radius*Math.Min(ACoeffX, ACoeffY));
 			DrwObjList.Add(vIncomes);
 		}
 		
-		public TScObjSector(TScene AScene)
+		public TScObjSector(TScene AScene, string AName)
 		{
 			Scene = AScene;
-			Name = "Sectors";
+			Name = AName;
+			Sum = 0;
+			Sectors = new List<TScObjSector.TSector>();
+		}
+		
+		public class TSector
+		{
+			public int ID;
+			public string Name;
+			public int Value;
+			public string Code;
+			
+			public TSector(int AID, string AName, int AValue, string ACode)
+			{
+				ID = AID;
+				Name = AName;
+				Value = AValue;
+				Code = ACode;	
+			}
+		}
+		
+		public void LoadSectors(Dictionary<string, int> ASectors, TModel ADirectory, string AType)
+		{
+			//Сумма
+			Dictionary<string, int>.ValueCollection vValues = ASectors.Values;
+			foreach (int vValue in vValues)
+			{
+				Sum = Sum + vValue; 	
+			}
+			//Категории
+			Dictionary<string, int>.KeyCollection vKeys = ASectors.Keys;
+			foreach (string vKey in vKeys)
+			{
+				TSector vSector = new TScObjSector.TSector(Sectors.Count, 
+				                                           ADirectory.GetNameByID(AType, vKey),
+				                                           ASectors[vKey], 
+				                                           AType);
+				Sectors.Add(vSector);
+			} 
 		}
 	}
 	

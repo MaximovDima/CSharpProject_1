@@ -148,6 +148,28 @@ namespace MW.Core
     		}
 		}
 		
+		//Заполняет сгруппированный список
+		public void ReFill(Dictionary<string, int> AParts, string AGroupFactor)
+		{
+			AParts.Clear();
+			int vCurrValue = 0;
+			int vSumValue = 0;
+			foreach(Dictionary<string, string> vRow in Rows)
+			{
+				if (AParts.ContainsKey(vRow[AGroupFactor]))
+				{
+					vSumValue = AParts[vRow[AGroupFactor]];
+					vCurrValue = Format.StrToInt(vRow["Value"]);
+					vSumValue = vSumValue + vCurrValue;
+					AParts[vRow[AGroupFactor]] = vSumValue;
+				}
+				else
+				{
+					AParts.Add(vRow[AGroupFactor], Format.StrToInt(vRow["Value"]));
+				}
+			}
+		}
+		
 		//Заполняет список точками для графика с учетом доп модели с отриц воздействием
 		public void ReFill(List<TFuncPoint> APoints, TModel AIncomes)
 		{

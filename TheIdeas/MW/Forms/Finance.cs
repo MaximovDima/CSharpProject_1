@@ -46,7 +46,8 @@ namespace MW.Forms
 		public void SyncView()
 		{
 			Painter.Scene.SceneObjectList.Clear();
-			Painter.Scene.LoadModels(Costs, Incomes, rbTime.Checked, cbTimeType.SelectedIndex, rbColumns.Checked, rbStructura.Checked);
+			Painter.Scene.LoadModels(Costs, Incomes, Directory, rbTime.Checked, 
+			                         cbTimeType.SelectedIndex, rbColumns.Checked, rbStructura.Checked);
 			Painter.ReDraw(DrwControl.Width, DrwControl.Height);
 			DrwControl.Invalidate();
 		}
@@ -390,7 +391,7 @@ namespace MW.Forms
 			Painter.SelectAreaXStart = -1;
 			if (cbTimeType.SelectedIndex != 3)
 			{
-				Painter.MouseUp(e.X, e.Y, Costs, Incomes, Directory);
+				Painter.MouseUp(e.X, e.Y, Costs, Incomes, Directory, rbStructura.Checked);
 			}
 		}
 	}
