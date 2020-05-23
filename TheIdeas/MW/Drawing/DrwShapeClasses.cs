@@ -367,4 +367,72 @@ namespace MW.Drawing
 			FillOpacity = 75;
 		}
 	}
+	
+	public class TDrwSector : TDrwShape
+	{
+		//точка, находящаяся на верхней грани прямоугольника в центре
+    	public TDrwPoint Center;
+    	public double Radius;
+    	public float StartAngle;
+    	public float SweepAngle;
+    	
+    	public TDrwSector(double AX, double AY, double ARadius, float AStartAngle, float ASweepAngle)
+    	{
+    		Center = new TDrwPoint(AX, AY);
+    		Radius = ARadius;
+    		StartAngle = AStartAngle;
+    		SweepAngle = ASweepAngle;
+    	}
+ 		
+    	public override void Draw(Graphics G)
+    	{
+    		 if (!Visible)
+    		{
+    			return;
+    		}
+    		 
+    		int vOpacity = Convert.ToInt32(255 * Opacity / 100);
+    		int vFillOpacity = Convert.ToInt32(255 * FillOpacity / 100); 
+    		Pen mypen = new Pen(Color.FromArgb(vOpacity, Color), PenWidth);
+    		float[] dashValues = { 5, 5, 5, 5 };
+    		mypen.DashPattern = dashValues;
+    		mypen.DashStyle = DashStyle;  		
+    		
+    		if (Filled)
+    		{
+    			G.FillPie(new SolidBrush(Color.FromArgb(vFillOpacity, FillColor)),
+    			          (float)(Center.X - Radius), 
+    			          (float)(Center.Y - Radius), 
+    			          (float)(Radius*2), 
+    			          (float)(Radius*2), 
+    			          StartAngle, 
+    			          SweepAngle);
+    		}
+    		
+    		if (OutLine)
+    		{
+    			G.DrawPie(mypen, (float)(Center.X - Radius),
+    			          (float)(Center.Y - Radius), 
+    			          (float)(Radius*2), 
+    			          (float)(Radius*2), 
+    			          StartAngle, 
+    			          SweepAngle);
+    		}
+    	}
+    	
+		public override void CalcY(int AYScene)
+		{
+			Center.Y = AYScene - Center.Y;
+		}
+		
+		public override bool IncludePoint(int X, int Y)
+		{
+			return false;
+		}
+		
+		public override void Light()
+		{
+			FillOpacity = 75;
+		}
+	}
 }

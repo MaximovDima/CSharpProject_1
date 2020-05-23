@@ -98,9 +98,12 @@ namespace MW.Core
 			if (AViewStructura)
 			{
 				Dictionary<string, int> vPartsIncome = new Dictionary<string, int>();
-//				ACosts.ReFill(vParts, "");
+				Dictionary<string, int> vPartsCostType = new Dictionary<string, int>();
+				Dictionary<string, int> vPartsCostPlace = new Dictionary<string, int>();
+				ACosts.ReFill(vPartsCostType, "Type");
+				ACosts.ReFill(vPartsCostPlace, "Place");
 				AIncomes.ReFill(vPartsIncome, "Type");
-				CreatePizza(vPartsIncome, ADirectory);
+				CreatePizza(vPartsIncome, vPartsCostType, vPartsCostPlace, ADirectory);
 			}
 		}
 		
@@ -135,27 +138,32 @@ namespace MW.Core
 			SceneObjectList.Add(Columns);
 		}
 		
-		public void CreatePizza(Dictionary<string, int> APartsIncome, TModel ADirectory)
+		public void CreatePizza(Dictionary<string, int> APartsIncome,
+		                        Dictionary<string, int> APartsCostType,
+		                        Dictionary<string, int> APartsCostPlace,
+		                        TModel ADirectory)
 		{
 			//Incomes
 			double vRadius = Math.Min(X/6, Y/2);
 			TScObjSector vIncomes = new TScObjSector(this, "Incomes");
 			vIncomes.X = (X/6)*5;
-			vIncomes.Y = Y/2;
+			vIncomes.Y = Y*0.55;
 			vIncomes.Radius = vRadius;
 			vIncomes.LoadSectors(APartsIncome, ADirectory, "Income");
 			SceneObjectList.Add(vIncomes);
 			//Costs_Type
 			TScObjSector vCostsType = new TScObjSector(this, "Costs_Type");
-			vCostsType.X = X/2;
-			vCostsType.Y = Y/2;
+			vCostsType.X = X/6;
+			vCostsType.Y = Y*0.55;
 			vCostsType.Radius = vRadius;
+			vCostsType.LoadSectors(APartsCostType, ADirectory, "Cost");
 			SceneObjectList.Add(vCostsType);
 			//Costs_Place
 			TScObjSector vCostsPlace = new TScObjSector(this, "Costs_Place");
-			vCostsPlace.X = X/6;
-			vCostsPlace.Y = Y/2;
+			vCostsPlace.X = X/2;
+			vCostsPlace.Y = Y*0.55;
 			vCostsPlace.Radius = vRadius;
+			vCostsPlace.LoadSectors(APartsCostPlace, ADirectory, "Place");
 			SceneObjectList.Add(vCostsPlace);
 		}
 		
@@ -567,9 +575,58 @@ namespace MW.Core
 		public override void Build(double ACoeffX, double ACoeffY)
 		{
 			DrwObjList.Clear();
-			//Общий круг			
-			TDrwCircle vIncomes = new TDrwCircle(X*ACoeffX, Y*ACoeffY, Radius*Math.Min(ACoeffX, ACoeffY));
-			DrwObjList.Add(vIncomes);
+			//Сектора и легенда
+			double vStartAngle = 0.00;
+			double vLastAngle = 0.00;
+			double vSweepAngle = 0.00;
+			double vX0 = X*ACoeffX - Radius*Math.Min(ACoeffX, ACoeffY) + 5;
+			double vY0 = Y*ACoeffY - Radius*Math.Min(ACoeffX, ACoeffY) - 10;
+			double vX = 0;
+			double vY = 0;
+			int i = 0;
+			foreach (TSector vSector in Sectors)
+			{
+				if ((i >= 0) && (i < 4))
+			    {
+			    	vX = vX0 + 85*i;
+			    	vY = vY0;
+			    }
+			    if ((i >= 4) && (i < 8))
+			    {
+			    	vX = vX0 + 85*(i-4);
+			    	vY = vY0 - 30;
+			    }
+				vStartAngle = vLastAngle;
+				vSweepAngle = (double)360*vSector.Value / Sum;
+				vLastAngle = vLastAngle + vSweepAngle;
+				
+				TDrwSector vDrwSector = new TDrwSector(X*ACoeffX, Y*ACoeffY, 
+				                                       Radius*Math.Min(ACoeffX, ACoeffY), (float)vStartAngle, (float)vSweepAngle);
+				vDrwSector.Color = vSector.Color;
+				vDrwSector.FillColor = vSector.Color;
+				vDrwSector.FillOpacity = 25;
+				vDrwSector.Filled = true;
+				vDrwSector.GroupCode = vSector.Code;
+				vDrwSector.CodeElement = vSector.ID;
+			    DrwObjList.Add(vDrwSector);
+			    
+			    TDrwRect vRect = new TDrwRect(vX, vY, 10, 10);
+			    
+			    vRect.Color = vSector.Color;
+				vRect.FillColor = vSector.Color;
+				vRect.FillOpacity = 25;
+				vRect.Filled = true; 
+			    DrwObjList.Add(vRect);
+			    
+			    TDrwLabel vLabel = new TDrwLabel();
+			    vLabel.Point = new TDrwPoint(vX + 10, vY + 4);
+			    vLabel.Text = vSector.Name;
+			    vLabel.TextFont = 10;
+			    vLabel.HAlig = TDrwLabel.THAlig.HRight;
+			    vLabel.VAlig = TDrwLabel.TVAlig.VBottom;
+			    DrwObjList.Add(vLabel);
+			    i++;
+			}
 		}
 		
 		public TScObjSector(TScene AScene, string AName)
@@ -582,17 +639,19 @@ namespace MW.Core
 		
 		public class TSector
 		{
-			public int ID;
+			public string ID;
 			public string Name;
 			public int Value;
 			public string Code;
+			public Color Color;
 			
-			public TSector(int AID, string AName, int AValue, string ACode)
+			public TSector(string AID, string AName, int AValue, string ACode, Color AColor)
 			{
 				ID = AID;
 				Name = AName;
 				Value = AValue;
-				Code = ACode;	
+				Code = ACode;
+				Color = AColor;				
 			}
 		}
 		
@@ -605,13 +664,17 @@ namespace MW.Core
 				Sum = Sum + vValue; 	
 			}
 			//Категории
+			Color vColor;
+			Random random = new Random();
 			Dictionary<string, int>.KeyCollection vKeys = ASectors.Keys;
 			foreach (string vKey in vKeys)
 			{
-				TSector vSector = new TScObjSector.TSector(Sectors.Count, 
+				vColor = Color.FromArgb(random.Next(255), random.Next(255), random.Next(255));
+				TSector vSector = new TScObjSector.TSector(vKey, 
 				                                           ADirectory.GetNameByID(AType, vKey),
 				                                           ASectors[vKey], 
-				                                           AType);
+				                                           AType,
+				                                           vColor);
 				Sectors.Add(vSector);
 			} 
 		}
