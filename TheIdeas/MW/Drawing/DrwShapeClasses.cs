@@ -370,18 +370,23 @@ namespace MW.Drawing
 	
 	public class TDrwSector : TDrwShape
 	{
-		//точка, находящаяся на верхней грани прямоугольника в центре
     	public TDrwPoint Center;
     	public double Radius;
     	public float StartAngle;
     	public float SweepAngle;
+    	public string Comment;
     	
-    	public TDrwSector(double AX, double AY, double ARadius, float AStartAngle, float ASweepAngle)
+    	public TDrwSector(double AX, double AY, double ARadius, double AStartAngle, double ASweepAngle)
     	{
     		Center = new TDrwPoint(AX, AY);
+    		double vX1 = AX + ARadius*Math.Sin(Math.PI*(AStartAngle + 90)/180);
+    		double vX2 = AX + ARadius*Math.Sin(Math.PI*(AStartAngle+ASweepAngle + 90)/180);
+    		double vY1 = AY + ARadius*Math.Cos(Math.PI*(AStartAngle + 90)/180);
+    		double vY2 = AY + ARadius*Math.Cos(Math.PI*(AStartAngle+ASweepAngle + 90)/180);   	
+
     		Radius = ARadius;
-    		StartAngle = AStartAngle;
-    		SweepAngle = ASweepAngle;
+    		StartAngle = (float)AStartAngle;
+    		SweepAngle = (float)ASweepAngle;
     	}
  		
     	public override void Draw(Graphics G)
@@ -427,12 +432,25 @@ namespace MW.Drawing
 		
 		public override bool IncludePoint(int X, int Y)
 		{
-			return false;
+			bool vInCirlce = ((X - Center.X)*(X - Center.X) +
+      						(Y - Center.Y)*(Y - Center.Y)) <
+        					(Radius * Radius);
+			if (!vInCirlce)
+			{
+				return false;
+			}
+
+			double vAngle = 180*Math.Atan2((Y - Center.Y), (X - Center.X))/Math.PI;
+			if (vAngle < 0) {vAngle = vAngle + 360;}
+			
+			return vInCirlce && (vAngle > StartAngle) && (vAngle < StartAngle + SweepAngle);
 		}
 		
 		public override void Light()
 		{
 			FillOpacity = 75;
+			Color = Color.Black;
+			PenWidth = 2;
 		}
 	}
 }

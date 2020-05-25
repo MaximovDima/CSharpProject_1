@@ -295,12 +295,25 @@ namespace MW.Drawing
 
 		}
 		
-		public void MouseMove(int AX, int AY)
+		public void MouseMove(int AX, int AY, bool AIsStructura)
 		{
 			//Подсветка фигуры
 			BacklightShape(AX, AY);
 			//Обновление контрола
 			CtrlScene.Invalidate();
+			
+			TDrwShape vShape = GetDrwShape(AX, AY);
+			if ((vShape != null) && (vShape is TDrwSector) &&(AIsStructura))
+			{
+				TDrwLabel vLabel = new TDrwLabel();
+				vLabel.Point.X = AX + 20;
+				vLabel.Point.Y = AY - 20;
+				vLabel.TextFont = 11;
+				vLabel.HAlig = TDrwLabel.THAlig.HRight;
+				vLabel.VAlig = TDrwLabel.TVAlig.VBottom;
+				vLabel.Text = (vShape as TDrwSector).Comment;
+				vLabel.Draw(Layer_FT);	
+			}
 		}
 		
 		public void MouseUp(int AX, int AY, TModel ACosts, TModel AIncomes, TModel ADirectory, bool AIsStructura)

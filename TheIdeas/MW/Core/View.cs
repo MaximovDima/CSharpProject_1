@@ -25,7 +25,7 @@ namespace MW.Core
 		}	
 		
 		public void LoadModels(TModel ACosts, TModel AIncomes, TModel ADirectory, 
-		                       bool AViewTime, int ATimeType, bool AViewColumns, bool AViewStructura)
+		                       bool AViewTime, int ATimeType, bool AViewColumns, bool AViewStructura, string ATypeCostID)
 		{
 			/*ATimeType
 			 * 0-costs
@@ -101,9 +101,9 @@ namespace MW.Core
 				Dictionary<string, int> vPartsCostType = new Dictionary<string, int>();
 				Dictionary<string, int> vPartsCostPlace = new Dictionary<string, int>();
 				ACosts.ReFill(vPartsCostType, "Type");
-				ACosts.ReFill(vPartsCostPlace, "Place");
+				ACosts.ReFill(vPartsCostPlace, "Place", ATypeCostID);
 				AIncomes.ReFill(vPartsIncome, "Type");
-				CreatePizza(vPartsIncome, vPartsCostType, vPartsCostPlace, ADirectory);
+				CreatePizza(vPartsIncome, vPartsCostType, vPartsCostPlace, ADirectory, ATypeCostID);
 			}
 		}
 		
@@ -141,7 +141,7 @@ namespace MW.Core
 		public void CreatePizza(Dictionary<string, int> APartsIncome,
 		                        Dictionary<string, int> APartsCostType,
 		                        Dictionary<string, int> APartsCostPlace,
-		                        TModel ADirectory)
+		                        TModel ADirectory, string AID)
 		{
 			//Incomes
 			double vRadius = Math.Min(X/6, Y/2);
@@ -164,6 +164,7 @@ namespace MW.Core
 			vCostsPlace.Y = Y*0.55;
 			vCostsPlace.Radius = vRadius;
 			vCostsPlace.LoadSectors(APartsCostPlace, ADirectory, "Place");
+			vCostsPlace.CategoryName = ADirectory.GetNameByID("Cost", AID);
 			SceneObjectList.Add(vCostsPlace);
 		}
 		
@@ -571,10 +572,22 @@ namespace MW.Core
 		//Набор секторов
 		public List<TSector> Sectors;
 		public int Sum;
+		public string CategoryName;
 		
 		public override void Build(double ACoeffX, double ACoeffY)
 		{
 			DrwObjList.Clear();
+			//для категорий места укажем тип расхода
+			if (Name == "Costs_Place")
+			{
+				TDrwLabel vLabel = new TDrwLabel();
+			    vLabel.Point = new TDrwPoint(X*ACoeffX, Y*ACoeffY + Radius*Math.Min(ACoeffX, ACoeffY)+3);
+			    vLabel.Text = CategoryName;
+			    vLabel.TextFont = 10;
+			    vLabel.HAlig = TDrwLabel.THAlig.HCenter;
+			    vLabel.VAlig = TDrwLabel.TVAlig.VTop;
+			    DrwObjList.Add(vLabel);
+			}
 			//Сектора и легенда
 			double vStartAngle = 0.00;
 			double vLastAngle = 0.00;
@@ -588,12 +601,12 @@ namespace MW.Core
 			{
 				if ((i >= 0) && (i < 4))
 			    {
-			    	vX = vX0 + 85*i;
+			    	vX = vX0 + 90*i;
 			    	vY = vY0;
 			    }
 			    if ((i >= 4) && (i < 8))
 			    {
-			    	vX = vX0 + 85*(i-4);
+			    	vX = vX0 + 90*(i-4);
 			    	vY = vY0 - 30;
 			    }
 				vStartAngle = vLastAngle;
@@ -606,9 +619,15 @@ namespace MW.Core
 				vDrwSector.FillColor = vSector.Color;
 				vDrwSector.FillOpacity = 25;
 				vDrwSector.Filled = true;
+				vDrwSector.Comment = vSector.Name + ": " + Format.IntToStr(vSector.Value);
 				vDrwSector.GroupCode = vSector.Code;
 				vDrwSector.CodeElement = vSector.ID;
 			    DrwObjList.Add(vDrwSector);
+			    
+			    if (i > 7)
+				{
+					continue;
+				}
 			    
 			    TDrwRect vRect = new TDrwRect(vX, vY, 10, 10);
 			    

@@ -23,6 +23,8 @@ namespace MW.Forms
 		public bool IsScale;
 		//Отрисовщик
 		public TPainter Painter;
+		//Параметр для отображения типа расхода
+		public string TypeCostID;
 		
 		public FrmFinance(TData AData)
 		{
@@ -33,7 +35,8 @@ namespace MW.Forms
 			Costs = Data.GetModel("Cost");
 			Incomes = Data.GetModel("Income");
 			Painter = new TPainter(DrwControl);
-			cbTimeType.SelectedIndex = 0;		
+			cbTimeType.SelectedIndex = 0;
+			TypeCostID = "";
 			SyncForm();
 		}
 		
@@ -47,7 +50,7 @@ namespace MW.Forms
 		{
 			Painter.Scene.SceneObjectList.Clear();
 			Painter.Scene.LoadModels(Costs, Incomes, Directory, rbTime.Checked, 
-			                         cbTimeType.SelectedIndex, rbColumns.Checked, rbStructura.Checked);
+			                         cbTimeType.SelectedIndex, rbColumns.Checked, rbStructura.Checked, TypeCostID);
 			Painter.ReDraw(DrwControl.Width, DrwControl.Height);
 			DrwControl.Invalidate();
 		}
@@ -294,6 +297,7 @@ namespace MW.Forms
 			ZoomOut.Visible = false;
 			cbScale.Visible = false;
 			cbInfo.Visible = false;
+			TypeCostID = "";
 			SyncView();
 		}
 		
@@ -358,10 +362,8 @@ namespace MW.Forms
 		
 		void DrwControlMouseMove(object sender, MouseEventArgs e)
 		{
-			if (!rbStructura.Checked)
-			{
-				Painter.MouseMove(e.X, e.Y);
-			}
+			Painter.MouseMove(e.X, e.Y, rbStructura.Checked);
+
 			//Режим выделения
 			if ((cbScale.Checked || cbInfo.Checked) && (Painter.SelectAreaXStart != -1))
 			{
@@ -392,6 +394,16 @@ namespace MW.Forms
 			if (cbTimeType.SelectedIndex != 3)
 			{
 				Painter.MouseUp(e.X, e.Y, Costs, Incomes, Directory, rbStructura.Checked);
+			}
+			if (rbStructura.Checked)
+			{
+				TDrwShape vShape = Painter.GetDrwShape(e.X, e.Y);
+				if ((vShape != null) && (vShape is TDrwSector) 
+				    && ((vShape as TDrwSector).GroupCode == "Cost"))
+				{
+					TypeCostID = (vShape as TDrwSector).CodeElement;
+					SyncView();
+				}
 			}
 		}
 	}
