@@ -62,6 +62,8 @@
 			this.Name = "FrmMainForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Вики";
+			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+			this.Shown += new System.EventHandler(this.FrmMainFormShown);
 			this.MWMenu.ResumeLayout(false);
 			this.MWMenu.PerformLayout();
 			this.ResumeLayout(false);

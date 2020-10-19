@@ -35,7 +35,7 @@ namespace MW.Forms
 			Costs = Data.GetModel("Cost");
 			Incomes = Data.GetModel("Income");
 			Painter = new TPainter(DrwControl);
-			cbTimeType.SelectedIndex = 0;
+			cbTimeType.SelectedIndex = 0; //вызов перерисовки SyncView
 			TypeCostID = "";
 			SyncForm();
 		}
@@ -163,7 +163,7 @@ namespace MW.Forms
 			if (vCosts.CurrentRow.Index >= vCosts.RowCount - 1)
 				return;
 			string vID = vCosts.Rows[vCosts.CurrentRow.Index].Cells["ID"].Value.ToString();
-			Dictionary<string, string> vRow = Costs.Rows[Format.StrToInt(vID) - 1];
+			Dictionary<string, string> vRow = Costs.GetByID(vID);
 			
 			DialogResult vResult = MessageBox.Show("Удалить расход " + vRow["Value"] + " за " + vRow["Date"],
 			                                      "Удаление", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -202,9 +202,9 @@ namespace MW.Forms
 		{
 			if (ARowIndex >= vIncomes.RowCount - 1)
 				return;
-				
+							
 			string vID = vIncomes.Rows[ARowIndex].Cells["id1"].Value.ToString();
-			Dictionary<string, string> vRow = Incomes.Rows[Format.StrToInt(vID) - 1];
+			Dictionary<string, string> vRow = Incomes.GetByID(vID);
 
 			FrmEditFinance editForm = new FrmEditFinance(Directory, Incomes);
 			editForm.Text = "Редактировать расход...";
@@ -227,8 +227,9 @@ namespace MW.Forms
 		{
 			if (vIncomes.CurrentRow.Index >= vIncomes.RowCount - 1)
 				return;
-			string vID = vIncomes.Rows[vCosts.CurrentRow.Index].Cells["id1"].Value.ToString();
-			Dictionary<string, string> vRow = Incomes.Rows[Format.StrToInt(vID) - 1];
+			string vID = vIncomes.Rows[vIncomes.CurrentRow.Index].Cells["id1"].Value.ToString();
+			Dictionary<string, string> vRow = Incomes.GetByID(vID);
+			
 			
 			DialogResult vResult = MessageBox.Show("Удалить доход " + vRow["Value"] + " за " + vRow["Date"],
 			                                      "Удаление", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -405,6 +406,16 @@ namespace MW.Forms
 					SyncView();
 				}
 			}
+		}
+		
+		void DrwControlDoubleClick(object sender, EventArgs e)
+		{
+			if (rbStructura.Checked) 
+			{
+				TypeCostID = "";
+				SyncView();
+			}
+				
 		}
 	}
 }

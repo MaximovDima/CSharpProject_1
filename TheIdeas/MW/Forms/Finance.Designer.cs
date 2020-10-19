@@ -253,11 +253,11 @@
 			// 
 			this.lblIncomeSum.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.lblIncomeSum.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-			this.lblIncomeSum.Location = new System.Drawing.Point(319, 15);
+			this.lblIncomeSum.Location = new System.Drawing.Point(307, 16);
 			this.lblIncomeSum.Name = "lblIncomeSum";
-			this.lblIncomeSum.Size = new System.Drawing.Size(135, 32);
+			this.lblIncomeSum.Size = new System.Drawing.Size(144, 32);
 			this.lblIncomeSum.TabIndex = 7;
-			this.lblIncomeSum.Text = "100000";
+			this.lblIncomeSum.Text = "1000000";
 			// 
 			// btnIncomeEdit
 			// 
@@ -375,6 +375,7 @@
 			this.DrwControl.TabIndex = 0;
 			this.DrwControl.TabStop = false;
 			this.DrwControl.Paint += new System.Windows.Forms.PaintEventHandler(this.DrwControlPaint);
+			this.DrwControl.DoubleClick += new System.EventHandler(this.DrwControlDoubleClick);
 			this.DrwControl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DrwControlMouseDown);
 			this.DrwControl.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DrwControlMouseMove);
 			this.DrwControl.MouseUp += new System.Windows.Forms.MouseEventHandler(this.DrwControlMouseUp);

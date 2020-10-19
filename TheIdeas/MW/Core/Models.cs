@@ -12,6 +12,10 @@ namespace MW.Core
 		public string[] Fields;
 		//Строки
 		public List<Dictionary<string, string>> Rows;
+		//Дата начала учета
+		public DateTime StartDate;
+		//Дата окончания учета
+		public DateTime EndDate;
 		
 		public TModel(string AName, string[] AFields)
 		{
@@ -24,6 +28,25 @@ namespace MW.Core
 		public string GetNextID()
 		{
 			return Format.IntToStr(Rows.Count + 1);
+		}
+		
+		public void SyncEndDate(DateTime AStartDate)
+		{
+			if ((Name == "Cost") || ((Name == "Income")))
+			{
+				StartDate = AStartDate;
+				DateTime vEndDate = StartDate;
+			
+				foreach(Dictionary<string, string> vRow in Rows)
+				{
+					if (Format.ObjToDate(vRow["Date"]) > vEndDate)
+					{
+						vEndDate = Format.ObjToDate(vRow["Date"]);
+					}
+				}
+			
+				EndDate = vEndDate;
+			}
 		}
 		
 		//Проверка на дубликат строки
@@ -121,8 +144,8 @@ namespace MW.Core
 		public string GetTextAverageDay(string AFieldName)
 		{
 			double vResult = 0;
-			DateTime vFirstDate = new DateTime(2020, 1, 1);
-			string vDate = Convert.ToString(DateTime.Now);
+			DateTime vFirstDate = StartDate;
+			string vDate = Convert.ToString(EndDate);
 			TimeSpan vTime = Convert.ToDateTime(vDate) - vFirstDate;
 
 			foreach(Dictionary<string, string> vRow in Rows)
@@ -137,10 +160,10 @@ namespace MW.Core
 		public void ReFill(List<TFuncPoint> APoints)
 		{
 			APoints.Clear();
-			DateTime d1 = new DateTime(2020, 1, 1);
-			DateTime d2 = DateTime.Now;
+			DateTime d1 = StartDate;
+			DateTime d2 = EndDate;
 			TimeSpan time = d2 - d1;
-			for (int i = 1; i < time.Days+1; i++)
+			for (int i = 0; i < time.Days+1; i++)
 			{
 				double vSum = GetSumByDate(d1.AddDays(i));
 				TFuncPoint p = new TFuncPoint(i, d1.AddDays(i).ToString("dd/MM/yyyy"), vSum/1000);
@@ -177,15 +200,20 @@ namespace MW.Core
 		//Заполняет список точками для графика с учетом доп модели с отриц воздействием
 		public void ReFill(List<TFuncPoint> APoints, TModel AIncomes)
 		{
+			DateTime vEndDate = AIncomes.EndDate;
+			if ((StartDate == vEndDate) || (EndDate > AIncomes.EndDate))
+			{
+				vEndDate = EndDate;
+			}
 			APoints.Clear();
-			DateTime d1 = new DateTime(2020, 1, 1);
+			DateTime d1 = StartDate;
 			//Исходное значение баланса = 0;
 			TFuncPoint p0 = new TFuncPoint(0, d1.ToString("dd/MM/yyyy"), 0);
 			APoints.Add(p0);
-			DateTime d2 = DateTime.Now;
+			DateTime d2 = vEndDate;
 			TimeSpan time = d2 - d1;
 			double vBalance = 0;
-			for (int i = 1; i < time.Days+1; i++)
+			for (int i = 0; i < time.Days+1; i++)
 			{
 				double vSumCosts = GetSumByDate(d1.AddDays(i));
 				double vSumIncomes = AIncomes.GetSumByDate(d1.AddDays(i));
@@ -215,7 +243,7 @@ namespace MW.Core
 		//Возвращает сумму значений мужду двумя датами
 		public int GetSumByDate(int AXStart, int AXEnd)
 		{
-			DateTime d1 = new DateTime(2020, 1, 1);
+			DateTime d1 = StartDate;
 			int vResult = 0;
 			foreach(Dictionary<string, string> vRow in Rows)
 			{

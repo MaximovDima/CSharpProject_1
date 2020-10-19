@@ -62,6 +62,10 @@ namespace MW.Drawing
 		{
 			CoeffX = AX / Scene.X;
   			CoeffY = AY / Scene.Y;
+  			if ((AX == 0) && (AY == 0))
+  			{
+  				return;
+  			}
   			Bitmap_BG = new Bitmap(Convert.ToInt32(AX), Convert.ToInt32(AY));
   			Bitmap_FT = new Bitmap(Convert.ToInt32(AX), Convert.ToInt32(AY));
 			Layer_BG = Graphics.FromImage(Bitmap_BG);
@@ -218,7 +222,7 @@ namespace MW.Drawing
 			DrwFrontShapeList.Add(vRect);
 			//Данные
 			//Дата
-			DateTime d1 = new DateTime(2020, 1, 1);
+			DateTime d1 = Scene.StartDate;
 			int vXStart = Convert.ToInt32((Scene.GetSceneObject("Coord") as TScObjCoord).GetXUsrByDrw(SelectAreaXStart)/CoeffX);
 			int vXEnd = Convert.ToInt32((Scene.GetSceneObject("Coord") as TScObjCoord).GetXUsrByDrw(AX)/CoeffX);
 			string vBeginDate = d1.AddDays(Math.Min(vXStart, vXEnd)).ToString("d MMM");
@@ -355,10 +359,11 @@ namespace MW.Drawing
 		{
 			//данные
 			int vFindDay = Convert.ToInt32(AUsrX);
-			DateTime d1 = new DateTime(2020, 1, 1);
+			DateTime d1 = ACosts.StartDate;
 			Color vColor = Color.Black;
 			TModel vModel;
 			List<string> vRowList = new List<string>();
+			int vSum = 0;
 			if(AModelView == "Cost")
 			{
 				vModel = ACosts;
@@ -391,6 +396,7 @@ namespace MW.Drawing
 					}
 					string vNewRow = vName + ": " + vRow["Value"] + vComment;
 					vRowList.Add(vNewRow);
+					vSum = vSum + Format.StrToInt(vRow["Value"]);
 				}
 			}
 			//Отображение
@@ -415,7 +421,7 @@ namespace MW.Drawing
 			vDateLabel.Point.Y = vYLabel;
 			vDateLabel.HAlig = TDrwLabel.THAlig.HRight;
 			vDateLabel.VAlig = TDrwLabel.TVAlig.VBottom;
-			vDateLabel.Text = d1.AddDays(vFindDay).ToString("d MMM");
+			vDateLabel.Text = d1.AddDays(vFindDay).ToString("d MMM") + " (" + Format.IntToStr(vSum) + ")";
 			vDateLabel.Draw(Layer_BG);
 			//Values
 			float vInfoBoxWidth = 0;

@@ -15,18 +15,38 @@ namespace MW.Core
 		public double X;
 		public double Y;
 		//Коллеккция моделей объектов сцены
-		public List<TSceneObject> SceneObjectList;		
+		public List<TSceneObject> SceneObjectList;
+		public DateTime StartDate;
+		public DateTime EndDate;		
 		
 		public TScene(double AX, double AY)
 		{
 			X = AX;
 			Y = AY;
 			SceneObjectList = new List<TSceneObject>();
-		}	
+		}
 		
 		public void LoadModels(TModel ACosts, TModel AIncomes, TModel ADirectory, 
 		                       bool AViewTime, int ATimeType, bool AViewColumns, bool AViewStructura, string ATypeCostID)
 		{
+			if (ACosts.StartDate < AIncomes.StartDate) 
+			{
+				StartDate = ACosts.StartDate;	
+			}
+			else
+			{
+				StartDate = AIncomes.StartDate;	
+			}
+			
+			if (ACosts.EndDate > AIncomes.EndDate) 
+			{
+				EndDate = ACosts.EndDate;	
+			}
+			else
+			{
+				EndDate = AIncomes.EndDate;	
+			}
+			
 			/*ATimeType
 			 * 0-costs
 			 * 1-incomes
@@ -39,7 +59,7 @@ namespace MW.Core
 				{
 					ACosts.ReFill(vPoints);
 					//Построение системы координат
-					CreateCoord(vPoints);
+					CreateCoord(vPoints, StartDate, EndDate);
 					//Отображение модельных данных
 					if (AViewTime)
 					{
@@ -53,7 +73,7 @@ namespace MW.Core
 				else if (ATimeType == 1)
 				{
 					AIncomes.ReFill(vPoints);
-					CreateCoord(vPoints);
+					CreateCoord(vPoints, StartDate, EndDate);
 					if (AViewTime)
 					{
 						CreateFunc(vPoints, ATimeType);
@@ -68,7 +88,7 @@ namespace MW.Core
 					AIncomes.ReFill(vPoints);
 					List<TFuncPoint> vPoints2 = new List<TFuncPoint>();
 					ACosts.ReFill(vPoints2);
-					CreateCoord(vPoints, vPoints2);
+					CreateCoord(vPoints, vPoints2, StartDate, EndDate);
 					if (AViewTime)
 					{
 						CreateFunc(vPoints, 1);
@@ -83,7 +103,7 @@ namespace MW.Core
 				else if (ATimeType == 3)
 				{
 					ACosts.ReFill(vPoints, AIncomes);
-					CreateCoord(vPoints);
+					CreateCoord(vPoints, StartDate, EndDate);
 					if (AViewTime)
 					{
 						CreateFunc(vPoints, 3);
@@ -107,17 +127,21 @@ namespace MW.Core
 			}
 		}
 		
-		public void CreateCoord(List<TFuncPoint> APoints)
+		public void CreateCoord(List<TFuncPoint> APoints, DateTime AStartDate, DateTime AEndDate)
 		{
 			TScObjCoord Coord = new TScObjCoord(this);
+			Coord.StartDate = AStartDate;
+			Coord.EndDate = AEndDate;
 			Coord.SetAxis(APoints);
 			SceneObjectList.Add(Coord);
 		}
 		
 				
-		public void CreateCoord(List<TFuncPoint> APoints1, List<TFuncPoint> APoints2)
+		public void CreateCoord(List<TFuncPoint> APoints1, List<TFuncPoint> APoints2, DateTime AStartDate, DateTime AEndDate)
 		{
 			TScObjCoord Coord = new TScObjCoord(this);
+			Coord.StartDate = AStartDate;
+			Coord.EndDate = AEndDate;
 			Coord.SetAxis(APoints1, APoints2);
 			SceneObjectList.Add(Coord);
 		}
@@ -208,6 +232,8 @@ namespace MW.Core
 	//Система координат
 	public class TScObjCoord : TSceneObject
 	{
+		public DateTime StartDate;
+		public DateTime EndDate;
 		//Точка начала координат
 		public double X0;
 		public double X1;
@@ -233,6 +259,10 @@ namespace MW.Core
 		}
 		public double GetYDrwByUsr(double AYUsr)
 		{
+			if (YMax == YMin)
+			{
+				return 0;
+			}
 			return ((Y1-Y0)*Math.Abs(AYUsr - YMin))/(YMax - YMin);
 		}
 		
@@ -283,7 +313,7 @@ namespace MW.Core
 					vLabel.VAlig = TDrwLabel.TVAlig.VBottom;
 					vLabel.Point.X = vX;
 					vLabel.Point.Y = Y0-1;					
-					DateTime d1 = new DateTime(2020, 1, 1);							
+					DateTime d1 = StartDate;							
 					vLabel.Text = d1.AddDays(i).ToString("d MMM");
 					DrwObjList.Add(vLabel);
 				}
@@ -304,7 +334,8 @@ namespace MW.Core
 				int vInc = 2;
 				if(YMax > 20) {vInc = 5;}
 				if(YMax > 80) {vInc = 10;}
-				if ((i % vInc) == 0)
+				if(YMax > 200) {vInc = 25;}
+				if (((i % vInc) == 0) || YMax < 11)
 				{
 					vY = Y0 + GetYDrwByUsr(i)*ACoeffY;
 					vYLine = DrwObjects.GetLine(X0, vY, X0+3, vY, Color.Black, 2);
@@ -328,14 +359,14 @@ namespace MW.Core
 		{
 			//Временная шкала
 			XMin = 0;
-			DateTime d1 = new DateTime(2020, 1, 1);
-    		DateTime d2 = DateTime.Now;
+			DateTime d1 = StartDate;
+    		DateTime d2 = EndDate;
     		TimeSpan time = d2 - d1;
 			XMax = time.Days + 7;
 			//Шкала значений
 			//Анализ модельных значений
 			YMax = 0;
-			YMin = APoints[0].Value;
+			YMin = 0;
 			foreach (TFuncPoint vPoint in APoints)
 			{
 				YMin = Math.Min(YMin, vPoint.Value);
@@ -350,15 +381,18 @@ namespace MW.Core
 		{
 			//Временная шкала
 			XMin = 0;
-			DateTime d1 = new DateTime(2020, 1, 1);
-    		DateTime d2 = DateTime.Now;
+			DateTime d1 = StartDate;
+    		DateTime d2 = EndDate;
     		TimeSpan time = d2 - d1;
 			XMax = time.Days + 7;
 			//Шкала значений
 			//Анализ модельных значений
 			
 			YMax = 0;
-			YMin = APoints1[0].Value;
+			if (APoints1.Count == 0) {YMin = 0;} else
+			{
+				YMin = APoints1[0].Value;
+			}
 			foreach (TFuncPoint vPoint in APoints1)
 			{
 				YMin = Math.Min(YMin, vPoint.Value);
@@ -408,6 +442,7 @@ namespace MW.Core
 		
 		public override void Build(double ACoeffX, double ACoeffY)
 		{
+			if (Points.Count == 0) {return;}
 			DrwObjList.Clear();
 			TDrwPolygon vPolygon = new TDrwPolygon();
 			Color vColor = Color.Black;

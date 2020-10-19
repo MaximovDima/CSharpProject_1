@@ -206,8 +206,11 @@ namespace MW.Drawing
     		}
     		if (OutLine)
     		{
-    			DrwPointList.RemoveAt(DrwPointList.Count-1);
-    			DrwPointList.RemoveAt(0);
+    			if (DrwPointList.Count > 3)
+    			{
+    				DrwPointList.RemoveAt(DrwPointList.Count-1);
+    				DrwPointList.RemoveAt(0);
+    			}
     			Point[] OutLinePoints = new Point[DrwPointList.Count];
 				for(int i = 0; i < DrwPointList.Count; i++)
 				{

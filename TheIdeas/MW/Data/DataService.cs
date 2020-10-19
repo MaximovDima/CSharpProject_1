@@ -13,7 +13,13 @@ namespace MW.Data
 		//Модель данных
 		public List<TModel> Models;
 		//Конфигурации (пока захардкодим, реализация настройки в отедельном файле!)
-		public string SourceDB = @"D:\MaxiWiki";
+		//2020
+		public string SourceDB = @"D:\mw_db\2020\MaxiWiki";
+		public DateTime StartDate = new DateTime(2020, 1, 1);
+		//2021
+//		public string SourceDB = @"D:\mw_db\2021\MaxiWiki";
+//		public DateTime StartDate = new DateTime(2021, 1, 1);
+		
 		public string[] LogFields = new string[] {"ID", "Comment", "Date", "ActionType", "AdviceType", "Change", "User"};
 		public string[] DirectoryFields = new string[] {"ID", "Name", "Type", "Comment"};
 		public string[] CostFields = new string[] {"ID", "Comment", "Date", "Value", "Type", "Place"};
@@ -73,6 +79,7 @@ namespace MW.Data
 		public void GetData(TModel AModel)
 		{
 			DB.ReFillModelRows(AModel.Rows, AModel.Fields, AModel.Name);
+			AModel.SyncEndDate(StartDate);
 		}
 		
 		//Синхронизация модели данных с БД

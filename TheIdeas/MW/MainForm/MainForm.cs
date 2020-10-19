@@ -68,5 +68,10 @@ namespace MW
 		{
 			GetForm("FrmGKH").Show();			
 		}
+		
+		void FrmMainFormShown(object sender, EventArgs e)
+		{
+			FinanceClick(null, null);
+		}
 	}
 }
